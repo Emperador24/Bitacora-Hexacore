@@ -2,26 +2,24 @@
 
 > Registro oficial del equipo. Aquí se documenta con **detalle** todo lo tratado, acordado y decidido en cada sesión de trabajo (clases, reuniones internas, asesorías con el profesor, etc.). Cada integrante puede editar esta bitácora, pero los acuerdos aquí registrados se consideran compromisos del equipo.
 
-> **Nota de origen — unión con la Bitácora Arquitectónica.** El seguimiento real del proyecto empezó en la [**Bitácora Arquitectónica**](https://github.com/Emperador24/ArquiSoftware/blob/main/Work/BitacoraArquitectonica.md) (`Work/BitacoraArquitectonica.md`, repositorio `ArquiSoftware`), antes de que existiera este archivo. Esa bitácora sigue siendo el registro cronológico y técnico completo de reuniones, decisiones de diseño, cambios arquitectónicos, análisis y PoC (una entrada por fecha, orden inverso — no se reescribe). `BitacoraGrupal.md` es, de aquí en adelante, el registro oficial de las **reuniones del equipo** en sí (agenda, acuerdos, tareas asignadas); las decisiones ya documentadas en la Bitácora Arquitectónica se resumen abajo en "Registro consolidado de decisiones del equipo", con enlace de vuelta a la entrada original.
 
 ## Integrantes del equipo
 
-| Nombre | Rol en el proyecto | Contacto |
+| Nombre |
 |---|---|---|
-| Samuel Emperador | | |
-| Sebastián Sánchez | | |
-| Diego Coronado | | |
-| Daniel Cristancho | | |
+| Samuel Emperador |
+| Sebastián Sánchez |
+| Diego Coronado |
+| Daniel Cristancho |
 
 ---
 
-## Sesión N.º 1 — [DD/MM/AAAA]
+## Sesión N.º 1 — [31/07/2026]
 
-**Modalidad:** presencial / virtual — **Lugar o enlace:** 
-**Hora de inicio – fin:** 
-**Asistentes:** 
-**Ausentes (y motivo):** 
-**Moderador/relator de la sesión:** 
+**Modalidad:** presencial 
+**Hora de inicio – fin: 11:00am - 11:30 am** 
+**Asistentes:*Todos* 
+**Ausentes (y motivo):*N/A* 
 
 ### 1. Objetivo de la sesión
 Presentar y acordar la idea de proyecto del equipo, definir a grandes rasgos cómo se abordaría el desarrollo, y empezar a levantar los primeros casos de uso.
@@ -61,13 +59,12 @@ Arranque del proyecto: idea elegida y equipo formado; primeros casos de uso en b
 
 ---
 
-## Sesión N.º 2 — [DD/MM/AAAA]
+## Sesión N.º 2 — [06/08/2026]
 
-**Modalidad:** presencial / virtual — **Lugar o enlace:** 
-**Hora de inicio – fin:** 
-**Asistentes:** 
-**Ausentes (y motivo):** 
-**Moderador/relator de la sesión:** 
+**Modalidad:** presencial
+**Hora de inicio – fin: 11:00am - 11:30am** 
+**Asistentes:Todos** 
+**Ausentes (y motivo): N/A** 
 
 ### 1. Objetivo de la sesión
 Cerrar la definición completa del listado de casos de uso del proyecto.
@@ -106,13 +103,12 @@ Listado completo de casos de uso cerrado y listo para revisión del profesor.
 
 ---
 
-## Sesión N.º 3 — [DD/MM/AAAA]
+## Sesión N.º 3 — [13/08/2026]
 
-**Modalidad:** presencial / virtual — **Lugar o enlace:** 
-**Hora de inicio – fin:** 
-**Asistentes:** 
-**Ausentes (y motivo):** 
-**Moderador/relator de la sesión:** 
+**Modalidad:** presencial
+**Hora de inicio – fin: 11:00am - 11:30am** 
+**Asistentes: Todos** 
+**Ausentes (y motivo): N/A** 
 
 ### 1. Objetivo de la sesión
 Revisar las recomendaciones del profesor sobre el listado de casos de uso y aplicar los cambios necesarios.
@@ -147,26 +143,27 @@ Revisar las recomendaciones del profesor sobre el listado de casos de uso y apli
 Casos de uso actualizados y cerrados en su versión final; el equipo queda listo para empezar el diseño arquitectónico.
 
 ### 8. Próxima sesión
-**Fecha propuesta:** — **Temas a tratar:** diseño de la propuesta arquitectónica y del diagrama C4.
+**Fecha propuesta: 20/08/2026** — **Temas a tratar:** diseño de la propuesta arquitectónica y del diagrama C4.
 
 ---
 
-## Sesión N.º 4 — [DD/MM/AAAA]
+## Sesión N.º 4 — [20/08/2026]
 
-**Modalidad:** presencial / virtual — **Lugar o enlace:** 
-**Hora de inicio – fin:** 
-**Asistentes:** 
-**Ausentes (y motivo):** 
-**Moderador/relator de la sesión:** 
+**Modalidad:** presencial 
+**Hora de inicio – fin: 11:00am - 11:30am** 
+**Asistentes:Samuel Emperador y Sebastian Sanchez** 
+**Ausentes (y motivo): Daniel Cristancho y Diego Coronado** 
 
 ### 1. Objetivo de la sesión
-Empezar a diseñar la propuesta arquitectónica del sistema y el diagrama C4.
+Empezar a diseñar la propuesta arquitectónica del sistema y el diagrama C4 asi como tambien la creación de la bitacora.
 
 ### 2. Temas tratados
 
 - Tema 1: Priorización de atributos de calidad del sistema.
 - Tema 2: Definición de componentes y conexiones principales de la arquitectura.
 - Tema 3: Arranque de los diagramas C4 (`Work/ArchitecturalProposal.tex`, `Work/C4Diagrams.tex`).
+- Tema 4: Elaboración de la bitacora grupal e individual.
+- Tema 5: Distribucion de los casos de uso.
 
 ### 3. Decisiones tomadas
 
@@ -190,9 +187,11 @@ Empezar a diseñar la propuesta arquitectónica del sistema y el diagrama C4.
 
 ### 7. Avance general del proyecto
 Arranque formal del diseño arquitectónico: propuesta arquitectónica y diagramas C4 en desarrollo.
+Distribucion de los casos de uso por cada integrante y envio de los mismo al profesor.
+Elaboracion de las bitacoras con su respectivas plantillas.
 
 ### 8. Próxima sesión
-**Fecha propuesta:** — **Temas a tratar:** según agenda de reunión semanal (jueves 11:00 a.m., ver README).
+**Fecha propuesta: 28/08/2026** — **Temas a tratar:** Recomendaciones del profesor con respecto a los diagramas y las propuestas arquitectonicas (jueves 11:00 a.m., ver README).
 
 ---
 
@@ -200,10 +199,10 @@ Arranque formal del diseño arquitectónico: propuesta arquitectónica y diagram
 
 | Sesión | Fecha | Temas principales | Enlace |
 |---|---|---|---|
-| 1 | | Idea de proyecto y arranque de casos de uso | [Ir a la sesión](#sesión-nº-1--ddmmaaaa) |
-| 2 | | Definición completa de casos de uso | [Ir a la sesión](#sesión-nº-2--ddmmaaaa) |
-| 3 | | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--ddmmaaaa) |
-| 4 | | Arranque de la propuesta arquitectónica y el diagrama C4 | [Ir a la sesión](#sesión-nº-4--ddmmaaaa) |
+| 1 | | Idea de proyecto y arranque de casos de uso | [Ir a la sesión](#sesión-nº-1--31072026) |
+| 2 | | Definición completa de casos de uso | [Ir a la sesión](#sesión-nº-2--06082026) |
+| 3 | | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--13082026) |
+| 4 | | Arranque de la propuesta arquitectónica y el diagrama C4 así como tambien la creacion de las bitacoras| [Ir a la sesión](#sesión-nº-4--20082026) |
 
 ---
 
