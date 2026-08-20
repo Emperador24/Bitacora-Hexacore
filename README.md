@@ -56,24 +56,9 @@ Detalle completo, semana a semana, en [`Cronograma.md`](./Cronograma.md). Resume
 7. **Claridad ante todo.** Se escribe para que cualquier integrante (o el profesor) entienda el avance sin tener que preguntar; se prefiere una entrada corta y clara sobre una larga y ambigua.
 8. **Responsabilidad individual.** Cada integrante es responsable de mantener actualizada su propia bitácora personal. La bitácora grupal es responsabilidad compartida del equipo.
 
-### Reparto de atributos de calidad
+### Reunión de equipo
 
-Acuerdo vigente (definido en `Cronograma.md`) para no duplicar esfuerzo: cada integrante investiga tácticas y patrones de los atributos de calidad a su cargo, además de su propio prototipo y sus casos de uso asignados. Los hallazgos alimentan el Utility Tree, la Bitácora y el SAD compartido.
-
-| Integrante | Atributos de calidad a cargo |
-|---|---|
-| **I1** | Availability, Deployability |
-| **I2** | Performance, Modifiability |
-| **I3** | Integrabilidad, Safety, Testability |
-| **I4** | Security, Usability |
-
-> ⬜ Pendiente: reemplazar **I1–I4** por los nombres reales del equipo (ver `Cronograma.md`).
-
-### Pendientes de acuerdo de equipo
-
-- [ ] Confirmar con el profesor las fechas reales de Entrega 1, Entrega 2, primer y segundo parcial, y sustentaciones.
-- [ ] Confirmar si el equipo de 4 personas requiere aprobación explícita del profesor frente al mínimo de 5–7 del syllabus.
-- [ ] Definir y registrar en `BitacoraGrupal.md` (sección "Acuerdos y compromisos del equipo") el canal de comunicación, la cadencia de reuniones y las convenciones de trabajo (Git, código, herramientas) que el equipo use de aquí en adelante.
+El grupo se reúne **todos los jueves a las 11:00 a.m., de forma presencial**. Cada reunión se registra como una sesión nueva en `BitacoraGrupal.md`.
 
 ## Cómo usar las plantillas
 
