@@ -199,10 +199,10 @@ Elaboracion de las bitacoras con su respectivas plantillas.
 
 | Sesión | Fecha | Temas principales | Enlace |
 |---|---|---|---|
-| 1 | | Idea de proyecto y arranque de casos de uso | [Ir a la sesión](#sesión-nº-1--31072026) |
-| 2 | | Definición completa de casos de uso | [Ir a la sesión](#sesión-nº-2--06082026) |
-| 3 | | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--13082026) |
-| 4 | | Arranque de la propuesta arquitectónica y el diagrama C4 así como tambien la creacion de las bitacoras| [Ir a la sesión](#sesión-nº-4--20082026) |
+| 1 | 31/07/2026 | Idea de proyecto y arranque de casos de uso | [Ir a la sesión](#sesión-nº-1--31072026) |
+| 2 | 06/08/2026 | Definición completa de casos de uso | [Ir a la sesión](#sesión-nº-2--06082026) |
+| 3 | 13/06/2026 | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--13082026) |
+| 4 | 20/08/2026 | Arranque de la propuesta arquitectónica y el diagrama C4 así como tambien la creacion de las bitacoras| [Ir a la sesión](#sesión-nº-4--20082026) |
 
 ---
 
