@@ -6,7 +6,7 @@
 ## Integrantes del equipo
 
 | Nombre |
-|---|---|---|
+|---|
 | Samuel Emperador |
 | Sebastián Sánchez |
 | Diego Coronado |
@@ -34,8 +34,8 @@ Presentar y acordar la idea de proyecto del equipo, definir a grandes rasgos có
 
 | # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
 |---|---|---|---|---|
-| 1 | Elegir "Sistema Integral de Gestión de Eventos" como idea de proyecto del equipo. | Elegida entre las 2 ideas propuestas por el equipo, según lo pedido en la Clase 1. | Todos | — |
-| 2 | Definir el enfoque general de desarrollo (módulos/alcance inicial) con el que arrancar el levantamiento de casos de uso. | — | Todos | — |
+| 1 | Elegir "Sistema Integral de Gestión de Eventos" como idea de proyecto del equipo. | Elegida entre las 2 ideas propuestas por el equipo, según lo pedido en la Clase 1. | Todos | 06/08/2026 |
+| 2 | Definir el enfoque general de desarrollo (módulos/alcance inicial) con el que arrancar el levantamiento de casos de uso. | — | Todos | 06/08/2026 |
 
 ### 4. Acuerdos y compromisos del equipo
 
@@ -45,7 +45,7 @@ Presentar y acordar la idea de proyecto del equipo, definir a grandes rasgos có
 
 | Tarea | Responsable | Fecha límite | Estado |
 |---|---|---|---|
-| Borrador inicial de casos de uso por módulo | Todos | — | Completada |
+| Borrador inicial de casos de uso por módulo | Todos | 06/08/2026 | Completada |
 
 ### 6. Riesgos, bloqueos o dudas abiertas
 
@@ -79,7 +79,7 @@ Cerrar la definición completa del listado de casos de uso del proyecto.
 
 | # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
 |---|---|---|---|---|
-| 1 | Consolidar y cerrar el listado completo de casos de uso del proyecto (módulos de Boletería/Entradas, Personal, Pedidos/Comida, Logística y Parqueadero), en `Submission/CU_eventos_completo.xlsx`. | Cumple el ejercicio de la Clase 1 (≥5 CU por integrante) y da insumo a la propuesta arquitectónica. | Todos | — |
+| 1 | Consolidar y cerrar el listado completo de casos de uso del proyecto (módulos de Boletería/Entradas, Personal, Pedidos/Comida, Logística y Parqueadero), en `Submission/CU_eventos_completo.xlsx`. | Cumple el ejercicio de la Clase 1 (≥5 CU por integrante) y da insumo a la propuesta arquitectónica. | Todos | 13/08/2026 |
 
 ### 4. Acuerdos y compromisos del equipo
 
@@ -89,7 +89,7 @@ Cerrar la definición completa del listado de casos de uso del proyecto.
 
 | Tarea | Responsable | Fecha límite | Estado |
 |---|---|---|---|
-| Consolidar spreadsheet de casos de uso | Todos | — | Completada |
+| Consolidar spreadsheet de casos de uso | Todos | 13/08/2026 | Completada |
 
 ### 6. Riesgos, bloqueos o dudas abiertas
 
@@ -123,7 +123,7 @@ Revisar las recomendaciones del profesor sobre el listado de casos de uso y apli
 
 | # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
 |---|---|---|---|---|
-| 1 | Aplicar las recomendaciones del profesor sobre los casos de uso; esta actualización queda como la **versión final** del listado de casos de uso antes de seguir con la propuesta arquitectónica. | Ajuste pedido directamente por el profesor. | Todos | — |
+| 1 | Aplicar las recomendaciones del profesor sobre los casos de uso; esta actualización queda como la **versión final** del listado de casos de uso antes de seguir con la propuesta arquitectónica. | Ajuste pedido directamente por el profesor. | Todos | 20/08/2026 |
 
 ### 4. Acuerdos y compromisos del equipo
 
@@ -133,7 +133,7 @@ Revisar las recomendaciones del profesor sobre el listado de casos de uso y apli
 
 | Tarea | Responsable | Fecha límite | Estado |
 |---|---|---|---|
-| Actualizar los casos de uso según lo indicado por el profesor | Todos | — | Completada |
+| Actualizar los casos de uso según lo indicado por el profesor | Todos | 20/08/2026 | Completada |
 
 ### 6. Riesgos, bloqueos o dudas abiertas
 
@@ -169,7 +169,7 @@ Empezar a diseñar la propuesta arquitectónica del sistema y el diagrama C4 asi
 
 | # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
 |---|---|---|---|---|
-| 1 | Arrancar la propuesta arquitectónica y el diagrama C4 a partir de la versión final de casos de uso (Sesión 3). El detalle de las decisiones arquitectónicas de fondo (microservicios, API Gateway, etc.) queda registrado en la [Bitácora Arquitectónica](https://github.com/Emperador24/ArquiSoftware/blob/main/Work/BitacoraArquitectonica.md) — ver fila 1 del registro consolidado más abajo. | Es el siguiente paso del cronograma tras cerrar los casos de uso. | Todos | — |
+| 1 | Arrancar la propuesta arquitectónica y el diagrama C4 a partir de la versión final de casos de uso (Sesión 3). El detalle de las decisiones arquitectónicas de fondo (microservicios, API Gateway, etc.) queda registrado en la [Bitácora Arquitectónica](https://github.com/Emperador24/ArquiSoftware/blob/main/Work/BitacoraArquitectonica.md) — ver fila 1 del registro consolidado más abajo. | Es el siguiente paso del cronograma tras cerrar los casos de uso. | Todos | 28/08/26 |
 
 ### 4. Acuerdos y compromisos del equipo
 
@@ -179,7 +179,7 @@ Empezar a diseñar la propuesta arquitectónica del sistema y el diagrama C4 asi
 
 | Tarea | Responsable | Fecha límite | Estado |
 |---|---|---|---|
-| Elaborar propuesta arquitectónica y diagramas C4 | Todos | — | Completada |
+| Elaborar propuesta arquitectónica y diagramas C4 | Todos | 28/08/2026 | En Proceso |
 
 ### 6. Riesgos, bloqueos o dudas abiertas
 
