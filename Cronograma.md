@@ -4,25 +4,6 @@ Planificación semanal completa del proyecto, desde la formación del equipo
 (31 de julio de 2026) hasta el último día de semestre (28 de noviembre de
 2026). Equipo de **4 integrantes**.
 
-> ⚠️ **Supuestos a confirmar con el profesor.** Ninguna diapositiva revisada
-> (clases 1 a 14) menciona fechas oficiales de Entrega 1, Entrega 2, primer
-> parcial ni segundo parcial. Las fechas marcadas como **(tentativa)** en
-> este documento son propuestas del equipo para poder planear, no fechas
-> confirmadas por el profesor — ajustarlas en cuanto se anuncien las reales.
-> La única fecha dura conocida es el **28 de noviembre de 2026** (último día
-> de semestre, dato dado por el equipo), a partir de la cual se calculó
-> hacia atrás el resto del cronograma.
->
-> También se asume que la clase se dicta **2 veces por semana** (según lo
-> confirmado por el equipo), en un patrón tipo martes/viernes que calza con
-> las fechas de exportación de diapositivas ya vistas en `Work/Slides/`.
-> Si los días reales de clase son otros, correr las fechas de "Clase" de
-> cada fila sin cambiar la semana a la que pertenecen.
->
-> El syllabus (Clase 1) pide grupos de **5 a 7 personas**; este equipo tiene
-> 4. Si eso no ha sido validado explícitamente con el profesor, es un punto
-> a confirmar — puede implicar que cada integrante deba asumir más de los
-> "mínimo 5 casos de uso" indicados por persona.
 
 ## Cómo leer este documento
 
