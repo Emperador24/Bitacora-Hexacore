@@ -66,3 +66,19 @@
 **Próximos pasos**
 - Mantener la Bitácora Arquitectónica actualizada con cada avance técnico, sin reescribir entradas pasadas.
 - Hacer los cambias que nos dijo el profesor en la retroalimentación de los diagrmas C4.
+
+---
+
+## [22/08/2026] 
+
+**¿Qué hice?**
+- Revisé el documento de Diagramas C4 (C4Diagrams.tex) completo contra el checklist oficial de c4model.com (https://c4model.com/diagrams/checklist).
+- Rehice los 6 diagramas (Contexto, Contenedores, Componentes, Panorama de Sistemas, Secuencia y Despliegue) en draw.io (app.diagrams.net), aplicando la retroalimentación del profesor: cada caja ahora muestra nombre, tipo/tecnología entre corchetes y una breve descripción, y el antiguo Diagrama Dinámico se reemplazó por un Diagrama de Secuencia UML con líneas de vida, mensajes numerados y barra de activación.
+- Exporté los 6 diagramas como imágenes PNG y guardé también los archivos fuente .drawio en Work/Diagrams/, para poder editarlos más adelante.
+- Mejoré el formato del documento en LaTeX (tablas con encabezado repetido en cada página, texto alineado a la izquierda en vez de justificado, imágenes que no se salen de la página).
+- Recompilé C4Diagrams.tex sin errores ni advertencias y actualicé el PDF final en Submission/C4Diagrams.pdf. 
+
+**Próximos pasos** 
+- Mostrar los nuevos avances al profesor y al equipo para escuchar nuevas sugerencias.
+- Revisar si el diagrama de despliegue en Kubernetes coincide con la plataforma que el equipo realmente va a usar.
+- Mantener la Bitácora Arquitectónica actualizada con cada avance técnico, sin reescribir entradas pasadas.
