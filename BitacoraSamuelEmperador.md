@@ -62,6 +62,7 @@
 - Cree el repositorio con las bitacoras personal y la bitacora grupal con una plantilla para tener todo el proceso del proyecto documentado y organizado.
 - Actualización de la bitacora grupal con las reuniones grupales que hemos tenido hasta el dia de hoy.
 - Actualización de mi bitacora personal con todo el trabajo que he realizado hasta el dia de hoy.
+- Distribución de los casos de uso y envio del mismo al profesor.
 
 **Próximos pasos**
 - Mantener la Bitácora Arquitectónica actualizada con cada avance técnico, sin reescribir entradas pasadas.
