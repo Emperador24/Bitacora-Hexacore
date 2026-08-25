@@ -29,10 +29,10 @@ Detalle completo, semana a semana, en [`Cronograma.md`](./Cronograma.md). Resume
 | Hito | Fecha | Estado |
 |---|---|---|
 | Formación del equipo + 2 ideas de proyecto | 31 jul 2026 | ✅ hecho |
-| Propuesta arquitectónica (QA priorizados, componentes, conexiones) | 18 ago 2026 | ✅ submitted |
-| Diagramas C4 completos (6 diagramas + checklist) | 20 ago 2026 | ✅ submitted |
+| Propuesta arquitectónica (QA priorizados, componentes, conexiones) | 18 ago 2026 | ✅ hecho |
+| Diagramas C4 completos (6 diagramas + checklist) | 20 ago 2026 | ⚠️ en trabajo |
 | Bitácora Arquitectónica creada (registro permanente) | 18 ago 2026 | ✅ en curso, continuo |
-| Listado de casos de uso (25 CU, spreadsheet) | 20 ago 2026 | ✅ submitted |
+| Listado de casos de uso (25 CU, spreadsheet) | 20 ago 2026 | ✅ hecho |
 | Utility Tree formal + tácticas de disponibilidad | 28 ago 2026 (tentativa) | ⬜ pendiente |
 | Primer Parcial | 25 sep 2026 (tentativa) | ⬜ pendiente |
 | **Entrega 1 (SAD v1, 15%)** | **9 oct 2026 (tentativa)** | ⬜ pendiente |
