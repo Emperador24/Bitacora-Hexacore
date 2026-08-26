@@ -83,3 +83,13 @@
 - Mostrar los nuevos avances al profesor y al equipo para escuchar nuevas sugerencias.
 - Revisar si el diagrama de despliegue en Kubernetes coincide con la plataforma que el equipo realmente va a usar.
 - Mantener la Bitácora Arquitectónica actualizada con cada avance técnico, sin reescribir entradas pasadas.
+
+---
+
+## [25/08/2026]
+
+**¿Qué hice?**
+- Hice el cambio de la plantilla del documento SAD de word a latex y tambien se elaboro la primera version de este mismo.
+
+**Próximos pasos** 
+- Mostrar al profesor la primera versión y tomar su retroalimentación.
