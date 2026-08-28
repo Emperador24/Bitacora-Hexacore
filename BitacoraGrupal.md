@@ -195,6 +195,64 @@ Elaboracion de las bitacoras con su respectivas plantillas.
 
 ---
 
+## Sesión N.º 5 — [27/08/2026]
+
+**Modalidad:** virtual 
+**Hora de inicio – fin: 11:00am - 11:30am** 
+**Asistentes: Todos** 
+**Ausentes (y motivo): N/A** 
+
+### 1. Objetivo de la sesión
+Repasar en equipo todo lo avanzado durante la semana (20/08–27/08): cierre de los diagramas C4 con la retroalimentación del profesor, migración y consolidación del documento SAD, y arranque de la estructura base del prototipo (`App/`) con su flujo de ramas.
+
+### 2. Temas tratados
+
+- Tema 1: Retroalimentación del profesor sobre la primera versión de los diagramas C4 (Sesión 4) y rehechura de los 6 diagramas en draw.io siguiendo el checklist oficial de c4model.com.
+- Tema 2: Migración del documento de arquitectura de Word a LaTeX y consolidación como un único SAD (Descripción de Arquitectura de Software), versión 1.0.
+- Tema 3: Cierre de los pendientes de la v1.0 del SAD → versión 1.1, vía PR revisado y mergeado por el equipo.
+- Tema 4: Definición y creación de la estructura base del prototipo en `App/` (gateway, microservicios, frontends, infra, shared), derivada de las vistas de contenedores/componentes del SAD.
+- Tema 5: Acuerdo del flujo de ramas del repo (`main`/`develop`/`feature/<nombre>`) y de la convención de un repo personal de patrones por integrante, documentado en `WORKFLOW.md`.
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
+|---|---|---|---|---|
+| 1 | Adoptar draw.io como herramienta definitiva de diagramación y rehacer los 6 diagramas C4 (Contexto, Contenedores, Componentes, Panorama de Sistemas, Secuencia y Despliegue) conforme al checklist de c4model.com, reemplazando el antiguo Diagrama Dinámico por un Diagrama de Secuencia UML con líneas de vida y mensajes numerados. | Ajuste pedido por el profesor sobre la primera versión de los diagramas (Sesión 4). | Samuel Emperador | 22/08/2026 |
+| 2 | Migrar el documento de arquitectura de Word a LaTeX y consolidarlo en un único SAD (`DescripcionArquitecturaSoftware.tex`) que integra la propuesta arquitectónica, los diagramas C4, los 32 casos de uso y la Bitácora Arquitectónica, agregando el primer Árbol de Utilidad (ASR) y los ADR de las decisiones fundacionales — versión 1.0. | Evita mantener varios documentos sueltos y deja un solo entregable de arquitectura versionado. | Samuel Emperador | 25/08/2026 |
+| 3 | Cerrar los pendientes de la v1.0 del SAD — diagrama de clases UML del modelo de dominio, vista de componentes de Personal/Eventos-Emergencias/Parqueaderos, ambientes de desarrollo y pruebas en la vista física, y modelo de datos detallado por microservicio — dejando la versión 1.1 como base para el prototipo. | Continuación directa de la v1.0; necesario antes de empezar a codear. | Diego Coronado (PR), equipo (revisión) | 27/08/2026 |
+| 4 | Definir la estructura de carpetas del prototipo (`App/gateway`, `App/services/*`, `App/frontend/*`, `App/infra`, `App/shared`), cada una con README propio (rol, casos de uso que cubre, responsable), todavía sin código. | Deriva de las vistas de contenedores y componentes del SAD; da a cada integrante un punto de partida claro sin pisar el trabajo de los demás. | Samuel Emperador | 27/08/2026 |
+| 5 | Adoptar el flujo de ramas `main` (protegida) ← `develop` ← `feature/<nombre>` para el código de `App/`, y que cada integrante mantenga además un repo personal de patrones (ej. `samuel-pattern-lab`) para probar tácticas arquitectónicas (circuit breaker, failover, bloqueo distribuido, colas de mensajes) antes de aplicarlas en un servicio real. | Indicación del profesor; aísla la experimentación de patrones del código del prototipo. | Todos | 27/08/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+
+- Cada integrante empieza a trabajar en su propia rama `feature/<nombre>` (creada desde `develop`) sobre el servicio o frontend que le corresponde, según el mapa de responsables de `App/README.md`.
+- El repo personal de patrones de cada integrante se mantiene fuera de HEXACORE y no reemplaza el prototipo: solo sirve para aislar y entender un patrón antes de llevarlo a `App/`.
+- El SAD (`Documentation/Work/DescripcionArquitecturaSoftware.tex`) queda como documento vivo: cualquier avance técnico se agrega ahí sin reescribir entradas pasadas de su historial de cambios.
+
+### 5. Tareas asignadas
+
+| Tarea | Responsable | Fecha límite | Estado |
+|---|---|---|---|
+| Rehacer los 6 diagramas C4 en draw.io según el checklist de c4model.com | Samuel Emperador | 22/08/2026 | Completada |
+| Migrar y consolidar el SAD v1.0 en LaTeX | Samuel Emperador | 25/08/2026 | Completada |
+| Cerrar pendientes del SAD (clases UML, vista de componentes, vista física, modelo de datos) → v1.1 | Diego Coronado | 27/08/2026 | Completada |
+| Crear la estructura base de `App/` y el `WORKFLOW.md` con el flujo de ramas | Samuel Emperador | 27/08/2026 | Completada |
+| Crear las ramas `develop`/`feature/<nombre>` y empezar el prototipo del servicio/frontend asignado | Todos | 28/08/2026 | En Proceso |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+
+- La agrupación de Eventos/Emergencias, Pedidos y Administración como contenedores propios aún no está detallada a nivel de vista de componentes en el SAD (solo se documentan en profundidad Entradas, Personal, Eventos/Emergencias y Parqueaderos); se ajustará si al prototipar aparece una mejor separación.
+- Falta definir el stack técnico concreto (lenguaje/framework) por servicio; queda abierto para cuando cada integrante empiece a prototipar el suyo.
+- Pendiente validar con el profesor la versión 1.1 del SAD, en particular si el diagrama de despliegue en Kubernetes coincide con la plataforma que el equipo realmente va a usar.
+
+### 7. Avance general del proyecto
+Semana de cierre del diseño arquitectónico y arranque del prototipo: los 6 diagramas C4 quedaron corregidos y validados contra el checklist oficial; el documento de arquitectura se consolidó y migró a LaTeX como SAD único (v1.0 → v1.1, con ASR, ADR, vista de componentes completa, modelo de datos y vista física); y quedó lista la primera estructura de carpetas del prototipo (`App/`) con su flujo de ramas, para que cada integrante empiece a codear su servicio o frontend.
+
+### 8. Próxima sesión
+**Fecha propuesta: 28/08/2026** — **Temas a tratar:** retroalimentación del profesor sobre el SAD v1.1 y avance del prototipo por servicio.
+
+---
+
 ## Historial de sesiones
 
 | Sesión | Fecha | Temas principales | Enlace |
@@ -203,6 +261,7 @@ Elaboracion de las bitacoras con su respectivas plantillas.
 | 2 | 06/08/2026 | Definición completa de casos de uso | [Ir a la sesión](#sesión-nº-2--06082026) |
 | 3 | 13/06/2026 | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--13082026) |
 | 4 | 20/08/2026 | Arranque de la propuesta arquitectónica y el diagrama C4 así como tambien la creacion de las bitacoras| [Ir a la sesión](#sesión-nº-4--20082026) |
+| 5 | 27/08/2026 | Cierre de diagramas C4 y consolidación del SAD (v1.0 → v1.1); arranque de la estructura base del prototipo y del flujo de ramas | [Ir a la sesión](#sesión-nº-5--27082026) |
 
 ---
 
