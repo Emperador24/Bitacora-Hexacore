@@ -212,6 +212,7 @@ Repasar en equipo todo lo avanzado durante la semana (20/08–27/08): cierre de 
 - Tema 3: Cierre de los pendientes de la v1.0 del SAD → versión 1.1, vía PR revisado y mergeado por el equipo.
 - Tema 4: Definición y creación de la estructura base del prototipo en `App/` (gateway, microservicios, frontends, infra, shared), derivada de las vistas de contenedores/componentes del SAD.
 - Tema 5: Acuerdo del flujo de ramas del repo (`main`/`develop`/`feature/<nombre>`) y de la convención de un repo personal de patrones por integrante, documentado en `WORKFLOW.md`.
+- Tema 6: Cierre del stack técnico que el SAD dejaba abierto ("se define al empezar el prototipo") — framework de frontend web, framework de app móvil y motor(es) de base de datos por microservicio — para poder arrancar el código de la Entrega 2.
 
 ### 3. Decisiones tomadas
 
@@ -222,6 +223,12 @@ Repasar en equipo todo lo avanzado durante la semana (20/08–27/08): cierre de 
 | 3 | Cerrar los pendientes de la v1.0 del SAD — diagrama de clases UML del modelo de dominio, vista de componentes de Personal/Eventos-Emergencias/Parqueaderos, ambientes de desarrollo y pruebas en la vista física, y modelo de datos detallado por microservicio — dejando la versión 1.1 como base para el prototipo. | Continuación directa de la v1.0; necesario antes de empezar a codear. | Diego Coronado (PR), equipo (revisión) | 27/08/2026 |
 | 4 | Definir la estructura de carpetas del prototipo (`App/gateway`, `App/services/*`, `App/frontend/*`, `App/infra`, `App/shared`), cada una con README propio (rol, casos de uso que cubre, responsable), todavía sin código. | Deriva de las vistas de contenedores y componentes del SAD; da a cada integrante un punto de partida claro sin pisar el trabajo de los demás. | Samuel Emperador | 27/08/2026 |
 | 5 | Adoptar el flujo de ramas `main` (protegida) ← `develop` ← `feature/<nombre>` para el código de `App/`, y que cada integrante mantenga además un repo personal de patrones (ej. `samuel-pattern-lab`) para probar tácticas arquitectónicas (circuit breaker, failover, bloqueo distribuido, colas de mensajes) antes de aplicarlas en un servicio real. | Indicación del profesor; aísla la experimentación de patrones del código del prototipo. | Todos | 27/08/2026 |
+| 6 | Frontend web (`portal-web-cliente`, `portal-web-admin`) → **Angular + TypeScript**. App móvil (`app-movil-cliente`, `app-movil-personal`) → **Kotlin nativo sobre Android Studio** (Jetpack Compose, coroutines/Flow). | Angular: el equipo ya lo conoce; su estructura de módulos/guards/interceptors facilita trabajo en paralelo entre 4 personas con convenciones consistentes; RxJS encaja con las actualizaciones en tiempo real (ASR-05). Kotlin: ya definido por el equipo; es el estándar oficial de Android; coroutines/Flow encajan con tiempo real y notificaciones (evacuación, turnos). Alternativa descartada: framework híbrido (React Native/Flutter) — ASR-10 ya evita duplicar lógica de negocio en el cliente, así que compartir UI entre plataformas no compensaba la complejidad extra. | Todos | 27/08/2026 |
+| 7 | Motor de base de datos por microservicio (refina ADR-01) → **PostgreSQL** para todos los esquemas transaccionales (Entradas, Personal, Eventos/Emergencias, Parqueaderos, cuentas/proveedores/pagos) + **MongoDB** solo para Reportes/analítica dentro de `administracion` (polyglot persistence). | Cada motor se ajusta al tipo de dato que maneja. Alternativa descartada: un único motor (PostgreSQL) también para Reportes — se descartó para no forzar un esquema rígido sobre datos de reporte cuya estructura varía. | Todos | 27/08/2026 |
+
+**Ventajas / desventajas de las decisiones 6 y 7:** un solo framework por tipo de interfaz simplifica el tooling y el CI para un equipo de 4, a costa de que Angular y Kotlin no comparten código de UI (los contratos comunes quedan limitados a la especificación de API — OpenAPI/JSON Schema). El polyglot persistence usa el motor más adecuado a cada tipo de dato, a costa de operar dos motores de base de datos en vez de uno.
+
+Documentadas como **ADR-05** (stack de frontend) y **ADR-06** (motor de BD por dominio) en `DescripcionArquitecturaSoftware.tex`; reflejadas también en `App/README.md` y en el README de cada servicio/frontend.
 
 ### 4. Acuerdos y compromisos del equipo
 
@@ -237,16 +244,18 @@ Repasar en equipo todo lo avanzado durante la semana (20/08–27/08): cierre de 
 | Migrar y consolidar el SAD v1.0 en LaTeX | Samuel Emperador | 25/08/2026 | Completada |
 | Cerrar pendientes del SAD (clases UML, vista de componentes, vista física, modelo de datos) → v1.1 | Diego Coronado | 27/08/2026 | Completada |
 | Crear la estructura base de `App/` y el `WORKFLOW.md` con el flujo de ramas | Samuel Emperador | 27/08/2026 | Completada |
+| Definir y documentar el stack de frontend (Angular/Kotlin) y el motor de BD por dominio (PostgreSQL/MongoDB) como ADR-05 y ADR-06 | Todos | 27/08/2026 | Completada |
 | Crear las ramas `develop`/`feature/<nombre>` y empezar el prototipo del servicio/frontend asignado | Todos | 28/08/2026 | En Proceso |
 
 ### 6. Riesgos, bloqueos o dudas abiertas
 
 - La agrupación de Eventos/Emergencias, Pedidos y Administración como contenedores propios aún no está detallada a nivel de vista de componentes en el SAD (solo se documentan en profundidad Entradas, Personal, Eventos/Emergencias y Parqueaderos); se ajustará si al prototipar aparece una mejor separación.
-- Falta definir el stack técnico concreto (lenguaje/framework) por servicio; queda abierto para cuando cada integrante empiece a prototipar el suyo.
+- Angular y Kotlin no comparten código de UI entre plataformas: los contratos comunes entre frontend web y app móvil quedan limitados a la especificación de API (OpenAPI/JSON Schema); vigilar que esto no genere inconsistencias entre clientes.
+- Operar dos motores de base de datos (PostgreSQL + MongoDB) suma complejidad operativa frente a un único motor; evaluar si se justifica mantenerlo así en despliegue.
 - Pendiente validar con el profesor la versión 1.1 del SAD, en particular si el diagrama de despliegue en Kubernetes coincide con la plataforma que el equipo realmente va a usar.
 
 ### 7. Avance general del proyecto
-Semana de cierre del diseño arquitectónico y arranque del prototipo: los 6 diagramas C4 quedaron corregidos y validados contra el checklist oficial; el documento de arquitectura se consolidó y migró a LaTeX como SAD único (v1.0 → v1.1, con ASR, ADR, vista de componentes completa, modelo de datos y vista física); y quedó lista la primera estructura de carpetas del prototipo (`App/`) con su flujo de ramas, para que cada integrante empiece a codear su servicio o frontend.
+Semana de cierre del diseño arquitectónico y arranque del prototipo: los 6 diagramas C4 quedaron corregidos y validados contra el checklist oficial; el documento de arquitectura se consolidó y migró a LaTeX como SAD único (v1.0 → v1.1, con ASR, ADR, vista de componentes completa, modelo de datos y vista física); se cerró el stack técnico que quedaba abierto (Angular para frontend web, Kotlin nativo para app móvil, PostgreSQL + MongoDB como persistencia poliglota) documentado como ADR-05 y ADR-06; y quedó lista la primera estructura de carpetas del prototipo (`App/`) con su flujo de ramas, para que cada integrante empiece a codear su servicio o frontend.
 
 ### 8. Próxima sesión
 **Fecha propuesta: 28/08/2026** — **Temas a tratar:** retroalimentación del profesor sobre el SAD v1.1 y avance del prototipo por servicio.
@@ -261,7 +270,7 @@ Semana de cierre del diseño arquitectónico y arranque del prototipo: los 6 dia
 | 2 | 06/08/2026 | Definición completa de casos de uso | [Ir a la sesión](#sesión-nº-2--06082026) |
 | 3 | 13/06/2026 | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--13082026) |
 | 4 | 20/08/2026 | Arranque de la propuesta arquitectónica y el diagrama C4 así como tambien la creacion de las bitacoras| [Ir a la sesión](#sesión-nº-4--20082026) |
-| 5 | 27/08/2026 | Cierre de diagramas C4 y consolidación del SAD (v1.0 → v1.1); arranque de la estructura base del prototipo y del flujo de ramas | [Ir a la sesión](#sesión-nº-5--27082026) |
+| 5 | 27/08/2026 | Cierre de diagramas C4 y consolidación del SAD (v1.0 → v1.1); definición del stack (Angular, Kotlin, PostgreSQL/MongoDB); arranque de la estructura base del prototipo y del flujo de ramas | [Ir a la sesión](#sesión-nº-5--27082026) |
 
 ---
 
