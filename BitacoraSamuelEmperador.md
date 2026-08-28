@@ -93,3 +93,14 @@
 
 **Próximos pasos** 
 - Mostrar al profesor la primera versión y tomar su retroalimentación.
+
+---
+
+## [27/08/2026]
+
+**¿Qué hice?**
+- Crear la rama Develop y mi rama personal feature/samuel
+- Crear estructura basica de la aplicación
+
+**Próximos pasos** 
+- Empezar con la implementación de la aplicación.
