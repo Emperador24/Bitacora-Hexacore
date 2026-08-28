@@ -258,7 +258,7 @@ Documentadas como **ADR-05** (stack de frontend) y **ADR-06** (motor de BD por d
 Semana de cierre del diseño arquitectónico y arranque del prototipo: los 6 diagramas C4 quedaron corregidos y validados contra el checklist oficial; el documento de arquitectura se consolidó y migró a LaTeX como SAD único (v1.0 → v1.1, con ASR, ADR, vista de componentes completa, modelo de datos y vista física); se cerró el stack técnico que quedaba abierto (Angular para frontend web, Kotlin nativo para app móvil, PostgreSQL + MongoDB como persistencia poliglota) documentado como ADR-05 y ADR-06; y quedó lista la primera estructura de carpetas del prototipo (`App/`) con su flujo de ramas, para que cada integrante empiece a codear su servicio o frontend.
 
 ### 8. Próxima sesión
-**Fecha propuesta: 28/08/2026** — **Temas a tratar:** retroalimentación del profesor sobre el SAD v1.1 y avance del prototipo por servicio.
+**Fecha propuesta: 03/09/2026** — **Temas a tratar:** retroalimentación del profesor sobre el SAD v1.1 y avance del prototipo por servicio.
 
 ---
 
