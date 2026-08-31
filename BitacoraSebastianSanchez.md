@@ -46,3 +46,18 @@ Teníamos la duda de si debíamos quedarnos únicamente con alimentación o trab
 ### Próximos pasos
 El profesor nos indicó que agregáramos también el sistema de gestión de parqueaderos, así que el siguiente paso es definir sus casos de uso e integrarlos con los de alimentación.
 
+
+
+## [10/08/2026]
+
+### ¿Qué hice?
+Terminé de definir bien los casos de uso que teníamos y los organicé en la plantilla de Excel, completando la información necesaria de cada uno.
+
+### ¿Qué aprendí?
+Aprendí a detallar mejor un caso de uso y a organizar toda su información dentro de la plantilla.
+
+### Dificultades o dudas
+Algunos casos de uso todavía necesitaban aterrizarse mejor para que quedara claro qué hacía cada uno.
+
+### Próximos pasos
+Revisar los casos de uso con el grupo y hacer los ajustes que sean necesarios antes de presentarlos.
