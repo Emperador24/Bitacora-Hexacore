@@ -95,3 +95,19 @@ Todavía no teníamos claro si usar timestamps junto con la cola virtual o si la
 
 ### Próximos pasos
 Seguir evaluando estas alternativas y definir mejor la arquitectura que vamos a utilizar.
+
+
+
+## [27/08/2026]
+
+### ¿Qué hice?
+Hablé con el profesor sobre las posibilidades que teníamos para el monitoreo del proyecto. Durante la conversación propuse utilizar Circuit Breaker como una posible opción, aunque quedó como algo tentativo mientras revisamos otras alternativas.
+
+### ¿Qué aprendí?
+Entendí mejor la importancia de pensar desde la arquitectura cómo vamos a monitorear el sistema y qué mecanismos podemos usar para detectar o manejar problemas.
+
+### Dificultades o dudas
+Todavía no está definido qué mecanismo vamos a utilizar para el monitoreo. Circuit Breaker es una posibilidad, pero tenemos que revisar otras opciones antes de decidir.
+
+### Próximos pasos
+Investigar otras alternativas de monitoreo y compararlas con Circuit Breaker para decidir cuál tiene más sentido para el proyecto.
