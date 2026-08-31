@@ -32,4 +32,17 @@ No estábamos seguros de si trabajar la parte de alimentación o la de parqueade
 Terminar de organizar los casos de uso de alimentación y presentárselos al profesor.
 
 
+## [06/08/2026]
+
+### ¿Qué hice?
+Le presentamos al profesor los casos de uso que habíamos definido para la gestión de alimentación.
+
+### ¿Qué aprendí?
+Con la retroalimentación del profesor vimos que el proyecto podía incluir más de un sistema y no teníamos que escoger solamente uno.
+
+### Dificultades o dudas
+Teníamos la duda de si debíamos quedarnos únicamente con alimentación o trabajar también otra parte del centro de eventos.
+
+### Próximos pasos
+El profesor nos indicó que agregáramos también el sistema de gestión de parqueaderos, así que el siguiente paso es definir sus casos de uso e integrarlos con los de alimentación.
 
