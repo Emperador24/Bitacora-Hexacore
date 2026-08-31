@@ -65,21 +65,23 @@ Revisar los casos de uso con el grupo y hacer los ajustes que sean necesarios an
 
 
 
-
 ## [13/08/2026]
 
 ### ¿Qué hice?
-Revisamos con el profesor los casos de uso de gestión de alimentación. Nos indicó que algunos estaban muy relacionados y se podían juntar, así que unimos "Gestionar preparación del pedido" con "Validar y entregar pedido" en un solo caso de uso. También agregué nuevos casos para completar y mejorar la propuesta, entre ellos el de gestionar establecimientos de alimentos.
+Revisamos con el profesor los casos de uso de gestión de alimentación y vimos que algunos se podían juntar porque hacían parte del mismo proceso. Por ejemplo, unimos "Gestionar preparación del pedido" con "Validar y entregar pedido". También agregué otros casos de uso para completar mejor la propuesta.
+
+Además, con mi grupo empezamos a definir cómo íbamos a desarrollar el sistema. Decidimos hacer una aplicación móvil en Android Studio para los usuarios y una aplicación web para la parte administrativa.
+
+En la aplicación móvil los usuarios podrán tener sus entradas a los eventos y utilizar los códigos QR necesarios para acceder y utilizar servicios como los parqueaderos. Por otro lado, la aplicación web estará enfocada en los administradores, para que puedan gestionar la información y las diferentes funcionalidades del sistema.
 
 ### ¿Qué aprendí?
-Entendí que no es necesario separar en casos de uso diferentes acciones que realmente hacen parte del mismo proceso.
+Entendí mejor cómo separar las funcionalidades dependiendo del tipo de usuario. No todos necesitan utilizar la misma aplicación, ya que los usuarios necesitan principalmente acceder a sus entradas y servicios, mientras que los administradores necesitan herramientas para gestionar el sistema.
 
 ### Dificultades o dudas
-Después de juntar algunos casos de uso tuvimos que revisar cuáles hacían falta para que el sistema quedara más completo.
+Tuvimos que pensar cómo dividir las funcionalidades entre la aplicación móvil y la web, y cómo funcionaría el uso de los códigos QR para las entradas y los parqueaderos.
 
 ### Próximos pasos
-Terminar de ajustar los nuevos casos de uso en la plantilla de Excel y revisar que todos estén bien definidos.
-
+Seguir definiendo las funcionalidades de la aplicación móvil y de la página web, y terminar de ajustar los casos de uso en la plantilla de Excel.
 
 
 ## [25/08/2026]
