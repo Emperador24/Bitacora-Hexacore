@@ -79,3 +79,19 @@ Después de juntar algunos casos de uso tuvimos que revisar cuáles hacían falt
 
 ### Próximos pasos
 Terminar de ajustar los nuevos casos de uso en la plantilla de Excel y revisar que todos estén bien definidos.
+
+
+
+## [25/08/2026]
+
+### ¿Qué hice?
+Hablé con mi grupo sobre la arquitectura que podría tener el proyecto. Discutimos si para la compra de entradas íbamos a manejar timestamps o si era mejor trabajar solamente con una cola virtual. También evaluamos algunas opciones de bases de datos que podríamos utilizar para los diferentes componentes del sistema.
+
+### ¿Qué aprendí?
+Entendí que antes de definir la arquitectura hay que pensar bien cómo se van a manejar procesos importantes como la compra de entradas y qué base de datos se adapta mejor a cada necesidad.
+
+### Dificultades o dudas
+Todavía no teníamos claro si usar timestamps junto con la cola virtual o si la cola por sí sola era suficiente. También quedaron por revisar las opciones de bases de datos.
+
+### Próximos pasos
+Seguir evaluando estas alternativas y definir mejor la arquitectura que vamos a utilizar.
