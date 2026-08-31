@@ -15,16 +15,21 @@ Teníamos varias ideas y no estábamos seguros de cuál escoger.
 
 ### Próximos pasos
 Empezar a definir mejor cómo va a funcionar el centro de eventos y qué cosas va a tener el sistema.
-## [DD/MM/AAAA]
 
-**¿Qué hice?**
-- 
 
-**¿Qué aprendí?**
-- 
+## [05/08/2026]
 
-**Dificultades o dudas**
-- 
+### ¿Qué hice?
+Definí los casos de uso para la gestión de alimentación del centro de eventos. También estuvimos mirando si enfocarnos en el sistema de alimentación o en el de parqueaderos.
 
-**Próximos pasos**
-- 
+### ¿Qué aprendí?
+Entendí mejor cómo plantear los casos de uso a partir de lo que necesita hacer el sistema.
+
+### Dificultades o dudas
+No estábamos seguros de si trabajar la parte de alimentación o la de parqueaderos.
+
+### Próximos pasos
+Terminar de organizar los casos de uso de alimentación y presentárselos al profesor.
+
+
+
