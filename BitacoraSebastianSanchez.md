@@ -61,3 +61,21 @@ Algunos casos de uso todavía necesitaban aterrizarse mejor para que quedara cla
 
 ### Próximos pasos
 Revisar los casos de uso con el grupo y hacer los ajustes que sean necesarios antes de presentarlos.
+
+
+
+
+
+## [13/08/2026]
+
+### ¿Qué hice?
+Revisamos con el profesor los casos de uso de gestión de alimentación. Nos indicó que algunos estaban muy relacionados y se podían juntar, así que unimos "Gestionar preparación del pedido" con "Validar y entregar pedido" en un solo caso de uso. También agregué nuevos casos para completar y mejorar la propuesta, entre ellos el de gestionar establecimientos de alimentos.
+
+### ¿Qué aprendí?
+Entendí que no es necesario separar en casos de uso diferentes acciones que realmente hacen parte del mismo proceso.
+
+### Dificultades o dudas
+Después de juntar algunos casos de uso tuvimos que revisar cuáles hacían falta para que el sistema quedara más completo.
+
+### Próximos pasos
+Terminar de ajustar los nuevos casos de uso en la plantilla de Excel y revisar que todos estén bien definidos.
