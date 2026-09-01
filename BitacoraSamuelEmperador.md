@@ -111,10 +111,11 @@
 
 **¿Qué hice?**
 - Generé los 6 diagramas C4 del sistema (Contexto, Contenedores, Componentes, Panorama de Sistemas, Secuencia y Despliegue) con la herramienta [archify](https://github.com/tt-a1i/archify.git), como HTML interactivos (pan/zoom, tema claro/oscuro), en `Documentation/Work/Diagrams/Archify/`.
-- Cree una aplicación base de la apliacion movil.
+- Cree una aplicación base de la apliacion movil de cliente.
 - Limpié `Documentation/Work/` para que solo tenga fuentes (`.tex`, `.md`, `Diagrams/`): moví los PDF compilados a `Documentation/Submission/`, eliminé los subproductos de LaTeX sueltos (`.aux .log .out .toc .fls .fdb_latexmk`) y actualicé `.gitignore` más un `README.md` con el flujo de compilación, para que no se vuelva a acumular basura de compilación.
 
 **Próximos pasos**
 - Conectar los servicios mock del Portal Web Cliente al API Gateway real cuando el backend esté disponible.
 - Actualizar `C4Diagrams.tex`/`DescripcionArquitecturaSoftware.tex` para que coincidan con los diagramas de archify (4 apps, 6 microservicios).
 - Revisar con el equipo el PR que hice hacia el main desde la rama develop.
+- Revisar documentacion si podemos tener una unica aplicacion movil para los usuarios de cliente y personal.
