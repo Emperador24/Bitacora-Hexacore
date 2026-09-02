@@ -119,3 +119,14 @@
 - Actualizar `C4Diagrams.tex`/`DescripcionArquitecturaSoftware.tex` para que coincidan con los diagramas de archify (4 apps, 6 microservicios).
 - Revisar con el equipo el PR que hice hacia el main desde la rama develop.
 - Revisar documentacion si podemos tener una unica aplicacion movil para los usuarios de cliente y personal.
+
+---
+
+## [02/09/2026]
+
+**¿Qué hice?**
+- Verifique como poder asignar acceso a diferentes aplicaciones despues del login por el rol que tenga cada usuario, en nuestra aplicacion movil.
+- Version 0.1 de la aplicacion movil la cual solo tiene plasmado la idea de como sera nuestra aplicacion y cuales seran las funcionalidades.
+
+**Próximos pasos**
+- 
