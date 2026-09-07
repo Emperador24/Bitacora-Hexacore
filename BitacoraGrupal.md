@@ -18,8 +18,8 @@
 
 **Modalidad:** presencial 
 **Hora de inicio – fin: 11:00am - 11:30 am** 
-**Asistentes:*Todos* 
-**Ausentes (y motivo):*N/A* 
+**Asistentes:Todos**
+**Ausentes (y motivo): N/A**
 
 ### 1. Objetivo de la sesión
 Presentar y acordar la idea de proyecto del equipo, definir a grandes rasgos cómo se abordaría el desarrollo, y empezar a levantar los primeros casos de uso.
@@ -169,11 +169,11 @@ Empezar a diseñar la propuesta arquitectónica del sistema y el diagrama C4 asi
 
 | # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
 |---|---|---|---|---|
-| 1 | Arrancar la propuesta arquitectónica y el diagrama C4 a partir de la versión final de casos de uso (Sesión 3). El detalle de las decisiones arquitectónicas de fondo (microservicios, API Gateway, etc.) queda registrado en la [Bitácora Arquitectónica](https://github.com/Emperador24/ArquiSoftware/blob/main/Work/BitacoraArquitectonica.md) — ver fila 1 del registro consolidado más abajo. | Es el siguiente paso del cronograma tras cerrar los casos de uso. | Todos | 28/08/26 |
+| 1 | Arrancar la propuesta arquitectónica y el diagrama C4 a partir de la versión final de casos de uso (Sesión 3). El detalle de las decisiones arquitectónicas de fondo (microservicios, API Gateway, etc.) | Todos | 28/08/26 |
 
 ### 4. Acuerdos y compromisos del equipo
 
-- El detalle técnico de las decisiones de arquitectura se documenta desde este punto en la Bitácora Arquitectónica (`Work/BitacoraArquitectonica.md`), no solo aquí — ver la nota de unión al inicio de este documento.
+- El detalle técnico de las decisiones de arquitectura se documenta desde este punto en la Bitácora Grupal, y los aportes individuales se registraran en las Bitacoras personales.
 
 ### 5. Tareas asignadas
 

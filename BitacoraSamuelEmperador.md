@@ -107,14 +107,26 @@
 
 ---
 
-## [06/09/2026]
+## [31/08/2026]
 
 **¿Qué hice?**
-- Participé en la Sesión N.º 6 del equipo (virtual): revisamos los puntos 1–4 de la guía de Entrega 1 (RNF con métricas verificables, Árbol de Utilidad con el par (Importancia, Dificultad) + ASR-11/ASR-12, tácticas y patrones de los 8 atributos pendientes, y las 2 PoCs) y repartimos todo como tareas de la semana con fecha límite 13/09/2026.
-- Generé los **6 diagramas C4** del sistema (Contexto, Contenedores, Componentes, Panorama de Sistemas, Secuencia y Despliegue) con la herramienta **archify**, como HTML interactivos (pan/zoom, tema claro/oscuro), en `Documentation/Work/Diagrams/Archify/`.
-- Creé una **aplicación base de la app móvil de cliente**.
-- Limpié `Documentation/Work/` para que solo contenga fuentes (`.tex`, `.md`, `Diagrams/`): moví los PDF compilados a `Documentation/Submission/`, eliminé los subproductos sueltos de LaTeX (`.aux`, `.log`, `.out`, `.toc`, `.fls`, `.fdb_latexmk`) y actualicé el `.gitignore`, además de un `README.md` con el flujo de compilación para que no se vuelva a acumular basura de compilación.
+- Generé los 6 diagramas C4 del sistema (Contexto, Contenedores, Componentes, Panorama de Sistemas, Secuencia y Despliegue) con la herramienta [archify](https://github.com/tt-a1i/archify.git), como HTML interactivos (pan/zoom, tema claro/oscuro), en `Documentation/Work/Diagrams/Archify/`.
+- Cree una aplicación base de la apliacion movil de cliente.
+- Limpié `Documentation/Work/` para que solo tenga fuentes (`.tex`, `.md`, `Diagrams/`): moví los PDF compilados a `Documentation/Submission/`, eliminé los subproductos de LaTeX sueltos (`.aux .log .out .toc .fls .fdb_latexmk`) y actualicé `.gitignore` más un `README.md` con el flujo de compilación, para que no se vuelva a acumular basura de compilación.
 
 **Próximos pasos**
-- Cerrar mis tareas de la semana: RNF-01 a RNF-16, el reformateo del Árbol de Utilidad con ASR-11 y ASR-12, las tácticas de Rendimiento y Mantenibilidad, y la documentación de PoC-01 y PoC-02.
-- Seguir con la implementación de la app móvil de cliente sobre la base ya creada.
+- Conectar los servicios mock del Portal Web Cliente al API Gateway real cuando el backend esté disponible.
+- Actualizar `C4Diagrams.tex`/`DescripcionArquitecturaSoftware.tex` para que coincidan con los diagramas de archify (4 apps, 6 microservicios).
+- Revisar con el equipo el PR que hice hacia el main desde la rama develop.
+- Revisar documentacion si podemos tener una unica aplicacion movil para los usuarios de cliente y personal.
+
+---
+
+## [02/09/2026]
+
+**¿Qué hice?**
+- Verifique como poder asignar acceso a diferentes aplicaciones despues del login por el rol que tenga cada usuario, en nuestra aplicacion movil.
+- Version 0.1 de la aplicacion movil la cual solo tiene plasmado la idea de como sera nuestra aplicacion y cuales seran las funcionalidades.
+
+**Próximos pasos**
+- 
