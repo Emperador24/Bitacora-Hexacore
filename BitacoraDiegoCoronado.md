@@ -17,6 +17,26 @@
 
 ---
 
+## [27/08/2026]
+**¿Qué hice?**
+- Cerré los pendientes que quedaban abiertos en la v1.0 del SAD (DescripcionArquitecturaSoftware.tex): subí la versión a 1.1 y actualicé la fecha de entrega.
+- Dibujé el diagrama de clases UML del modelo de dominio en TikZ (18 clases con sus relaciones y multiplicidades).
+- Documenté los componentes internos de los servicios de Personal, Eventos/Emergencias y Parqueaderos (antes solo estaba detallado el de Entradas/Mercado Secundario).
+- Describí los ambientes de desarrollo y pruebas en la vista física (topología reducida de producción, CI en dev, pruebas de carga en test).
+- Detallé el modelo de datos por microservicio, con esquemas y llaves foráneas lógicas.
+- Corregí una referencia rota a la tabla del modelo de dominio.
+
+**¿Qué aprendí?**
+- Con base de datos independiente por microservicio (ADR-01) las referencias entre dominios no pueden ser llaves foráneas físicas, porque cada esquema vive en su propia base; toca resolverlas a nivel de aplicación guardando el id y validando desde el servicio dueño del dato.
+
+**Dificultades o dudas**
+- Qué tan detallado dejar el diagrama de clases en esta versión (simplificado, con multiplicidades) sin meterme ya en navegabilidad y tipos de dato exactos, que dependen de decisiones que aún no están cerradas.
+
+**Próximos pasos**
+- Refinar el modelo entidad-relación de cada microservicio junto con el prototipo funcional y definir el motor de base de datos concreto por dominio.
+
+---
+
 ## [06/09/2026]
 **¿Qué hice?**
 - Migré toda la app de Kotlin a Flutter y la reimplementé desde cero (hexacore_cliente pasó a llamarse hexacore_app: pubspec.yaml, bundle ID iOS, applicationId/namespace Android, MainActivity, Info.plist).
