@@ -61,3 +61,48 @@
 - Correcciones de frontend y backend completo.
 
 ---
+
+## [13/09/2026]
+
+**¿Qué hice?**
+- Corregí el PR #10 (feature/diego → main), que debía apuntar a develop — quedó feature/diego → develop, mergeable sin conflictos.
+- Confirmé mi alcance real revisando el README del SAD: App/services/eventos-emergencias, CU-016 a CU-020 (logística). Los de parqueadero no son míos, son de Daniel y Samuel.
+- Elegí CU-018 (Gestionar turno y asistencia del personal) como mi caso de uso complejo, siguiendo el criterio real del equipo: no el flujo más largo, sino el que ya tiene infraestructura no trivial documentada (offline-first + cola de mensajes) en CU_eventos_completo.xlsx.
+- Construí el backend real desde cero: NestJS + TypeORM + PostgreSQL. Entidades (Empleado, Turno, SolicitudCambioTurno, RegistroAsistencia), lógica de solicitud/aprobación de cambio de turno con validación de horas máximas y búsqueda automática de reemplazo, y registro de entrada/salida con detección de credencial inválida, turno no vigente y duplicados.
+- Agregué la infraestructura no trivial que exige la ficha del CU: cola de mensajes RabbitMQ (Publicador/Consumidor de Eventos) para propagar cambios de turno aprobados, y soporte offline-first (idempotencyKey + timestamp del cliente) en el registro de asistencia.
+- Instalé Docker, levanté PostgreSQL y RabbitMQ reales, y verifiqué todo el flujo end-to-end.
+- Escribí 20 pruebas de integración contra la infraestructura real; llegué a 97.7% de cobertura.
+
+**¿Qué aprendí?**
+- A elegir el caso de uso complejo con criterio de arquitectura (infraestructura no trivial demostrable), no por instinto de "cuál se ve más largo".
+- Un gotcha real de TypeORM: si cargas una relación eager y luego reasignas solo la FK cruda (turno.empleadoId = x), el save() la revierte silenciosamente porque prioriza el objeto de la relación — hay que reasignar ambos.
+- Con ESM real (nodenext), una referencia circular entre dos entidades que se necesitan mutuamente revienta en producción aunque los tests con vitest la toleren — se soluciona con el tipo Relation<T> de TypeORM.
+
+**Dificultades o dudas**
+- Encontré varios bugs solo al probar contra infraestructura real que los tests con mocks nunca hubieran detectado (columnas nullable sin tipo explícito, la relación stale ya mencionada).
+
+**Próximos pasos**
+- Conectar la GUI de Flutter a este backend real y probarlo de punta a punta en el navegador.
+
+---
+
+## [14/09/2026]
+
+**¿Qué hice?**
+- Conecté ShiftsPage, AttendancePage y RequestsReviewPage de la app Flutter al backend real (antes eran 100% mock). Probé el flujo completo en Chrome: login → ver turno real → solicitar cambio → jefe de personal aprueba → turno se reasigna de verdad en la base de datos → registrar entrada/salida de asistencia.
+- Intenté desplegar en mi iPhone físico. Falló por un bug de macOS (com.apple.provenance bloqueando el firmado de código del framework de Flutter) — diagnostiqué la causa raíz hasta el fondo, pero lo dejé pendiente porque requiere sudo y no era bloqueante para demostrar el trabajo (Chrome ya prueba el flujo completo).
+- Descubrí que tenía dos clones locales del repo desincronizados (~/HEXACORE, donde tengo VS Code abierto, y otra copia donde había estado trabajando) — sincronicé todo el trabajo de esta semana a la carpeta correcta y quedó comiteado ahí.
+- Hice commit de todo el trabajo (backend + GUI conectada) en feature/diego y lo subí a origin/feature/diego.
+- Revisé el estado general de la entrega contra la rúbrica de la primera entrega: identifiqué qué me falta a mí (bitácora al día, prepararme para las preguntas de "conocimiento de lo entregado") y qué falta a nivel de equipo (SRS formal, diapositivas, CI/CD, desplegabilidad en 2+ computadoras — nada de eso existe todavía en el repo).
+
+**¿Qué aprendí?**
+- A no dar nada por hecho con las rutas de trabajo: tener dos clones del mismo repo en carpetas distintas genera confusión real sobre "dónde están mis cambios" si no se verifica con cuidado.
+
+**Dificultades o dudas**
+- El despliegue a dispositivos físicos iOS sigue bloqueado por el bug de macOS; falta resolverlo si quiero demostrarlo en el celular real el día de la sustentación.
+
+**Próximos pasos**
+- Coordinar con el equipo lo pendiente grupal (CI/CD, desplegabilidad, diapositivas, SRS) — no es algo que pueda resolver solo.
+- Repasar el código a fondo para las preguntas de "conocimiento de lo entregado" (25% del total).
+
+---
