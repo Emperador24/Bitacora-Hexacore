@@ -130,3 +130,11 @@
 
 **Próximos pasos**
 - 
+
+---
+
+## [12/09/2026]
+
+**¿Qué hice?**
+- Version 2 de la pagina web siguiendo el mismo diseño de la aplicacion movil (SOLO FRONTEND).
+- Toma de decision sobre lenguaje para el backend.
