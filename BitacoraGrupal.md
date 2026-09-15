@@ -282,7 +282,7 @@ Revisar en equipo los **puntos 1 a 4 de la guía de Entrega 1** (requisitos no f
   - **PoC-02 — validación de QR (JWT firmado vs. UUID + consulta a BD):** resultado **no concluyente**: en el benchmark local **UUID + BD midió más rápido que JWT**, contrario a lo que se esperaba al escribir el ADR.
 - Tema 5 — **Cómo reportar una PoC que no confirma la hipótesis.** A raíz de PoC-02 se discutió si "arreglar" el experimento hasta que diera el resultado esperado o reportarlo como salió. Se acordó reportarlo tal cual, porque el valor de la PoC es reducir riesgo antes de codificar, no justificar una decisión ya tomada.
 - Tema 6 — **Una sola app móvil, con acceso por rol.** Se discutió que la vista de contenedores del SAD contempla dos aplicaciones móviles separadas (`app-movil-cliente` y `app-movil-personal`) y que, en la práctica, ambas comparten navegación, autenticación, notificaciones y consumo del gateway. Se planteó unificarlas en **una sola aplicación** en la que el **login determine el rol** (cliente, personal, administrador) y, con él, las vistas y funcionalidades habilitadas.
-- Tema 7 — **Cambio del stack de la app móvil: de Kotlin nativo a Flutter.** Se revisó la decisión 6 de la Sesión 5 (Kotlin nativo sobre Android Studio, **ADR-05**): tal como está, el sistema solo llegaría a dispositivos Android. Se discutió migrar a **Flutter (Dart)** para cubrir Android e iOS con una sola base de código, y a qué atributo de calidad corresponde esa motivación (ver la nota bajo §3).
+- Tema 7 — **Cambio del stack de la app móvil: de Kotlin nativo a Flutter.** Se revisó la decisión 6 de la Sesión 5 (Kotlin nativo sobre Android Studio, **ADR-05**): tal como está, el sistema solo llegaría a dispositivos Android. Se discutió migrar a **Flutter (Dart)** para cubrir Android e iOS con una sola base de código, y a qué atributo de calidad corresponde esa motivación (ver la nota bajo §3). La migración ya quedó **ejecutada** durante la semana: la app pasó de `hexacore_cliente` (Kotlin) a `hexacore_app` (Flutter), reimplementada desde cero y corriendo en Android e iOS; la sesión formaliza la decisión y la deja documentada como ADR.
 - Tema 8 — **Orden del repositorio de documentación.** Se revisó la limpieza de `Documentation/Work/` (solo fuentes: `.tex`, `.md`, `Diagrams/`; PDF compilados en `Documentation/Submission/`; subproductos de LaTeX ignorados por `.gitignore`; `README.md` con el flujo de compilación) y la generación de los **6 diagramas C4 como HTML interactivos** (pan/zoom, tema claro/oscuro) en `Documentation/Work/Diagrams/Archify/`, como complemento navegable de los PNG del SAD.
 
 ### 3. Decisiones tomadas
@@ -311,6 +311,9 @@ Revisar en equipo los **puntos 1 a 4 de la guía de Entrega 1** (requisitos no f
 - Cada integrante documenta **sus** atributos en `ArchitecturalProposal.tex` respetando el formato acordado (escenario → táctica → patrón, ≥2 alternativas comparadas), para que el documento se lea uniforme aunque lo escriban 4 personas.
 - Los resultados de las PoCs se registran con **números medidos**, no con apreciaciones; si una PoC no concluye, se dice explícitamente y se anota qué haría falta para concluirla.
 - Los cambios de esta semana entran al SAD como **versión 1.2** por PR, sin reescribir el historial de versiones anteriores.
+- El cambio de stack móvil **no se edita sobre la Sesión 5**: ADR-05 se deja como está y se agrega **ADR-07** referenciándolo, conforme a la regla 5 del `README.md` ("no se edita el pasado").
+- La autorización por rol se valida **en el backend**, no solo ocultando pantallas en la app: la app única solo decide qué muestra, el gateway decide qué permite.
+- De aquí en adelante, `Documentation/Work/` se mantiene solo con fuentes; ningún PDF ni subproducto de LaTeX vuelve a commitearse ahí.
 - Cada integrante registra su avance de la semana en su bitácora personal (regla 1 del `README.md`).
 
 ### 5. Tareas asignadas
@@ -327,6 +330,15 @@ Revisar en equipo los **puntos 1 a 4 de la guía de Entrega 1** (requisitos no f
 | PoC-02 (validación de QR, JWT vs. UUID+BD): documentar el resultado no concluyente, las condiciones del benchmark y qué haría falta para concluirla | Samuel Emperador | 13/09/2026 | En Proceso |
 | Revisión cruzada del documento consolidado (puntos 1–4 de Entrega 1) y merge del PR del SAD v1.2 | Todos | 13/09/2026 | Pendiente |
 | Seleccionar el caso de uso complejo de cada integrante para el prototipo de Entrega 1 (trabajo transversal de la Semana 6 del cronograma) | Todos | 13/09/2026 | En Proceso |
+| Redactar **ADR-07** (app móvil única con acceso por rol + Flutter en lugar de Kotlin nativo), con ventajas/desventajas y alternativas descartadas, referenciando ADR-05 sin modificarlo | Samuel Emperador | 13/09/2026 | Pendiente |
+| Migrar la app móvil de Kotlin a un **único proyecto Flutter** (`hexacore_cliente` → `hexacore_app`: pubspec, bundle ID iOS, applicationId/namespace Android, 16 pantallas reimplementadas, registro con OTP, checkout, reventa y notificaciones) | Diego Coronado | 06/09/2026 | Completada |
+| Implementar sobre `hexacore_app` la **navegación y las vistas habilitadas por rol** tras el login (cliente, personal, administrador), con la autorización real validada en el gateway | Diego Coronado + Samuel Emperador | 13/09/2026 | En Proceso |
+| Actualizar el SAD, `C4Diagrams.tex` y los README de `App/` (vista de contenedores, vista de despliegue y mapa de responsables) para reflejar **una sola app móvil multiplataforma** en vez de `app-movil-cliente` + `app-movil-personal`, y alinearlos con los diagramas de archify | Samuel Emperador | 13/09/2026 | Pendiente |
+| Verificar si **Portabilidad** está entre los 14 atributos priorizados; si no está, registrarla con su RNF y su escenario en el Árbol de Utilidad (sustenta la decisión 8) | Samuel Emperador | 13/09/2026 | Pendiente |
+| Comprobar en `hexacore_app` la **funcionalidad nativa** que aún no se ha probado en Flutter: escaneo de QR con cámara y permisos, y notificaciones push contra un backend real | Diego Coronado | 13/09/2026 | Pendiente |
+| Resolver **Google/Apple Sign-In**, hoy simulados en la app por falta de backend y credenciales (Client ID de Google, cuenta Apple Developer): decidir si se consiguen o si se documenta como limitación asumida para Entrega 1 | Todos | 13/09/2026 | Pendiente |
+| Limpieza de `Documentation/Work/` (solo fuentes), PDF movidos a `Submission/`, `.gitignore` y `README.md` con el flujo de compilación | Samuel Emperador | 31/08/2026 | Completada |
+| Generar los 6 diagramas C4 como HTML interactivos en `Documentation/Work/Diagrams/Archify/` | Samuel Emperador | 31/08/2026 | Completada |
 
 ### 6. Riesgos, bloqueos o dudas abiertas
 
@@ -335,12 +347,105 @@ Revisar en equipo los **puntos 1 a 4 de la guía de Entrega 1** (requisitos no f
 - **Safety** sigue siendo el atributo con el alcance menos claro (el sistema no es crítico ni embebido); hay que decidir esta semana si se documenta con escenarios reales (aforo máximo, evacuación) o si se justifica formalmente por qué tiene baja relevancia.
 - Los 8 atributos pendientes de tácticas son bastante trabajo para una sola semana y la Semana 7 ya trae contenido nuevo (Seguridad y Comprobabilidad, Clases 12 y 13) más el Primer Parcial cerca (25/09 tentativo): existe riesgo de acumulación.
 - Sigue pendiente validar con el profesor la versión 1.1 del SAD (viene de la Sesión 5), en particular el diagrama de despliegue en Kubernetes.
+- **Conocimiento de Flutter concentrado en una persona:** la migración la hizo Diego y por ahora es el único con el stack andando; el resto del equipo debe ponerse al día con Flutter (composición de widgets en vez de XML + Views) para poder aportar al prototipo y no depender de un solo integrante.
+- **Funcionalidad nativa en Flutter:** las notificaciones ya están en la app, pero el escaneo de QR con cámara y los permisos asociados todavía no se han probado; dependen de plugins y hay que verificarlos antes de dar el cambio de stack por cerrado (tarea asignada en §5).
+- **Google/Apple Sign-In simulados:** el registro con proveedores externos está mockeado por falta de backend y de credenciales reales; mientras siga así, el flujo de autenticación (y con él el acceso por rol) no está probado de extremo a extremo.
+- **Probar en iOS requiere macOS/Xcode** y una cuenta de desarrollador para publicar: hoy la app ya corre en iOS en el equipo de Diego (tras ajustar permisos de Automatización y Red Local para el debugging inalámbrico), pero falta confirmar que los demás integrantes puedan ejecutarla y probarla en esa plataforma.
+- **App única = más superficie en un solo cliente:** cliente, personal y administración conviven en el mismo binario; el control de acceso real debe estar en el backend (RBAC en el gateway), porque cualquiera puede inspeccionar la app y descubrir las vistas de los otros roles.
+- El cambio de stack móvil deja **desactualizadas** la vista de contenedores, la vista de despliegue y los README de `App/` mientras no se apliquen las tareas de §5.
 
 ### 7. Avance general del proyecto
-Sesión de consolidación de los puntos 1–4 de la guía de Entrega 1. El equipo revisó y acordó: el conjunto de RNF (RNF-01 a RNF-16) con métricas verificables cubriendo los 14 atributos de calidad priorizados; el reformateo del Árbol de Utilidad al par (Importancia, Dificultad) junto con dos ASR nuevos (Integrabilidad y Desplegabilidad); el formato y el reparto del análisis de tácticas y patrones para los 8 atributos de las Clases 7–14 que faltan en `ArchitecturalProposal.tex`; y la lectura de las 2 PoCs ya corridas — PoC-01 confirma ADR-03 con resultados determinantes (30/30 vs. 0/30) y PoC-02 queda reportada como no concluyente. Todo lo tratado quedó repartido como tareas con fecha límite 13/09/2026, para cerrar los puntos 1–4 de Entrega 1 antes de entrar a la Semana 7 del cronograma.
+Sesión de consolidación de los puntos 1–4 de la guía de Entrega 1. El equipo revisó y acordó: el conjunto de RNF (RNF-01 a RNF-16) con métricas verificables cubriendo los 14 atributos de calidad priorizados; el reformateo del Árbol de Utilidad al par (Importancia, Dificultad) junto con dos ASR nuevos (Integrabilidad y Desplegabilidad); el formato y el reparto del análisis de tácticas y patrones para los 8 atributos de las Clases 7–14 que faltan en `ArchitecturalProposal.tex`; y la lectura de las 2 PoCs ya corridas — PoC-01 confirma ADR-03 con resultados determinantes (30/30 vs. 0/30) y PoC-02 queda reportada como no concluyente. Todo lo tratado quedó repartido como tareas con fecha límite 13/09/2026, para cerrar los puntos 1–4 de Entrega 1 antes de entrar a la Semana 7 del cronograma. Además se tomaron dos decisiones que cambian el diseño del cliente móvil: **unificar las dos apps móviles en una sola con acceso por rol** (Mantenibilidad/Modificabilidad, con apoyo de Desplegabilidad, Seguridad y Usabilidad) y **cambiar el stack móvil de Kotlin nativo a Flutter** para llegar a Android e iOS (**Portabilidad**), que se documentarán como **ADR-07** superseding la parte móvil de ADR-05. La migración a Flutter no quedó solo en el papel: durante la semana la app se reimplementó desde cero como `hexacore_app`, con 16 pantallas rediseñadas, registro con OTP, compra de entradas, reventa y notificaciones, corriendo ya en Android e iOS. En lo operativo, `Documentation/Work/` quedó limpio (solo fuentes, PDF en `Submission/`, subproductos ignorados) y los 6 diagramas C4 quedaron también disponibles como HTML interactivos.
 
 ### 8. Próxima sesión
 **Fecha propuesta: 10/09/2026** — **Temas a tratar:** revisión de las tácticas documentadas por cada integrante, cierre del alcance de Safety, y definición de la estrategia de pruebas y los estándares de programación (trabajo transversal de la Semana 7).
+
+---
+
+## Sesión N.º 7 — [14/09/2026]
+
+**Modalidad:** virtual 
+**Hora de inicio – fin: 11:00am - 12:30pm** 
+**Asistentes: Todos** 
+**Ausentes (y motivo): N/A** 
+
+### 1. Objetivo de la sesión
+Reunión extraordinaria convocada tras el anuncio del profesor con las **condiciones definitivas de la Primera Entrega y de la sustentación**. El objetivo fue tomar las decisiones necesarias para llegar con todo terminado: fijar el plan de cierre, repartir los entregables faltantes, definir cómo se van a demostrar en vivo los atributos de calidad, y dejar por escrito las dudas que se le preguntarán al profesor en la clase de mañana.
+
+### 2. Temas tratados
+
+- Tema 1 — **Fechas confirmadas.** La sustentación de **Hexacore es el 24/09/2026**. Los entregables se suben a la asignación de **Brightspace antes de que inicie la clase de la primera sustentación (22/09)**.
+- Tema 2 — **Formato de la sustentación (40 minutos).** 20 minutos de **diapositivas** cubriendo todos los entregables + 20 minutos de **demostración directa del software y de las pruebas** hechas para validar los atributos de calidad. Hay que ensayar: son dos bloques cronometrados y el segundo depende de que el sistema levante en vivo.
+- Tema 3 — **Listado de entregables y estado real de cada uno.** Se revisó uno por uno contra lo que el equipo tiene hoy:
+  - **SRS (Especificación de Requisitos de Software):** *no existe como documento aparte*. Hoy los 32 casos de uso y los RNF viven dentro del SAD. Es el vacío más grande de documentación.
+  - **SAD** según el formato visto en clase: existe (`DescripcionArquitecturaSoftware.tex`, v1.1 + lo trabajado en la Sesión 6); falta cerrar las tácticas pendientes, ADR-07 y dejarlo como versión de entrega.
+  - **Prototipo funcional:** la app móvil (`hexacore_app`, Flutter) está avanzada en GUI, pero **el backend todavía no está implementado** — hoy la app trabaja con datos y proveedores de autenticación simulados. Sin backend no hay "end-to-end" ni pruebas de integración.
+  - **Bitácora arquitectónica y bitácoras individuales:** existen en este repositorio; se entregan como enlace.
+  - **Diapositivas y anexos:** por hacer.
+- Tema 4 — **Criterio de "caso de uso completo".** El profesor lo define explícitamente: implementación **end-to-end** (GUI, backend, base de datos y servicios de apoyo) **y 100% de cobertura de pruebas de integración sobre el backend**. Además, si el CU complejo depende de otros (autenticación, registro, login), esos también hay que implementarlos. Se discutió que esto cambia la prioridad: es mejor **menos casos de uso realmente completos** que muchos a medias.
+- Tema 5 — **Atributos de calidad: demostración en vivo con resultados cuantitativos.** No basta con documentar tácticas: hay que **ejecutar la prueba delante del profesor y mostrar números**. Se revisó qué prueba concreta respalda cada atributo y quién la corre.
+- Tema 6 — **Desplegabilidad (requisitos duros).** El sistema completo debe quedar **distribuido en dos o más computadores**, debe poder **iniciarse con un único script desde uno de ellos**, y debe existir el **pipeline CI/CD con todos los componentes vistos en clase**. Integrar el script de arranque con el pipeline es opcional. Es el requisito más pesado en infraestructura y el que más riesgo tiene de no estar listo.
+- Tema 7 — **Regla de las bitácoras.** El profesor exige **al menos una entrada por semana, con evidencia de que fue creada en una fecha acorde** (es decir, se verifica contra el historial del repositorio). Se hizo la revisión honesta del estado: hay integrantes con semanas sin entrada y una bitácora todavía con la plantilla vacía.
+- Tema 8 — **"Conocimiento de lo entregado".** Es un ítem de la rúbrica: preguntas individuales, sobre partes grupales **y** sobre el trabajo propio de cada uno, respondidas **por escrito en un tiempo máximo**. Nadie puede llegar sabiendo solo su pedazo.
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
+|---|---|---|---|---|
+| 1 | **Congelar los entregables el domingo 21/09 a las 8:00 p.m.** y subirlos a Brightspace esa misma noche, no el 22/09. | El plazo real del profesor es "antes de que inicie la clase del 22/09" y no se permiten cambios después; entregar la noche anterior evita depender de la hora exacta de la clase, de la conexión o de un merge de último minuto. Alternativa descartada: subir el mismo 22/09 antes de clase. | Todos | 21/09/2026 |
+| 2 | **Producir el SRS como documento propio y separado del SAD**, reutilizando los 32 casos de uso ya levantados y los RNF-01 a RNF-16, en LaTeX y con la misma convención de `Documentation/` (fuente en `Work/`, PDF en `Submission/`). | Es un entregable explícito del profesor y hoy no existe; los insumos ya están hechos, el trabajo es de estructura y redacción, no de levantamiento. Alternativa descartada: presentar el SAD como si cubriera el SRS — son dos entregables distintos en la lista. | Todos | 19/09/2026 |
+| 4 | **Priorizar el backend por encima de la GUI.** El alcance del prototipo se fija en **un caso de uso complejo por integrante (4 en total) más los CU de soporte** (registro, login y control de acceso por rol), todos end-to-end: GUI → gateway → microservicio → base de datos. | Sin backend no hay end-to-end, no hay pruebas de integración y no hay demo de atributos de calidad: la GUI sola no suma en la rúbrica. Alternativa descartada: seguir puliendo pantallas y dejar el backend para el final. | Todos | 20/09/2026 |
+| 5 | **Un caso de uso solo se presenta como terminado si tiene 100% de cobertura de pruebas de integración sobre su backend**; el reporte de cobertura se genera con herramienta y se muestra en la sustentación. Si un CU no llega, se presenta como parcial y se dice explícitamente. | Es el criterio literal del profesor para considerar completa la implementación, y coincide con la regla 2 de las bitácoras (no exagerar el alcance). Alternativa descartada: reportar cobertura "aproximada" sin reporte generado. | Cada integrante en su CU | 20/09/2026 |
+| 6 | **Desplegabilidad:** desplegar el sistema en **2 computadores del equipo** (nodo A: gateway + microservicios; nodo B: bases de datos + servicios de apoyo), con un **único script de arranque** ejecutable desde el nodo A, y un **pipeline CI/CD** con todos los componentes vistos en clase (build, pruebas, reporte de cobertura, empaquetado y despliegue). La integración del script con el pipeline se intentará solo si sobra tiempo (es opcional). | Son requisitos duros y explícitos de la entrega; separarlos en dos nodos reales evita la trampa de "dos procesos en la misma máquina". Alternativa descartada: simular la distribución con contenedores en un solo equipo. | 20/09/2026 |
+| 7 | Cada atributo de calidad visto hasta la entrega debe tener **una prueba ejecutable con resultado numérico**, no solo documentación. Se arma un **guion de demo** con el orden de las pruebas, quién la ejecuta, el comando exacto y el resultado esperado. Se reutiliza el reparto de atributos de la Sesión 6: Diego (Desplegabilidad, Integrabilidad), Sebastián (Comprobabilidad, Safety), Daniel (Seguridad, Usabilidad), Samuel (Rendimiento, Mantenibilidad). | El profesor exige "demostraciones en vivo de las pruebas realizadas y los resultados cuantitativos"; sin guion, 20 minutos de demo no alcanzan para 14 atributos. Alternativa descartada: mostrar capturas de resultados en diapositivas. | Cada dueño de atributo | 21/09/2026 |
+| 8 | **Estructura de la sustentación:** 20 min de diapositivas repartidas por integrante (cada uno expone la parte que trabajó: Samuel documentación/arquitectura, Diego app y despliegue, Sebastián SRS y pruebas, Daniel seguridad y usabilidad) + 20 min de demo según el guion. **Ensayo completo cronometrado el 23/09.** | El formato es de 40 minutos exactos y la demo es en vivo: hay que medir tiempos y tener probado que el sistema levanta. Alternativa descartada: ensayar el mismo día de la sustentación. | Todos | 23/09/2026 |
+| 9 | **Bitácoras al día desde hoy y sin rellenar el pasado:** cada integrante escribe su entrada semanal el día que trabaja y la commitea ese mismo día, para que la fecha del commit coincida con la fecha de la entrada. Las semanas que quedaron sin entrada **no se inventan**; si hubo trabajo no registrado, se escribe una entrada nueva con la fecha de hoy que aclare a qué semana corresponde. | El profesor verifica que las entradas "hayan sido creadas en fechas acordes", es decir, contra el historial del repositorio: backdatear sería detectable y contradice la regla 5 del `README.md` ("no se edita el pasado"). Alternativa descartada: llenar las semanas faltantes con entradas retroactivas. | Cada integrante | 21/09/2026 |
+| 10 | Antes del ensayo del 23/09 se hace una **ronda interna de preguntas cruzadas**: cada integrante responde por escrito preguntas de los otros tres sobre partes grupales y sobre su propio trabajo. | Prepara el ítem "Conocimiento de lo entregado" de la rúbrica, que se responde por escrito y con tiempo límite, y obliga a que todos entiendan el entregable completo y no solo su parte. | Todos | 23/09/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+
+- **Del 14 al 21 de septiembre el equipo trabaja en modo entrega:** reunión corta diaria (15 min) para revisar bloqueos, y nada de trabajo nuevo que no esté en la lista de entregables.
+- **Nada se sube a Brightspace sin haber sido revisado por otro integrante**; el paquete final lo arma una sola persona (Samuel) para que no se suban versiones distintas del mismo documento.
+- **Después del 21/09 no se toca ningún entregable**, aunque se encuentre un error: no se permiten modificaciones posteriores y presentar un archivo distinto al subido sería incumplir la condición del profesor. Lo que se encuentre después se anota para la Entrega 2.
+- La demo se ejecuta sobre el **mismo paquete entregado**, en los dos computadores ya configurados, y se prueba de punta a punta el 23/09 en las mismas condiciones del día de la sustentación.
+- Cada integrante debe poder explicar **todo el entregable**, no solo su parte (ítem "Conocimiento de lo entregado").
+- El enlace a este repositorio se entrega como evidencia de la bitácora arquitectónica y de las bitácoras individuales.
+
+### 5. Tareas asignadas
+
+| Tarea | Responsable | Fecha límite | Estado |
+|---|---|---|---|
+| Redactar el **SRS** como documento propio (casos de uso + RNF-01 a RNF-16 + alcance), en LaTeX, fuente en `Documentation/Work/` y PDF en `Submission/` | Samuel Emperador | 19/09/2026 | Pendiente |
+| Cerrar el **SAD** como versión de entrega: tácticas de los 8 atributos pendientes, ADR-07, Árbol de Utilidad con (Importancia, Dificultad) y ASR-11/ASR-12, y resultados de las PoCs | Samuel Emperador | 19/09/2026 | En Proceso |
+| Implementar el **backend** de los 4 casos de uso complejos + autenticación/registro/roles, end-to-end contra base de datos | Cada integrante en su CU | 20/09/2026 | Pendiente |
+| Definir la estrategia de **pruebas de integración** y la herramienta de cobertura, y dejar el reporte generándose en el pipeline | Sebastián Sánchez | 18/09/2026 | Pendiente |
+| Llegar a **100% de cobertura de pruebas de integración** sobre el backend de cada CU entregado | Cada integrante en su CU | 20/09/2026 | Pendiente |
+| Montar el despliegue en **2 computadores** + **script único de arranque** desde el nodo A | Diego Coronado | 20/09/2026 | Pendiente |
+| Implementar el **pipeline CI/CD** con todos los componentes vistos en clase (build, pruebas, cobertura, empaquetado, despliegue) | Diego Coronado | 20/09/2026 | Pendiente |
+| Conectar `hexacore_app` (Flutter) al backend real y reemplazar los datos y proveedores de autenticación simulados | Diego Coronado | 20/09/2026 | En Proceso |
+| Guion de demo de atributos de calidad: por atributo, prueba, comando, resultado esperado y responsable de ejecutarla | Cada dueño de atributo (Sesión 6) | 21/09/2026 | Pendiente |
+| Diapositivas de la sustentación (20 min) cubriendo todos los entregables, con reparto por integrante | Samuel Emperador (armado), todos (contenido) | 21/09/2026 | Pendiente |
+| Revisar y poner al día la bitácora personal propia, commiteando en la fecha real de trabajo | Cada integrante | 21/09/2026 | En Proceso |
+| Armar el paquete final y subirlo a Brightspace | Samuel Emperador | 21/09/2026 | Pendiente |
+| Ronda interna de preguntas cruzadas ("Conocimiento de lo entregado") | Todos | 23/09/2026 | Pendiente |
+| Ensayo completo cronometrado (20 min diapositivas + 20 min demo) sobre el paquete ya entregado | Todos | 23/09/2026 | Pendiente |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+
+**Riesgos**
+
+- **Solo quedan 8 días** (14/09 → 21/09) y el backend, las pruebas de integración, el despliegue en dos máquinas y el pipeline CI/CD no están empezados. Es el riesgo principal de toda la entrega.
+- **El 100% de cobertura de pruebas de integración** es la condición más difícil de cumplir: exige que el backend esté terminado con varios días de margen. Si no se alcanza, hay que decidir entre entregar menos casos de uso completos o entregar casos de uso incompletos — el equipo ya decidió lo primero (decisión 5).
+- **Desplegabilidad** concentra tres requisitos duros (dos computadores, script único, pipeline CI/CD) en un solo responsable; si Diego se bloquea, hay que reasignar rápido.
+- **La demo es en vivo y sobre el paquete congelado:** cualquier falla del sistema el 24/09 no se puede corregir, porque no se permiten modificaciones después del 22/09. De ahí el ensayo del 23/09 en las mismas condiciones.
+- **Bitácoras con semanas faltantes:** hay integrantes sin entradas en varias semanas y una bitácora que sigue con la plantilla vacía. La rúbrica pide una entrada semanal con fechas verificables y el historial del repositorio ya está escrito: no se puede arreglar hacia atrás, solo cumplir desde ahora.
+- **La rúbrica llegó como imagen** y no quedó transcrita en el anuncio; el equipo no tiene el detalle de los pesos por ítem, así que hoy no puede priorizar el esfuerzo según puntaje.
+
+### 7. Avance general del proyecto
+El anuncio del profesor convirtió la Entrega 1 de un hito tentativo de octubre en una fecha dura: **entrega el 22/09 (congelada, sin modificaciones posteriores) y sustentación de Hexacore el 24/09**, con 40 minutos repartidos entre diapositivas y demostración en vivo. La sesión sirvió para hacer el inventario honesto de lo que hay y lo que falta: la documentación de arquitectura está avanzada (SAD v1.1 + lo trabajado en la Sesión 6) y la app móvil en Flutter tiene la GUI bastante completa, pero **falta el SRS como documento propio, falta todo el backend, las pruebas de integración con 100% de cobertura, el despliegue en dos computadores con script único y el pipeline CI/CD**. El equipo decidió congelar el 21/09 por la noche, priorizar backend sobre GUI, entregar menos casos de uso pero realmente completos, preparar un guion de demo con resultados cuantitativos por atributo de calidad, ensayar cronometrado el 23/09 y ponerse al día con las bitácoras sin falsear fechas. Mañana 15/09 se llevan a clase las dudas abiertas, varias de las cuales pueden cambiar el alcance del trabajo de la semana.
+
+### 8. Próxima sesión
+**Fecha propuesta: 15/09/2026 ** — **Temas a tratar:** Problemas y atribuciones despues del primer dia de desarrollo, con respecto a todas las decisiones tomadas el día de hoy. A partir de ahí, reunión diaria corta hasta el 21/09.
 
 ---
 
@@ -353,7 +458,8 @@ Sesión de consolidación de los puntos 1–4 de la guía de Entrega 1. El equip
 | 3 | 13/06/2026 | Recomendaciones del profesor y actualización final de casos de uso | [Ir a la sesión](#sesión-nº-3--13082026) |
 | 4 | 20/08/2026 | Arranque de la propuesta arquitectónica y el diagrama C4 así como tambien la creacion de las bitacoras| [Ir a la sesión](#sesión-nº-4--20082026) |
 | 5 | 27/08/2026 | Cierre de diagramas C4 y consolidación del SAD (v1.0 → v1.1); definición del stack (Angular, Kotlin, PostgreSQL/MongoDB); arranque de la estructura base del prototipo y del flujo de ramas | [Ir a la sesión](#sesión-nº-5--27082026) |
-| 6 | 06/09/2026 | Revisión de los puntos 1–4 de la guía de Entrega 1: RNF con métricas verificables, Árbol de Utilidad con (Importancia, Dificultad) + ASR-11/ASR-12, tácticas y patrones de los 8 atributos pendientes, y lectura de las 2 PoCs (PoC-01 confirma ADR-03; PoC-02 no concluyente) | [Ir a la sesión](#sesión-nº-6--06092026) |
+| 6 | 06/09/2026 | Revisión de los puntos 1–4 de la guía de Entrega 1: RNF con métricas verificables, Árbol de Utilidad con (Importancia, Dificultad) + ASR-11/ASR-12, tácticas y patrones de los 8 atributos pendientes, y lectura de las 2 PoCs (PoC-01 confirma ADR-03; PoC-02 no concluyente); app móvil única con acceso por rol y cambio de stack móvil a Flutter (ADR-07) | [Ir a la sesión](#sesión-nº-6--06092026) |
+| 7 | 14/09/2026 | Plan de cierre de la Entrega 1 tras el anuncio del profesor: congelamiento el 21/09, entrega 22/09 y sustentación el 24/09; prioridad al backend, 100% de cobertura de pruebas de integración, despliegue en 2 computadores con script único y pipeline CI/CD, guion de demo por atributo de calidad y ensayo cronometrado | [Ir a la sesión](#sesión-nº-7--14092026) |
 
 ---
 
