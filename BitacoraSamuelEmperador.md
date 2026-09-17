@@ -142,24 +142,31 @@
 ---
 
 ## [14/09/2026]
-
+ 
 **¿Qué hice?**
-- Implementé el **backend completo de CU-006 (Gestión del Mercado Secundario de Entradas)** como microservicio **NestJS** (ADR-09) sobre **PostgreSQL, Redis y RabbitMQ**, cubriendo los **13 pasos del flujo básico** y los **nueve caminos alternos y de excepción** (CU-006A a CU-006I).
-- El flujo quedó end-to-end: publicación de la entrada con tope de precio, consulta del mercado, checkout con **bloqueo distribuido en Redis** (ADR-03), cobro contra una pasarela de pago simulada en contenedor, transferencia de propiedad con **reemisión del QR** e historial auditable, publicación del evento `ENTRADA_TRANSFERIDA` en **RabbitMQ** (ADR-10) con sus consumidores de notificación y liquidación, y expiración programada de las publicaciones.
-- Agregué al modelo de datos tres tablas que el **SAD §12 no contemplaba** — `transacciones_reventa`, `historial_propietarios` y `eventos_referencia` —, necesarias para cumplir la **post-condición 3** del caso de uso y el **RNF-11**.
-- Conecté la **app móvil a la API real** (las dos pestañas de reventa) y publiqué los contratos en `App/shared/` como **OpenAPI** y **JSON Schema**.
-- Verificación: **169 pruebas unitarias con 76,5 % de cobertura** (RNF-18 pide 70 %) y **cuatro suites de integración** contra infraestructura real.
-- Corregí **cinco defectos de corrección** que destapó una revisión posterior. El más grave estaba justo en el invariante que este caso de uso demuestra: el checkout verificaba que **existiera** un bloqueo sobre la publicación, pero no que **fuera del comprador que estaba pagando**; si la reserva caducaba y otro la tomaba, ambos podían pagar. Medido: **dos cobros, dos transferencias y dos códigos QR sobre una sola entrada**. Lo cerré con **tres barreras encadenadas** (bloqueo, verificación de titularidad y `UPDATE` condicional) y dejé como **pruebas de regresión** los dos escenarios que lo reproducían.
-
-**¿Qué aprendí?**
-- **Una prueba de concurrencia solo cubre el punto exacto donde se aplica.** Mi batería de 50 compras simultáneas pasaba en verde porque únicamente ejercitaba el momento de *reservar*; el hueco estaba en el momento de *pagar*, que ninguna prueba tocaba. Tener la prueba en verde no significa que el invariante esté protegido en todo el flujo.
-- Implementar un caso de uso completo obliga a corregir el diseño documentado: el modelo de datos del SAD §12 se quedó corto apenas hubo que sostener la trazabilidad de propietarios que pide la post-condición 3.
-
-**Dificultades o dudas**
-- El 76,5 % que tengo es de **cobertura unitaria** y cumple RNF-18, pero la entrega exige **100 % de cobertura de pruebas de integración sobre el backend** (decisión 5 de la Sesión 7): falta medir esa cobertura por separado y cerrar la brecha con las cuatro suites de integración.
-- El cobro corre contra una **pasarela simulada en contenedor**; hay que confirmar con el profesor si eso cuenta como "servicio adicional de apoyo" para dar el caso de uso por completo.
-
+- Implementé el backend completo de CU-006 (Gestión del Mercado Secundario de Entradas) como microservicio NestJS (ADR-09) sobre PostgreSQL, Redis y RabbitMQ, cubriendo los 13 pasos del flujo básico y los nueve caminos alternos y de excepción (CU-006A a CU-006I).
+- El flujo quedó end-to-end: publicación de la entrada con tope de precio, consulta del mercado, checkout con bloqueo distribuido en Redis (ADR-03), cobro contra una pasarela de pago simulada en contenedor, transferencia de propiedad con reemisión del QR e historial auditable, publicación del evento ENTRADA_TRANSFERIDA en RabbitMQ (ADR-10) con sus consumidores de notificación y liquidación, y expiración programada de las publicaciones.
+- Agregué al modelo de datos tres tablas que el SAD §12 no contemplaba — transacciones_reventa, historial_propietarios y eventos_referencia —, necesarias para cumplir la post-condición 3 del caso de uso y el RNF-11.
+- Conecté la app móvil a la API real (las dos pestañas de reventa) y publiqué los contratos en App/shared/ como OpenAPI y JSON Schema.
+- Verificación: 169 pruebas unitarias con 76,5 % de cobertura (RNF-18 pide 70 %) y cuatro suites de integración contra infraestructura real.
+- Corregí cinco defectos de corrección que destapó una revisión posterior. El más grave estaba justo en el invariante que este caso de uso demuestra: el checkout verificaba que existiera un bloqueo sobre la publicación, pero no que fuera del comprador que estaba pagando; si la reserva caducaba y otro la tomaba, ambos podían pagar. Medido: dos cobros, dos transferencias y dos códigos QR sobre una sola entrada. Lo cerré con tres barreras encadenadas (bloqueo, verificación de titularidad y UPDATE condicional) y dejé como pruebas de regresión los dos escenarios que lo reproducían.
+ 
 **Próximos pasos**
-- Llevar la cobertura de **pruebas de integración de CU-006 al 100 %** antes del 20/09.
-- Documentar **ADR-09** (NestJS como stack de backend) y **ADR-10** (mensajería con RabbitMQ), y actualizar el **modelo de datos del SAD §12** con las tres tablas nuevas.
-- Incluir en el guion de demo el **escenario de doble cobro (antes/después de la corrección)** como evidencia cuantitativa del bloqueo distribuido, junto con los resultados de PoC-01.
+- Llevar la cobertura de pruebas de integración de CU-006 al 100 % antes del 20/09.
+- Documentar ADR-09 (NestJS como stack de backend) y ADR-10 (mensajería con RabbitMQ), y actualizar el modelo de datos del SAD §12 con las tres tablas nuevas.
+- Incluir en el guion de demo el escenario de doble cobro (antes/después de la corrección) como evidencia cuantitativa del bloqueo distribuido, junto con los resultados de PoC-01.
+ 
+---
+ 
+## [17/09/2026]
+ 
+**¿Qué hice?**
+- Implementé backend completo **CU-027 (Cuentas de Usuario)**: microservicio NestJS (Administración) sobre PostgreSQL/RabbitMQ — registro scrypt, verificación correo, login RS256, bloqueo fuerza bruta, recuperación contraseña, edición perfil, admin cuentas (activar/desactivar/eliminar). Tablas nuevas: `sesiones`, `tokens_cuenta`, `auditoria_cuentas`. **ADR-01**: anonimiza al eliminar (FK lógicas en otras BD). **Usabilidad**: login tiempo constante con hash señuelo.
+- Conecté **CU-006 → CU-027 (RNF-06)**: tokens RS256 en lugar de `X-Usuario-Id`, sesiones Redis (ADR-03), renovación access 15min / refresh 30d con rotación y detección reuso sin almacenar tokens. App móvil (llavero) + portal web (cookie HttpOnly, tema oscuro).
+- Verificación: 7 suites integración CU-027, 11 rutas CU-006 → 401 sin token, E2E iPhone/Chrome. **Disponibilidad**: login 76→114 req/s, consulta 4.9s→<1s, PG caído → 503 en 3s, `/salud` chequea BD, recuperación 1.3s (RNF-04 ≤30s).
+- Defectos por medición: logout no propagaba (TypeORM `RETURNING`), deadlock 2 admins desactivándose → 500. Endurecí pruebas primero.
+- Pendientes: API Gateway (ADR-02), cobertura unitaria Admin 8% vs 70% RNF-18, reventa portal (RNF-14), SAD desactualizado.
+ 
+**Próximos pasos**
+- Continuar backend y pruebas de integración con Diego
+- Congelamiento 21/09
