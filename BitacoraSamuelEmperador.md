@@ -166,6 +166,7 @@
 - Verificación: 7 suites integración CU-027, 11 rutas CU-006 → 401 sin token, E2E iPhone/Chrome. **Disponibilidad**: login 76→114 req/s, consulta 4.9s→<1s, PG caído → 503 en 3s, `/salud` chequea BD, recuperación 1.3s (RNF-04 ≤30s).
 - Defectos por medición: logout no propagaba (TypeORM `RETURNING`), deadlock 2 admins desactivándose → 500. Endurecí pruebas primero.
 - Pendientes: API Gateway (ADR-02), cobertura unitaria Admin 8% vs 70% RNF-18, reventa portal (RNF-14), SAD desactualizado.
+- Creación del PipeLine CI.
  
 **Próximos pasos**
 - Continuar backend y pruebas de integración con Diego
