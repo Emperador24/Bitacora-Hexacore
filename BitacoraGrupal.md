@@ -448,7 +448,55 @@ El anuncio del profesor convirtió la Entrega 1 de un hito tentativo de octubre 
 **Fecha propuesta: 15/09/2026 ** — **Temas a tratar:** Problemas y atribuciones despues del primer dia de desarrollo, con respecto a todas las decisiones tomadas el día de hoy. A partir de ahí, reunión diaria corta hasta el 21/09.
 
 ---
-
+ 
+## Sesión N.º 8 — [17/09/2026]
+ 
+**Modalidad:** virtual
+**Hora de inicio – fin: 11:00am - 11:30am**
+**Asistentes: Samuel Emperador y Diego Coronado**
+**Ausentes (y motivo): Sebastián Sánchez y Daniel Cristancho**
+ 
+### 1. Objetivo de la sesión
+Revisar avances de implementación y arquitectura, y definir acciones ante la falta de participación de dos integrantes.
+ 
+### 2. Temas tratados
+ 
+- Tema 1: Ajuste de detalles pendientes en la implementación del backend (CU-027, CU-006, CU-018) y en la arquitectura documentada (SAD, ADR, modelo de datos).
+- Tema 2: Situación de Sebastián Sánchez y Daniel Cristancho, quienes no han entregado avances ni participado en las sesiones recientes.
+ 
+### 3. Decisiones tomadas
+ 
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha límite |
+|---|---|---|---|---|
+| 1 | Si Sebastián Sánchez y Daniel Cristancho no entregan avances ni participan en las próximas sesiones, se hablará con el profesor para tomar las acciones correspondientes. | El equipo no puede cumplir los entregables de la Entrega 1 con solo dos integrantes activos; la rúbrica evalúa participación individual y conocimiento de lo entregado. Alternativa descartada: seguir esperando sin fecha límite. | Samuel Emperador, Diego Coronado | 20/09/2026 |
+ 
+### 4. Acuerdos y compromisos del equipo
+ 
+- Samuel y Diego continuarán con la implementación del backend, pruebas de integración, despliegue y pipeline CI/CD para llegar a la entrega del 21/09.
+- Se notificará a los ausentes de esta decisión por los canales habituales.
+ 
+### 5. Tareas asignadas
+ 
+| Tarea | Responsable | Fecha límite | Estado |
+|---|---|---|---|
+| Completar backend CU-027, CU-006, CU-018 y autenticación/roles | Samuel Emperador, Diego Coronado | 20/09/2026 | En Proceso |
+| Alcanzar 100% cobertura pruebas de integración en backend entregado | Samuel Emperador, Diego Coronado | 20/09/2026 | Pendiente |
+| Despliegue en 2 computadores + script único + pipeline CI/CD | Diego Coronado | 20/09/2026 | Pendiente |
+| Notificar a Sebastián y Daniel de la decisión tomada | Samuel Emperador | 17/09/2026 | Pendiente |
+ 
+### 6. Riesgos, bloqueos o dudas abiertas
+ 
+- Solo quedan 4 días hasta el congelamiento (21/09) y la carga de trabajo recae en dos personas.
+- Si no hay respuesta de los ausentes, el alcance de la entrega deberá reducirse a lo que dos personas puedan completar con calidad.
+ 
+### 7. Avance general del proyecto
+Sesión de alineación entre los dos integrantes activos. Se ajustaron detalles de implementación y arquitectura, y se tomó la decisión formal de escalar al profesor la inactividad de Sebastián y Daniel si no hay avances para el 20/09, para proteger la entrega grupal.
+ 
+### 8. Próxima sesión
+**Fecha propuesta: 18/09/2026** — **Temas a tratar:** Avance de backend, pruebas de integración y estado del despliegue/CI/CD.
+ 
+---
+ 
 ## Historial de sesiones
 
 | Sesión | Fecha | Temas principales | Enlace |
