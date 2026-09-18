@@ -167,6 +167,7 @@
 - Defectos por medición: logout no propagaba (TypeORM `RETURNING`), deadlock 2 admins desactivándose → 500. Endurecí pruebas primero.
 - Pendientes: API Gateway (ADR-02), cobertura unitaria Admin 8% vs 70% RNF-18, reventa portal (RNF-14), SAD desactualizado.
 - Creación del PipeLine CI.
+- Nueva Version del Documento SRS y actualización de la guia de la entrega (GuiaEntrega1.md)
  
 **Próximos pasos**
 - Continuar backend y pruebas de integración con Diego
