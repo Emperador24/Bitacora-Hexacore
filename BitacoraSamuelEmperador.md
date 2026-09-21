@@ -166,8 +166,13 @@
 - Verificación: 7 suites integración CU-027, 11 rutas CU-006 → 401 sin token, E2E iPhone/Chrome. **Disponibilidad**: login 76→114 req/s, consulta 4.9s→<1s, PG caído → 503 en 3s, `/salud` chequea BD, recuperación 1.3s (RNF-04 ≤30s).
 - Defectos por medición: logout no propagaba (TypeORM `RETURNING`), deadlock 2 admins desactivándose → 500. Endurecí pruebas primero.
 - Pendientes: API Gateway (ADR-02), cobertura unitaria Admin 8% vs 70% RNF-18, reventa portal (RNF-14), SAD desactualizado.
-- Creación del PipeLine CI.
-- Nueva Version del Documento SRS y actualización de la guia de la entrega (GuiaEntrega1.md)
+- **API Gateway (ADR-02)**: Nginx punto único entrada, subpetición a `/sesiones/verificar` del servicio Administración, microservicios validan por su cuenta (prueba falsifica cabecera → 401). App/portal usan una sola dirección.
+- **SRS**: 66 págs generadas desde `CU_eventos_completo.xlsx` (fuente de verdad), tabla 18 RNF compartida con SAD.
+- **ADR-11**: autenticación RS256 vs HS256 (evita fabricación tokens admin), revocación Redis, dos tokens.
+- **Desplegabilidad**: `iniciar.sh` levanta 10 contenedores en 2m14s, 2 computadores (`--rol datos/servicios`), CI/CD (8 jobs PR, CD publica en ghcr.io etiquetado rama/commit, verifica arranque).
+- **Medición atributos**: catálogo mercado secundario p95 150ms (umbral 500ms RNF-07), 1417 req/s sin fallos. 2 réplicas en 1 máquina empeora p95 a 198ms (compiten núcleos/BD) — confirma necesidad 2 máquinas. 2 réplicas sobreviven caída 1 (20/20 ok).
+- **Cobertura integración real**: Administración 94.95%, Entradas 85.87% sentencias (c8). `npm test:cov` (90.9%) engañoso: Jest mide solo archivos tocados (4.9% real).
+- **CU-018**: corregido tope diario horas (comparaba contra acumulado vida), ligado a CU-027 (empleado→cuenta, admin da alta, app pide área al login en vez de mapa local).
  
 **Próximos pasos**
 - Continuar backend y pruebas de integración con Diego
