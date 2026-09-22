@@ -106,3 +106,41 @@
 - Repasar el código a fondo para las preguntas de "conocimiento de lo entregado" (25% del total).
 
 ---
+
+## [22/09/2026]
+
+**¿Qué hice?**
+
+Esta semana toqué prácticamente todas las capas del proyecto, no solo mi bloque de logística: desplegué el sistema completo, encontré y documenté un bug crítico fuera de mi servicio, corrí mi app en un dispositivo físico, hice una auditoría técnica completa del repositorio contra la rúbrica de entrega, y preparé las diapositivas de la sustentación con evidencia real en vez de cifras de memoria.
+
+- **Desplegué HEXACORE completo en Docker**, no solo mi servicio: administración, entradas/mercado secundario, eventos-emergencias (el mío), pedidos, gateway, portal web de cliente, Postgres, Redis, RabbitMQ y la pasarela simulada — 11 contenedores sanos a la vez. Tuve que reconstruir el entorno varias veces porque el sistema se apagó por presión de memoria del computador.
+- **Encontré un bug real fuera de mi servicio, no lo oculté ni lo arreglé sin permiso**: una migración de `entradas-mercado-secundario` (CU-001–005, de Daniel) tiene una comilla de más antes de `timestamptz` en la columna `creado_en` de la tabla de promociones. Eso hace que Postgres rechace la migración y el contenedor entre en *crashloop*. Descubrí además que el impacto es peor de lo que parece a primera vista: como `docker-compose` exige que `entradas-mercado-secundario` esté sano para que el **API Gateway** arranque (`depends_on: condition: service_healthy`), el bug tumba **todo el backend**, no solo boletería. Lo reporté al equipo sin tocarlo, porque no es mi servicio.
+- **Corrí la app móvil en mi iPhone físico**, no solo en el navegador. El primer intento falló por firma de código: el proyecto trae fijo en Git el equipo de desarrollo de Samuel (`9G4BBN67T9`), que en mi Mac no existe. Cambié el equipo de firma solo en mi copia local (nunca en el repositorio) y la app compiló e instaló en unos 4 minutos.
+- **Hice una auditoría técnica completa del repositorio** contra los 34 puntos de la rúbrica de entrega: SRS (32 CU, 18 RNF), SAD (11 ADR, todos con evidencia de PoC medida — NestJS vs. Spring Boot, RabbitMQ vs. Kafka, RS256 con dos tokens), los 6 diagramas C4, desplegabilidad (2+ computadores, script único, CI/CD) y, sobre todo, el estado real de los 32 casos de uso uno por uno, revisando el código de cada servicio en vez de asumir lo que dice el Excel. El resultado no siempre confirmó lo optimista: de los 32 CU, **solo 9 tienen backend, base de datos y pruebas reales**; el resto —incluidos CU-016, CU-019, CU-020 y mi bloque de Proveedores/Pagos/Reportes (CU-030–032)— sigue solo en el SRS, sin una sola línea de código. Lo dejé documentado así, sin maquillarlo.
+- **Verifiqué mis propios CU-017 y CU-018 con números medidos hoy, no con lo que tenía anotado del 13 de septiembre.** Corrí la suite real de integración (`npx vitest run --config ./vitest.config.e2e.ts --coverage`) contra PostgreSQL y RabbitMQ reales: **36 pruebas pasan**. La cobertura del módulo de turnos y asistencia es **86.3%**; la del servicio completo, con las migraciones incluidas, es **82.5%** — no el 97.7% que había anotado hace una semana, porque la suite creció de 20 a 36 pruebas desde entonces y el porcentaje cambió. Prefiero anotar el número real, aunque sea peor, a repetir uno que ya no es cierto.
+- **Recorrí CU-018 de punta a punta, archivo por archivo**, desde la pantalla en Flutter (`ShiftsPage`, `AttendancePage`, `RequestsReviewPage`, dentro de `lib/main.dart`) hasta la migración de Postgres, pasando por el guardia de sesión (`sesion-valida.guard.ts`, JWT RS256 verificado localmente + revocación por Redis), el servicio de asistencia con modo *offline-first* (`clientTimestamp` + `idempotencyKey` único en base de datos) y el publicador/consumidor de RabbitMQ con cola de mensajes muertos tras 3 intentos.
+- **Preparé las diapositivas de la sustentación** con el método *assertion-evidence* (título = afirmación completa, cuerpo = una sola evidencia visual, nada de tarjetas de cifras decorativas): el diagrama de contenedores y el de secuencia de CU-006 salieron recortados del propio `C4Diagrams.pdf` del equipo, no inventados; las diapositivas de Daniel y Sebastián las armé con lo que ellos mismos escribieron en su bitácora (el hallazgo de Daniel sobre concurrencia —20 compras simultáneas sobre un cupón de 5 dejaron exactamente 5— es suyo, lo encontré ahí); y agregué una diapositiva de "estado real" que dice sin rodeos qué está implementado y qué no, en vez de dar a entender que todo el catálogo funciona.
+
+**¿Qué aprendí?**
+
+- Que una dependencia de arranque mal puesta en `docker-compose` (`depends_on: condition: service_healthy`) puede convertir el bug de un servicio en la caída de todo el sistema. No es solo un detalle de configuración: es la diferencia entre "boletería no funciona" y "nada funciona", y hay que revisar esa cadena de dependencias, no solo el código de cada servicio por separado.
+- A no confiar en un número de cobertura o de pruebas que anoté hace más de una semana. La suite cambia, y la única forma honesta de dar una cifra en la sustentación es correrla el mismo día.
+- Que la cobertura de un servicio completo puede esconder información: mis migraciones (`up`/`down`) bajan el promedio general del servicio porque casi no se ejercitan en las pruebas (el esquema se sincroniza directo contra la base de pruebas), mientras que la lógica de negocio real de turnos y asistencia sí está bien cubierta. Reportar solo el número global sin esa aclaración habría sido engañoso.
+- Que el patrón de autenticación RS256 con clave pública/privada (ADR-11) evita que un microservicio comprometido pueda fabricar tokens de administrador — algo que si hubiéramos elegido HS256 con secreto compartido, cualquiera de los seis servicios podría hacer.
+- Que documentar lo que **no** está implementado es parte del trabajo, no un fracaso que esconder. Encontrar y anotar yo mismo que 23 de 32 CU no tienen código es mejor preparación para las preguntas del profesor que dejar que lo descubra en vivo.
+
+**Dificultades o dudas**
+
+- El bug de la migración de Daniel sigue sin arreglar en `develop` al cierre de esta entrada. Si nadie lo corrige antes del 24, el Bloque 2 de la sustentación (demo en vivo) no puede arrancar, porque el gateway completo depende de ese servicio.
+- La cobertura real (82.5%–86.3%) no llega al 100% que exige la rúbrica para pruebas de integración sobre el backend. No sé todavía si eso se puede subir a tiempo o si hay que explicarlo como limitación conocida en la sustentación.
+- El pipeline de CD está en rojo en los últimos dos merges a `develop` (PR #30 y #31); no alcancé a diagnosticar la causa, solo a confirmar que está fallando.
+- Sigo sin poder demostrar el despliegue repartido en 2 computadores físicos de verdad — el script (`iniciar.sh --rol datos/servicios`) existe y lo revisé, pero nunca lo he corrido separado en dos máquinas.
+
+**Próximos pasos**
+
+- Coordinar con Daniel el arreglo de la migración antes del 24 — es lo más urgente de toda la lista.
+- Revisar con el equipo si vale la pena intentar subir la cobertura de integración antes de la entrega, o si se presenta como limitación conocida.
+- Preparar la demo en vivo de CU-017 y CU-018 corriendo la suite de pruebas en tiempo real frente al profesor, con los mismos comandos que usé hoy.
+- Ensayar el despliegue en dos computadores al menos una vez antes de la sustentación.
+
+---
