@@ -497,6 +497,59 @@ Sesión de alineación entre los dos integrantes activos. Se ajustaron detalles 
  
 ---
  
+## Nota de seguimiento — [22/09/2026]
+
+**Modalidad:** actualización documental retrospectiva basada en el historial Git
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+**Asistentes:** No aplica.
+**Ausentes (y motivo):** No aplica.
+
+> Nota agregada el 22/09/2026, después de los avances descritos, para actualizar el estado registrado en la sesión del 17/09/2026. Se conserva íntegro lo documentado en esa sesión. La evidencia revisada respalda trabajo individual posterior, pero no acredita una nueva reunión grupal, asistencia ni acuerdos del equipo.
+
+### 1. Objetivo de la sesión
+Dejar constancia, mediante esta nota de seguimiento, de que **Sebastián Sánchez retomó actividad en el proyecto** y realizó avances verificables en el servicio de Pedidos entre el **19 y el 22 de septiembre de 2026**. Los commits están registrados a nombre de **Juan Sebastian Sanchez Vasquez / tiansv@gmail.com**; las fechas de autor y de creación coinciden y están en **UTC−05:00**.
+
+### 2. Temas tratados
+
+- Tema 1 — **Servicio de Pedidos (19–20/09).** Creación de la estructura del servicio con NestJS, configuración y Dockerfile; persistencia, entidades de catálogo, pedidos y transacciones de pago, migraciones, datos de ejemplo, consultas del catálogo, autenticación y checkout inicial. Evidencia: [`5a6bb66`](https://github.com/Emperador24/HEXACORE/commit/5a6bb66fdc12929268c4f5959a72c162bfb8c1bb) — Estructura base del servicio de Pedidos; [`9582d3e`](https://github.com/Emperador24/HEXACORE/commit/9582d3e51765e6239c4a460b9f1b3016754a5665) — Configura persistencia base del servicio de Pedidos; [`62533e4`](https://github.com/Emperador24/HEXACORE/commit/62533e488714f3b0a053ac88bc4393ad4fc58fad) — Implementa checkout inicial de Pedidos.
+- Tema 2 — **CU-011: inventario y pagos (21/09).** Reservas atómicas con Redis y conexión con el checkout; procesamiento de pagos, confirmación del pedido tras la aprobación y expiración de checkouts con liberación del inventario reservado. Evidencia: [`d73115e`](https://github.com/Emperador24/HEXACORE/commit/d73115eb8a8505dda6324893cf674972dad1f1f2) — Implementa reservas atomicas de inventario con Redis; [`08db928`](https://github.com/Emperador24/HEXACORE/commit/08db928700b2e86b0eb46da4253ba42ad301d3b3) — Integra reserva de inventario con checkout; [`fc6080a`](https://github.com/Emperador24/HEXACORE/commit/fc6080aa54f85be5e9017a337fe05301e7dde6bd) — Implementa pagos de Pedidos; [`644598f`](https://github.com/Emperador24/HEXACORE/commit/644598f57f77eebe5a90b25385eec0be34074ca1) — Finaliza pedidos tras pago aprobado; [`00efd7e`](https://github.com/Emperador24/HEXACORE/commit/00efd7ec669591388b3740809b968a579adce13d) — Expira checkouts y libera inventario reservado.
+- Tema 3 — **QR y mensajería (21/09).** Generación del QR al confirmar el pedido y publicación de pedidos confirmados mediante RabbitMQ. Evidencia: [`5263abe`](https://github.com/Emperador24/HEXACORE/commit/5263abeae2715d413f15041268d3fa670ace2b26) — Genera QR al confirmar pedidos; [`1533df7`](https://github.com/Emperador24/HEXACORE/commit/1533df735d041011ad8045b888d2dccbd4c224d5) — Publica pedidos confirmados mediante RabbitMQ.
+- Tema 4 — **Integración del flujo (21/09).** Incorporación del servicio a Docker y al API Gateway, integración de CU-011 en el portal web y en la aplicación móvil. Evidencia: [`714f426`](https://github.com/Emperador24/HEXACORE/commit/714f42636b543a856b979cea89025261e24eeeb3) — Integra servicio de pedidos con Docker y API Gateway; [`c093c4c`](https://github.com/Emperador24/HEXACORE/commit/c093c4c311be528b95b87f8a840d1366f51a34eb) — Integra flujo web de pedidos CU-011; [`5f92b3a`](https://github.com/Emperador24/HEXACORE/commit/5f92b3a5890578b4b83e8993a1697612e9b5f96a) — Implementa flujo movil de pedidos CU-011.
+- Tema 5 — **Pruebas E2E de CU-011 (21/09).** Incorporación de una suite del servicio con PostgreSQL, Redis, RabbitMQ y la pasarela simulada en Docker, con escenarios de checkout, inventario, pagos, confirmación, QR y publicación de mensajes. El commit acredita el código y la configuración de las pruebas, no sus resultados de ejecución ni un porcentaje de cobertura. Evidencia: [`4417fdb`](https://github.com/Emperador24/HEXACORE/commit/4417fdba5512a0549acd39955e93e706994124b0) — Agrega pruebas E2E reales para CU-011.
+- Tema 6 — **Vista del restaurante y avance de CU-012 (22/09).** Consulta de pedidos confirmados del establecimiento desde la aplicación móvil, y administración básica de disponibilidad del menú para activar o desactivar productos, con endpoints y pruebas del backend y de las pantallas móviles. Evidencia: [`d5e9ef5`](https://github.com/Emperador24/HEXACORE/commit/d5e9ef5cbf2aac3816bc1f4029c32a09b93f23e0) — Integra pedidos confirmados en vista de restaurante; [`f6c18f3`](https://github.com/Emperador24/HEXACORE/commit/f6c18f3027fa169e7fde0706c5329e55b183d919) — Implementa administracion de disponibilidad del menu CU-012.
+
+### 3. Decisiones tomadas
+
+No se registran nuevas decisiones grupales: esta nota documenta avances individuales verificables en Git.
+
+### 4. Acuerdos y compromisos del equipo
+
+No se registran nuevos acuerdos ni cambios a los compromisos anteriores. Esta actualización no acredita una decisión posterior del equipo sobre las medidas mencionadas el 17/09.
+
+### 5. Tareas asignadas
+
+No se asignan nuevas tareas ni fechas límite en esta nota. Se resume el estado del trabajo observado en los commits:
+
+| Tarea | Responsable | Fecha límite | Estado |
+|---|---|---|---|
+| Implementación del servicio de Pedidos y flujo CU-011 con Redis, pagos, QR, RabbitMQ, API Gateway, web y móvil | Sebastián Sánchez | No se establece en esta nota | Implementación registrada entre el 19 y el 21/09; sin certificación de cobertura completa |
+| Incorporación de pruebas E2E de CU-011 | Sebastián Sánchez | No se establece en esta nota | Código y entorno de pruebas incorporados el 21/09 |
+| Consulta de pedidos confirmados en la vista del restaurante | Sebastián Sánchez | No se establece en esta nota | Implementada el 22/09 como vista de consulta |
+| Administración de disponibilidad del menú CU-012 | Sebastián Sánchez | No se establece en esta nota | Avance registrado el 22/09: activar y desactivar productos |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+
+- La incorporación de pruebas no permite afirmar que se alcanzó el 100% de cobertura de integración exigido en las sesiones anteriores ni que todos los escenarios se ejecutaron satisfactoriamente.
+- La vista del restaurante incorporada es de consulta de pedidos confirmados; no gestiona su preparación ni entrega. El avance de CU-012 corresponde a disponibilidad de productos, sin declarar terminado todo el caso de uso.
+
+### 7. Avance general del proyecto
+El historial Git acredita que **Sebastián Sánchez retomó la implementación y aportó avances en Pedidos entre el 19 y el 22/09**, desde la estructura y persistencia del servicio hasta el flujo CU-011, sus integraciones y pruebas, la consulta de pedidos del restaurante y la disponibilidad del menú de CU-012. Esta evidencia **actualiza el estado de participación de Sebastián registrado el 17/09**, sin reescribir lo documentado entonces ni atribuirle participación en aquella reunión. No establece cambios en la situación de otros integrantes ni acredita que estos commits formen parte del paquete entregado.
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. **Temas a tratar:** No se registran nuevos temas acordados por el equipo.
+
+---
+
 ## Historial de sesiones
 
 | Sesión | Fecha | Temas principales | Enlace |
