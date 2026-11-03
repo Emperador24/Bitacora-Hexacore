@@ -550,6 +550,145 @@ El historial Git acredita que **Sebastián Sánchez retomó la implementación y
 
 ---
 
+## Nota de seguimiento — [01/11/2026] — Inicio de la migración modular
+
+**Modalidad:** actualización documental basada en trabajo técnico e historial Git.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Sebastián Sánchez, con apoyo de Codex.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota retrospectiva incorporada el 02/11/2026. Registra trabajo del domingo, correspondiente a la semana del 26/10 al 01/11. No acredita una reunión, asistencia de otros integrantes ni aprobación colectiva de la arquitectura. Las fechas y horas de las evidencias corresponden a America/Bogota (UTC−05:00), tanto para la fecha de autor como para la de creación del commit, que coinciden. El conteo comprende únicamente los commits de la rama `feature/sebastian-arquitectura` posteriores a `2cd4fde22683d370dfe32991d983a0ae373b9908`; no incluye el historial anterior ni los commits de actualización de estas bitácoras.
+
+### 1. Objetivo de la sesión
+Documentar, como seguimiento técnico, el inicio de la reorganización del backend para reducir la cantidad de procesos y conservar la funcionalidad existente. El desarrollo de los casos de uso ausentes permanece fuera del alcance de la migración.
+
+### 2. Temas tratados
+- Inventario del estado del proyecto, plan de migración y corrección del Compose remoto.
+- Recuperación de la integración aislada de Alimentos con Pagos y pasarela simulada.
+- Creación del workspace backend e integración de Identidad, Alimentos y Personal/Logística en el Núcleo.
+- Establecimiento de una referencia de pruebas de los cinco componentes de Boletería antes de su traslado. Su integración se publicó el lunes.
+
+### 3. Decisiones tomadas
+Se registra la dirección técnica ejecutada por Sebastián: agrupar módulos dentro de procesos compartidos y conservar temporalmente sus bases para separar la reorganización del código de la consolidación de datos. Esta nota no atribuye aprobación del equipo; la revisión conjunta permanece pendiente.
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos colectivos nuevos. Se conserva el reparto funcional existente. Migrar la arquitectura no implica que Sebastián deba completar los casos pendientes de los demás integrantes.
+
+### 5. Tareas asignadas
+No se asignan nuevas tareas o fechas mediante esta nota; se informa el avance observado:
+
+| Trabajo registrado | Responsable | Estado al cierre del domingo |
+|---|---|---|
+| Diagnóstico, plan y Compose remoto | Sebastián Sánchez | Publicado |
+| Integración aislada de CU-011 | Sebastián Sánchez | Recuperada y comprobada según ESTADO-MIGRACION |
+| Núcleo: Identidad, Alimentos y Personal/Logística | Sebastián Sánchez | Integrado; bases aún separadas |
+| Referencia de Boletería | Sebastián Sánchez | Publicada antes del traslado |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+Los contratos, consumidores y temporizadores debían conservarse al reunir procesos. Se identificaron dificultades de preparación de pruebas y ventanas de consistencia anteriores. La referencia permite distinguir estos límites de las regresiones de migración; agrupar procesos no unifica por sí mismo los datos ni sus transacciones.
+
+### 7. Avance general del proyecto
+Se publicaron **5 commits** del domingo, todos atribuidos en GitHub a `tiansv`, que establecen la base y el Núcleo modular. La funcionalidad pendiente y la revisión del equipo no se presentan como terminadas.
+
+| Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|
+| 18:56:18 | [`c6c6e92`](https://github.com/Emperador24/HEXACORE/commit/c6c6e9223a811bf2d3acca999b49436236bd7cef) | fix(infra): reparar Compose remoto y registrar plan de migración |
+| 19:59:52 | [`25a4fd3`](https://github.com/Emperador24/HEXACORE/commit/25a4fd3a98e3ba69ae8642d53253720f73e0621a) | test(alimentos): recuperar integración aislada de CU-011 |
+| 21:05:26 | [`8fff023`](https://github.com/Emperador24/HEXACORE/commit/8fff023cf5b5b8ce88e5e279e75165c46dfc8fa9) | refactor(backend): integrar identidad y alimentos en nucleo modular |
+| 22:56:35 | [`125fe36`](https://github.com/Emperador24/HEXACORE/commit/125fe36d874efc0f30d268a3219635854b807b82) | refactor(backend): incorporar personal y logistica al nucleo |
+| 23:25:54 | [`d48beff`](https://github.com/Emperador24/HEXACORE/commit/d48befff29244bdd2746ba4686c519c13a28cc4c) | test(boleteria): establecer integracion aislada antes del traslado |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece una reunión. **Trabajo técnico posterior previsto:** integrar Boletería, reutilizar Pagos, trasladar el correo existente y ensayar la consolidación de datos. Estos pasos se registran como planificación técnica, no como un compromiso colectivo nuevo.
+
+---
+
+## Nota de seguimiento — [02/11/2026] — Consolidación técnica y entrega para revisión
+
+**Modalidad:** actualización documental basada en trabajo técnico, historial Git y ejecuciones de GitHub Actions.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Sebastián Sánchez, con apoyo de Codex.
+
+**Asistentes / ausentes:** No aplica.
+
+> Corresponde al lunes de la semana del 02/11 al 08/11. No acredita una reunión ni aprobación de otros integrantes. Las fechas y horas de las evidencias corresponden a America/Bogota (UTC−05:00), tanto para la fecha de autor como para la de creación del commit, que coinciden. El conteo comprende únicamente los commits de la rama `feature/sebastian-arquitectura` posteriores a `2cd4fde22683d370dfe32991d983a0ae373b9908`; no incluye el historial anterior ni los commits de actualización de estas bitácoras.
+
+### 1. Objetivo de la sesión
+Documentar la continuación de la migración de lo existente y la preparación de una versión revisable desde `feature/sebastian-arquitectura`, sin integrar a `develop` ni a `main`.
+
+### 2. Temas tratados
+- Integración de Ventas, Catálogo, Fila, Postventa y Acceso QR en Boletería.
+- Extracción de Pagos, sustitución de HTTP interno por adaptadores locales, libro financiero compartido y webhook único en Núcleo.
+- Traslado del correo existente al Trabajador, conservando sus límites.
+- Ensayo aislado de transferencia y restauración de ocho bases: 49 tablas, 247 filas y 18 migraciones. Adaptación a base única con ocho esquemas, preparación central y aceptación sobre copia transferida A e instalación vacía B.
+- Actualización de ADR-16, diagramas/PDF, guía por integrante y procedimiento de corte/reversión.
+- Ejecución remota de CI/CD, publicación de ocho imágenes amd64/arm64 y verificación por digest.
+- Entorno persistente de revisión desde fuentes, portales y cuentas demo; recorridos de navegador y comprobación de persistencia tras reiniciar.
+
+### 3. Decisiones tomadas
+La versión implementada concentra el backend existente en Núcleo, Boletería y Trabajador; Pagos pasa a módulo reutilizable y los datos a una base por esquemas. Operación permanece como frontera futura sin backend terminado. ADR-16 registra la justificación y las concesiones arquitectónicas.
+
+Sebastián mantiene la entrega exclusivamente en su rama y el PR #44 en borrador para revisión posterior por otro integrante. No se registra una aceptación colectiva ni se autoriza mediante esta nota el cambio de la instalación habitual.
+
+### 4. Acuerdos y compromisos del equipo
+No se registran nuevos acuerdos grupales ni reasignaciones. La guía por integrante conserva los responsables del SRS y distingue código migrado, pantallas simuladas y funcionalidades pendientes.
+
+### 5. Tareas asignadas
+Se informa el estado técnico, sin establecer fechas ni asignaciones nuevas:
+
+| Trabajo registrado | Responsable | Estado |
+|---|---|---|
+| Boletería, Pagos local y Trabajador | Sebastián Sánchez | Implementados y comprobados en entornos aislados |
+| Consolidación y adaptación a base única | Sebastián Sánchez | Copias A/B verificadas; instalación habitual sin modificar |
+| Documentación, CI/CD e imágenes | Sebastián Sánchez | Publicados; resultados vinculados a sus SHA |
+| Entorno de revisión de la rama | Sebastián Sánchez | Publicado y validado con HTTP, Chrome y reinicio |
+| Revisión por otro integrante | Por confirmar | Pendiente; PR en borrador |
+| Integración de ramas y corte habitual | Por acordar tras la revisión | No ejecutados |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+Persisten F12 (recuperación financiera hacia el negocio), F13 (timeouts intermitentes), F14 (listado global de notificaciones logísticas) y F15 (límites de memoria, validación y resuscripción del correo). Se conservan proyecciones y tablas legacy de Entradas; compartir base no garantiza QR inmediato ni transacciones nuevas entre sus operaciones.
+
+Los casos de uso ausentes siguen pendientes por responsable. El corte habitual exige respaldo, conciliación y tratamiento de mensajes/reservas. Recuperar una imagen anterior no revierte escrituras o efectos externos. No se certifican rendimiento, disponibilidad mensual ni entrega exactamente una vez.
+
+### 7. Avance general del proyecto
+Se publicaron **14 commits** el lunes; el acumulado de migración es **19 commits**, todos atribuidos a `tiansv`. El último, aunque fechado el 03/11 en UTC, corresponde al **02/11 a las 19:02:16 en Bogotá** y se incluye en el lunes.
+
+| Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|
+| 03:43:57 | [`e08daf6`](https://github.com/Emperador24/HEXACORE/commit/e08daf68e204e8fa43d04ad40ce3a3f11a2060bf) | refactor(backend): integrar componentes de boleteria en una aplicacion |
+| 05:38:29 | [`f070bc2`](https://github.com/Emperador24/HEXACORE/commit/f070bc2fe6f691741623ee93b4041765100b1c69) | refactor(pagos): extraer modulo reutilizable conservando interfaz HTTP |
+| 09:36:50 | [`85419be`](https://github.com/Emperador24/HEXACORE/commit/85419bef9d2c88cd27301923e7e8252fbc75e863) | refactor(pagos): integrar llamadas locales y retirar servidor HTTP |
+| 11:02:57 | [`300a88e`](https://github.com/Emperador24/HEXACORE/commit/300a88ebd4337bb4538d9229c84af0361a6afd9f) | refactor(backend): trasladar notificaciones al trabajador |
+| 13:19:27 | [`be57961`](https://github.com/Emperador24/HEXACORE/commit/be57961472a0802c90a57d247fb67e96e6717b1b) | feat(datos): preparar y verificar consolidacion aislada por esquemas |
+| 15:55:41 | [`6e2260a`](https://github.com/Emperador24/HEXACORE/commit/6e2260a31651760f5867e7c3e0f121fbcc0f802f) | refactor(datos): conectar aplicaciones a base unica por esquemas |
+| 16:28:18 | [`58b8326`](https://github.com/Emperador24/HEXACORE/commit/58b832625e8a52a7798e2c68241a3e155174fdd3) | ci: verificar migracion y publicar arquitectura por digest |
+| 16:37:29 | [`7b34b71`](https://github.com/Emperador24/HEXACORE/commit/7b34b71f72c65174cc154cfa3c39ce1a7aab9295) | fix(ci): adaptar referencia historica y salud conjunta del nucleo |
+| 16:37:35 | [`82c5218`](https://github.com/Emperador24/HEXACORE/commit/82c52188d441edc05d2488fd04de42abc272c958) | docs(arquitectura): registrar ADR-16 y preparar revision del equipo |
+| 17:25:06 | [`36090b3`](https://github.com/Emperador24/HEXACORE/commit/36090b3b5a3591953fe32dfde231f21c01fbb06c) | fix(test): conservar digests publicados durante reinicio financiero |
+| 17:45:49 | [`c36427a`](https://github.com/Emperador24/HEXACORE/commit/c36427ac7b217cdb3a37c8a75b545d0fe9aef5d9) | fix(cd): compilar plataformas nativas y verificar sus manifiestos |
+| 18:01:57 | [`5183bc3`](https://github.com/Emperador24/HEXACORE/commit/5183bc3c418702514e3c2b4bc5f2d8a7b3aa9270) | docs(migracion): registrar verificacion remota y cierre tecnico |
+| 18:59:08 | [`9acfb65`](https://github.com/Emperador24/HEXACORE/commit/9acfb652e8fd4745b6eb2e36627caa9a32924500) | feat(dev): preparar entorno de revision de arquitectura |
+| 19:02:16 | [`6ce7f8b`](https://github.com/Emperador24/HEXACORE/commit/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916) | fix(dev): esperar la preparacion finita antes de iniciar aplicaciones |
+
+Evidencia complementaria:
+- [ESTADO-MIGRACION, resumen e hitos de la entrega](https://github.com/Emperador24/HEXACORE/blob/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916/Documentation/Work/ESTADO-MIGRACION.md).
+- [Guía por integrante y pendientes](https://github.com/Emperador24/HEXACORE/blob/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916/Documentation/Work/GUIA-EQUIPO-MIGRACION.md).
+- [PR #44 en borrador](https://github.com/Emperador24/HEXACORE/pull/44).
+- [CI aprobado en 6ce7f8b](https://github.com/Emperador24/HEXACORE/actions/runs/41549909189): suites de backend, interfaces y reconstrucción histórica/A/B. La referencia local registra 830 unitarias, 73 pruebas de Núcleo y 23 de Boletería por recorrido, además de correo y finanzas; no equivale a casos de uso completos ni a cobertura total.
+- [CD aprobado en c36427a](https://github.com/Emperador24/HEXACORE/actions/runs/41541166454): ocho imágenes de esa revisión para amd64/arm64 y smoke por digest en amd64. La revisión publicada de imágenes no se atribuye a los commits posteriores.
+- [Guía de revisión local](https://github.com/Emperador24/HEXACORE/blob/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916/App/infra/revision/README.md): 10 guardas, 6 pruebas HTTP, 4 recorridos Chrome y persistencia de 13 tablas documentados en el hito de revisión.
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece. **Siguiente actividad solicitada por Sebastián:** revisión funcional y técnica desde la misma rama con otro integrante; registrar hallazgos antes de decidir cualquier integración o corte. No se considera una revisión ya realizada.
+
+---
+
+
 ## Historial de sesiones
 
 | Sesión | Fecha | Temas principales | Enlace |

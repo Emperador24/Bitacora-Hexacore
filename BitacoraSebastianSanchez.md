@@ -231,3 +231,94 @@ A partir de esta versión, queda revisar el flujo de consulta y disponibilidad c
 - [`d5e9ef5`](https://github.com/Emperador24/HEXACORE/commit/d5e9ef5cbf2aac3816bc1f4029c32a09b93f23e0) — Integra pedidos confirmados en vista de restaurante
 - [`89b9fb1`](https://github.com/Emperador24/HEXACORE/commit/89b9fb1c5f6893645469da449d9f427bff9d3a7c) — Merge remote-tracking branch 'origin/develop' into feature/sebastian
 - [`f6c18f3`](https://github.com/Emperador24/HEXACORE/commit/f6c18f3027fa169e7fde0706c5329e55b183d919) — Implementa administracion de disponibilidad del menu CU-012
+
+
+## [01/11/2026]
+
+> Entrada agregada el 02/11/2026 para registrar el trabajo del domingo. Las fechas de los commits están en hora de Bogotá (UTC−05:00). Corresponde a la semana del 26 de octubre al 1 de noviembre.
+
+### ¿Qué hice?
+Revisé el proyecto y los cambios de arquitectura con ayuda de Codex. Organicé un plan para juntar varias partes del backend y hacer más sencillo el programa, manteniendo lo que ya estaba hecho y dejando los casos de uso que faltan para cada compañero.
+
+Empecé arreglando la configuración de Docker para el modo remoto y recuperando las pruebas de compra de alimentos. Después reuní Identidad y Alimentos en el Núcleo y agregué Personal/Logística. Dejé sus bases separadas por el momento para comprobar primero que todo siguiera funcionando al mover el código.
+
+También preparé las pruebas de referencia de Boletería para comparar cómo funcionaba antes de juntarla. Ese domingo quedó lista la referencia; el traslado de Boletería se publicó el lunes.
+
+### ¿Qué aprendí?
+Entendí mejor que un módulo no tiene que ser otro servicio separado. Varias partes del sistema pueden funcionar dentro del mismo programa y seguir organizadas en sus propios módulos.
+
+También me quedó más claro por qué conviene probar lo que hay antes de moverlo: así podemos distinguir un problema que ya existía de uno causado por la migración.
+
+### Dificultades o dudas
+Encontré pruebas que estaban mal conectadas a sus dependencias y otras que podían terminar sin comprobar nada si Redis no respondía. Hubo que revisar eso y resolver problemas al cargar NestJS desde las pruebas.
+
+Juntar el código tampoco solucionaba automáticamente los problemas de datos. Por ejemplo, el QR podía tardar en actualizarse y eso tenía que quedar documentado.
+
+### Próximos pasos
+Seguir con Boletería, pasar Pagos a un módulo compartido, mover el correo al Trabajador y después revisar cómo juntar las bases de datos sin perder información.
+
+### Evidencia
+
+5 commits del domingo, de la semana del 26/10 al 01/11:
+
+- [`c6c6e92`](https://github.com/Emperador24/HEXACORE/commit/c6c6e9223a811bf2d3acca999b49436236bd7cef) — fix(infra): reparar Compose remoto y registrar plan de migración (18:56, hora de Bogotá).
+- [`25a4fd3`](https://github.com/Emperador24/HEXACORE/commit/25a4fd3a98e3ba69ae8642d53253720f73e0621a) — test(alimentos): recuperar integración aislada de CU-011 (19:59, hora de Bogotá).
+- [`8fff023`](https://github.com/Emperador24/HEXACORE/commit/8fff023cf5b5b8ce88e5e279e75165c46dfc8fa9) — refactor(backend): integrar identidad y alimentos en nucleo modular (21:05, hora de Bogotá).
+- [`125fe36`](https://github.com/Emperador24/HEXACORE/commit/125fe36d874efc0f30d268a3219635854b807b82) — refactor(backend): incorporar personal y logistica al nucleo (22:56, hora de Bogotá).
+- [`d48beff`](https://github.com/Emperador24/HEXACORE/commit/d48befff29244bdd2746ba4686c519c13a28cc4c) — test(boleteria): establecer integracion aislada antes del traslado (23:25, hora de Bogotá).
+
+
+## [02/11/2026]
+
+> Entrada agregada después de los cambios descritos. Las fechas están en hora de Bogotá (UTC−05:00). Corresponde a la semana del 2 al 8 de noviembre.
+
+### ¿Qué hice?
+Seguí la migración con ayuda de Codex. Junté Ventas, Catálogo, Fila, Postventa y Acceso QR en Boletería. También pasé Pagos a un módulo que pueden usar Núcleo y Boletería, quité las llamadas HTTP internas hacia el servidor anterior y dejé un solo receptor del webhook en el Núcleo.
+
+Moví el envío de correos que ya existía al Trabajador. Después preparé una copia de las ocho bases y probé cómo pasarlas a una sola base con ocho esquemas. Revisé que se conservaran los registros, los pagos y los historiales. También se probaron los respaldos y su restauración.
+
+Con ese ensayo listo, adapté las aplicaciones para usar la base común. Probé una copia con datos transferidos y una instalación nueva, y dejé la preparación de las migraciones en una tarea que corre antes de arrancar las aplicaciones.
+
+Actualicé la documentación, los diagramas y las guías para el equipo. Dejé el PR #44 en borrador y se ejecutaron las pruebas remotas y la publicación de imágenes. Hubo que corregir problemas de preparación del pipeline y cambiar la compilación de las dos plataformas a ejecutores nativos.
+
+Por último dejé un entorno de revisión que se construye desde mi rama, con los dos portales y cuentas de prueba. Se comprobó que se puede entrar, hacer los recorridos implementados y reiniciar conservando los datos. Todo quedó publicado en `feature/sebastian-arquitectura`, sin mezclarlo con `develop` ni con `main`.
+
+### ¿Qué aprendí?
+Me quedó más clara la diferencia entre juntar programas y juntar bases de datos. Aunque las tablas estén en una sola base, hay que seguir teniendo claro qué módulo maneja cada dato.
+
+También entendí que revisar solamente cuántas filas se copiaron no basta: hay que comprobar su contenido, las referencias, los valores de los pagos y los historiales. Y volver a una imagen vieja no significa que los datos o los cobros vuelvan al estado anterior.
+
+### Dificultades o dudas
+Había tablas y secuencias con nombres repetidos entre las bases. También tuve que conservar las migraciones anteriores y revisar que cada parte buscara sus tablas en el esquema correcto.
+
+Se presentaron fallos en algunas pruebas y en la construcción de imágenes; los intentos y sus correcciones quedaron registrados. Además siguen pendientes problemas previos de pagos inciertos, timeouts, notificaciones de logística y correo, identificados como F12/F13/F14/F15. Los casos de uso que todavía faltan siguen con sus responsables.
+
+### Próximos pasos
+Probar la rama con otro compañero, anotar lo que encontremos y corregir los problemas de la migración que aparezcan. Después de esa revisión decidiremos cuándo integrar los cambios. La instalación habitual anterior sigue sin modificarse.
+
+### Evidencia
+
+14 commits del lunes, de la semana del 02/11 al 08/11:
+
+- [`e08daf6`](https://github.com/Emperador24/HEXACORE/commit/e08daf68e204e8fa43d04ad40ce3a3f11a2060bf) — refactor(backend): integrar componentes de boleteria en una aplicacion (03:43, hora de Bogotá).
+- [`f070bc2`](https://github.com/Emperador24/HEXACORE/commit/f070bc2fe6f691741623ee93b4041765100b1c69) — refactor(pagos): extraer modulo reutilizable conservando interfaz HTTP (05:38, hora de Bogotá).
+- [`85419be`](https://github.com/Emperador24/HEXACORE/commit/85419bef9d2c88cd27301923e7e8252fbc75e863) — refactor(pagos): integrar llamadas locales y retirar servidor HTTP (09:36, hora de Bogotá).
+- [`300a88e`](https://github.com/Emperador24/HEXACORE/commit/300a88ebd4337bb4538d9229c84af0361a6afd9f) — refactor(backend): trasladar notificaciones al trabajador (11:02, hora de Bogotá).
+- [`be57961`](https://github.com/Emperador24/HEXACORE/commit/be57961472a0802c90a57d247fb67e96e6717b1b) — feat(datos): preparar y verificar consolidacion aislada por esquemas (13:19, hora de Bogotá).
+- [`6e2260a`](https://github.com/Emperador24/HEXACORE/commit/6e2260a31651760f5867e7c3e0f121fbcc0f802f) — refactor(datos): conectar aplicaciones a base unica por esquemas (15:55, hora de Bogotá).
+- [`58b8326`](https://github.com/Emperador24/HEXACORE/commit/58b832625e8a52a7798e2c68241a3e155174fdd3) — ci: verificar migracion y publicar arquitectura por digest (16:28, hora de Bogotá).
+- [`7b34b71`](https://github.com/Emperador24/HEXACORE/commit/7b34b71f72c65174cc154cfa3c39ce1a7aab9295) — fix(ci): adaptar referencia historica y salud conjunta del nucleo (16:37, hora de Bogotá).
+- [`82c5218`](https://github.com/Emperador24/HEXACORE/commit/82c52188d441edc05d2488fd04de42abc272c958) — docs(arquitectura): registrar ADR-16 y preparar revision del equipo (16:37, hora de Bogotá).
+- [`36090b3`](https://github.com/Emperador24/HEXACORE/commit/36090b3b5a3591953fe32dfde231f21c01fbb06c) — fix(test): conservar digests publicados durante reinicio financiero (17:25, hora de Bogotá).
+- [`c36427a`](https://github.com/Emperador24/HEXACORE/commit/c36427ac7b217cdb3a37c8a75b545d0fe9aef5d9) — fix(cd): compilar plataformas nativas y verificar sus manifiestos (17:45, hora de Bogotá).
+- [`5183bc3`](https://github.com/Emperador24/HEXACORE/commit/5183bc3c418702514e3c2b4bc5f2d8a7b3aa9270) — docs(migracion): registrar verificacion remota y cierre tecnico (18:01, hora de Bogotá).
+- [`9acfb65`](https://github.com/Emperador24/HEXACORE/commit/9acfb652e8fd4745b6eb2e36627caa9a32924500) — feat(dev): preparar entorno de revision de arquitectura (18:59, hora de Bogotá).
+- [`6ce7f8b`](https://github.com/Emperador24/HEXACORE/commit/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916) — fix(dev): esperar la preparacion finita antes de iniciar aplicaciones (19:02, hora de Bogotá).
+
+El último commit aparece el 03/11 en UTC, pero en Bogotá corresponde al lunes 02/11 a las 19:02. Entre ambos días son 19 commits de migración.
+
+- [PR #44 en borrador](https://github.com/Emperador24/HEXACORE/pull/44).
+- [Pruebas remotas aprobadas sobre 6ce7f8b](https://github.com/Emperador24/HEXACORE/actions/runs/41549909189).
+- [Publicación y comprobación de imágenes de c36427a](https://github.com/Emperador24/HEXACORE/actions/runs/41541166454).
+- [Registro técnico de las etapas y resultados](https://github.com/Emperador24/HEXACORE/blob/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916/Documentation/Work/ESTADO-MIGRACION.md).
+- [Guía para arrancar y probar la rama](https://github.com/Emperador24/HEXACORE/blob/6ce7f8b7a391870d8123ff1bed2f3c22f34fa916/App/infra/revision/README.md).
