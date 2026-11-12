@@ -550,6 +550,233 @@ El historial Git acredita que **Sebastián Sánchez retomó la implementación y
 
 ---
 
+## Nota de seguimiento — [22/09/2026] — Cierre técnico de la Entrega 1: CI/CD, dos computadores y pruebas de integración
+
+**Modalidad:** actualización documental retrospectiva basada en el historial Git y los PR del repositorio.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota retrospectiva incorporada el 11/11/2026. Registra trabajo del 19 al 23/09/2026 que no quedó en esta bitácora, y complementa sin modificarla la nota anterior del 22/09 sobre Pedidos. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00). El conteo comprende los commits sin fusión de autor `Emperador24` en ese intervalo; no incluye los commits de fusión de los PR.
+
+### 1. Objetivo de la sesión
+Dejar constancia del trabajo con el que se atendieron los requisitos de la Entrega 1 fijados en las Sesiones 7 y 8 (pruebas de integración, despliegue en dos computadores con un script único, pipeline CI/CD y demostración cuantitativa por atributo de calidad), y del estado en que quedó cada uno al congelamiento.
+
+### 2. Temas tratados
+
+- Tema 1 — **Entrega continua (20/09).** Pipeline de CD que construye y publica en ghcr.io las imágenes de los servicios y del gateway en cada push a `develop` y `main`, etiquetadas por rama y por commit, y comprueba que lo publicado arranca antes de darlo por bueno. Las imágenes se publican para **amd64 y arm64**; se comprobó descargándolas sin credenciales en un Mac arm64 y levantando el sistema con `./iniciar.sh --registro` en **2 min 32 s** desde cero. El gateway gana un Dockerfile propio con su configuración dentro. Evidencia: [`65624a4`](https://github.com/Emperador24/HEXACORE/commit/65624a4769600cd64630dd51a401882a8a5a8f6c), [`e57868c`](https://github.com/Emperador24/HEXACORE/commit/e57868ccf906106c05a76808e4f6c256b199a053), [`748e553`](https://github.com/Emperador24/HEXACORE/commit/748e553c5be9b5226b48f69e3ad486002162ba32).
+- Tema 2 — **Un solo arranque deja el sistema usable (20–22/09).** El portal pasa a contenedor y los datos de ejemplo a SQL, para que una máquina con solo Docker pueda usar el sistema. `iniciar.sh` arrancaba los contenedores pero nadie aplicaba las migraciones: los servicios quedaban "sanos" sin tablas. Ahora el arranque migra y siembra. Evidencia: [`87b8bb2`](https://github.com/Emperador24/HEXACORE/commit/87b8bb2987d8ce3aac7a0fe4b519855be917e04d), [`542df33`](https://github.com/Emperador24/HEXACORE/commit/542df336ced32d810aaa6a1ebe918af63574efbf).
+- Tema 3 — **Despliegue real en dos computadores (22/09).** `docker-compose.remoto.yml` solo soltaba las dependencias de dos servicios. Pedidos y Eventos/Emergencias conservaban su `depends_on`, así que Compose levantaba PostgreSQL, Redis, RabbitMQ y la pasarela también en la máquina de servicios, y esos servicios hablaban con una base local vacía. Corregido. Evidencia: [`932606e`](https://github.com/Emperador24/HEXACORE/commit/932606ec779ffb43b10cd53055ac3e5c4383f315).
+- Tema 4 — **Pruebas de integración y CI (22/09).**
+  - **CU-011 no tenía ninguna prueba de integración:** se añadieron 33 comprobaciones, con 87,4 % de cobertura de integración.
+  - **Venta primaria (CU-001 a CU-005):** tampoco tenía. Entradas estaba al 74,70 % de líneas y al 48,50 % de funciones; se añadieron cinco suites con 75 bloques.
+  - **Guardas de pago de Pedidos:** 14 bloques.
+  - **Cobertura de Eventos/Emergencias:** se midió por primera vez.
+  - **Base propia para las pruebas:** antes escribían en la base de trabajo, donde se habían acumulado 719 empleados y 415 turnos de rastro. Se agregó además un recolector de los datos que dejan las pruebas.
+  - **CI:** ahora ejecuta las pruebas de integración, y el servicio de Pedidos entra al CI y al CD.
+
+  Evidencia: [`a52b23c`](https://github.com/Emperador24/HEXACORE/commit/a52b23cfd7c6df121b2c50e36c0292400a62fbb9), [`3464307`](https://github.com/Emperador24/HEXACORE/commit/346430732fb2859db3f60912fdc61562fd677858), [`1d6ed3a`](https://github.com/Emperador24/HEXACORE/commit/1d6ed3a7006fde5cd60cd2bd593d855be3b5cc2c), [`8b56b49`](https://github.com/Emperador24/HEXACORE/commit/8b56b49ae97f2433327723fc893cf5bc0bdf1e2a), [`2747215`](https://github.com/Emperador24/HEXACORE/commit/274721524682ad97e273afc479273215ad07fc2c), [`bee2f77`](https://github.com/Emperador24/HEXACORE/commit/bee2f7723ce0d2e8b24ecebb05cb6bfb12ab2a22).
+- Tema 5 — **Defectos encontrados al probar (19–22/09).**
+  - **Tope diario de horas (CU-017/018):** se comparaba contra un acumulado de por vida, así que quien más trabajaba quedaba inasignable para siempre.
+  - **Migración de la venta primaria:** una comilla de más impedía crear seis tablas (compras, cancelaciones, ingresos, códigos promocionales, usos de promoción y localidades).
+  - **Mercado secundario:** el orden "evento próximo" respondía 500 en todas las peticiones.
+  - **Logística:** cualquier empleado con sesión podía crear turnos, ver los fichajes de todos y **aprobar su propia solicitud de cambio de turno**.
+
+  Evidencia: [`ba65b42`](https://github.com/Emperador24/HEXACORE/commit/ba65b424ecac719163a12ca996880a535502cd96), [`528e6ba`](https://github.com/Emperador24/HEXACORE/commit/528e6ba53385e81c93d30c022d7c77077b306622), [`a3ac0cd`](https://github.com/Emperador24/HEXACORE/commit/a3ac0cd6d8f2b76c789506a0e264c5048cff0e38), [`f54608e`](https://github.com/Emperador24/HEXACORE/commit/f54608e971c5e240adbc565e7e063c6c8e7caca4).
+- Tema 6 — **Interfaces conectadas al backend real (21–22/09).** La reventa del portal web (CU-006) publicaba y compraba sobre una lista en memoria del navegador; ahora usa el API Gateway con el mismo recorrido que la app móvil. El portal administrativo no tenía ni una llamada HTTP y su login comparaba contra tres usuarios quemados con la contraseña «1234»; ahora usa Administración por el gateway y se despliega con el sistema. Evidencia: [`6d8e97e`](https://github.com/Emperador24/HEXACORE/commit/6d8e97e9c9c0693ecf05bf7d7aaa4d69c8fb8076), [`2b81146`](https://github.com/Emperador24/HEXACORE/commit/2b81146ebcf1ec69e9ca191b3068e6357843d606).
+- Tema 7 — **Demostración y documentación (22–23/09).** `atributos-calidad.py` mide los cinco atributos de calidad con una sola orden. El SAD documenta las tácticas de seguridad (§15.3) y de consistencia, que estaban implementadas pero sin escribir. Se añadieron las diapositivas de la sustentación y la presentación se llevó a `main` (PR #42). Evidencia: [`babc3a3`](https://github.com/Emperador24/HEXACORE/commit/babc3a3c5119ada5a1d894360304278ec686394f), [`e0d4575`](https://github.com/Emperador24/HEXACORE/commit/e0d4575682b3b2822a815945932cab339ce3f73b), [`cc613d5`](https://github.com/Emperador24/HEXACORE/commit/cc613d52955fb25ebc9464aeac7c41489d8a7102), [`eea2ddb`](https://github.com/Emperador24/HEXACORE/commit/eea2ddbf208b4003b44c9bb735e23d663d8a0574).
+
+### 3. Decisiones tomadas
+
+Decisiones técnicas tomadas por Samuel durante la implementación; quedan registradas con su justificación, no como acuerdos de una reunión.
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | Publicar imágenes multiarquitectura (amd64 y arm64) en ghcr.io, etiquetadas por rama y por commit, y desplegar desde el registro. | La demostración debe arrancar en cualquier computador del equipo, incluidos Mac arm64, sin compilar en la máquina. Etiquetar por commit permite saber exactamente qué versión corre. Descartado: compilar en cada máquina (lento y dependiente de Node). | Samuel Emperador | 20/09/2026 |
+| 2 | Las pruebas de integración corren contra una base propia y se ejecutan en el CI. | Escribían sobre la base de trabajo y la llenaron de datos de prueba; y una prueba que solo corre en un portátil no protege los pull requests. | Samuel Emperador | 22/09/2026 |
+| 3 | En logística, autorizar por rol (Jefe de personal) y no solo por sesión válida. | `SesionValida` solo comprobaba que hubiera sesión: un empleado podía aprobar su propio cambio de turno. | Samuel Emperador | 22/09/2026 |
+| 4 | La prueba de disponibilidad deja de afirmar sobre una sola muestra (el máximo), y en el CI tolera la falta de CPU del runner; fuera del CI exige el umbral completo. | El PR #35 se fusionó a `develop` con el CI en rojo porque a 300 logins simultáneos 1 de 900 no llegó a 200 en un runner de 2 núcleos. Descartado: bajar el umbral para todos los entornos. | Samuel Emperador | 22/09/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos nuevos. La tarea "Despliegue en 2 computadores + script único + pipeline CI/CD", asignada a Diego Coronado en la Sesión 8, quedó implementada en estos commits de Samuel; esta nota informa el hecho y no reasigna formalmente la tarea.
+
+### 5. Tareas asignadas
+No se asignan tareas nuevas. Estado al cierre del 23/09 de las tareas de la Sesión 8:
+
+| Tarea | Responsable | Fecha límite | Estado |
+|---|---|---|---|
+| Completar backend CU-027, CU-006, CU-018 y autenticación/roles | Samuel Emperador, Diego Coronado | 20/09/2026 | Implementado; autorización por rol en logística corregida el 22/09 |
+| Alcanzar 100 % de cobertura de pruebas de integración | Samuel Emperador, Diego Coronado | 20/09/2026 | No alcanzado: se cubrieron CU-001–005 y CU-011, que no tenían ninguna prueba (p. ej. Pedidos 87,4 %) |
+| Despliegue en 2 computadores + script único + pipeline CI/CD | Diego Coronado | 20/09/2026 | Implementado por Samuel entre el 20 y el 22/09 |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- `develop` no exige que el CI pase para fusionar: el PR #35 entró en rojo.
+- La prueba de disponibilidad depende del hardware en que corre; sus cifras de un portátil no son comparables con las de un runner.
+- No se puede afirmar el 100 % de cobertura de integración pedido en la Sesión 7.
+
+### 7. Avance general del proyecto
+Se publicaron **37 commits** del 19 al 23/09, integrados por los PR #24, #25, #26, #32, #35, #37 y #38 hacia `develop`, el #39 de `develop` a `main` y el #42 (presentación) a `main`.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 19/09/2026 | 18:58:02 | [`2dbee9a`](https://github.com/Emperador24/HEXACORE/commit/2dbee9a58a72adf7c7c08502d9cc1a9df4d07e0f) | Nueva versio CU-018 |
+| 19/09/2026 | 19:59:07 | [`b9dc700`](https://github.com/Emperador24/HEXACORE/commit/b9dc70040554d82de19ebb57f5d99366467ce1a8) | Restaura la resolución anidada de typescript en el lock de eventos-emergencias |
+| 19/09/2026 | 20:36:01 | [`5f70333`](https://github.com/Emperador24/HEXACORE/commit/5f70333f8ca571145c90bbbd4ad14bcbabb05dbd) | Separa las pruebas unitarias de las de integración en eventos-emergencias |
+| 19/09/2026 | 21:33:35 | [`fc26187`](https://github.com/Emperador24/HEXACORE/commit/fc26187096c5726893c99c2e695654ef0facd698) | Evita que las pantallas de personal actualicen estado ya desmontadas |
+| 19/09/2026 | 23:15:50 | [`ba65b42`](https://github.com/Emperador24/HEXACORE/commit/ba65b424ecac719163a12ca996880a535502cd96) | Corrige el tope diario de horas y mide la cobertura de integración |
+| 20/09/2026 | 21:25:25 | [`65624a4`](https://github.com/Emperador24/HEXACORE/commit/65624a4769600cd64630dd51a401882a8a5a8f6c) | Añade el pipeline de entrega continua |
+| 20/09/2026 | 21:25:33 | [`ce5b929`](https://github.com/Emperador24/HEXACORE/commit/ce5b9297127c7efde4285213947f19845d943909) | TEMPORAL: dispara el CD en feature/samuel para validarlo |
+| 20/09/2026 | 21:25:50 | [`2a71f7f`](https://github.com/Emperador24/HEXACORE/commit/2a71f7f59823800e9a862320decdcd94933774a8) | Sanea la etiqueta de imagen para ramas con barra |
+| 20/09/2026 | 21:27:57 | [`7e424df`](https://github.com/Emperador24/HEXACORE/commit/7e424df4315abd23adde1c385db9571e1dbaca90) | Prepara Buildx en el CD: el driver por defecto no exporta caché |
+| 20/09/2026 | 21:33:59 | [`0d18698`](https://github.com/Emperador24/HEXACORE/commit/0d18698e5461e3d098f387ebcee41512b3477ef1) | Quita el disparador temporal del CD |
+| 20/09/2026 | 21:41:10 | [`e57868c`](https://github.com/Emperador24/HEXACORE/commit/e57868ccf906106c05a76808e4f6c256b199a053) | Publica las imágenes para amd64 y arm64 |
+| 20/09/2026 | 21:51:49 | [`748e553`](https://github.com/Emperador24/HEXACORE/commit/748e553c5be9b5226b48f69e3ad486002162ba32) | Quita el disparador temporal tras validar el multiarquitectura |
+| 20/09/2026 | 22:18:17 | [`87b8bb2`](https://github.com/Emperador24/HEXACORE/commit/87b8bb2987d8ce3aac7a0fe4b519855be917e04d) | Levanta el sistema completo sin Node: portal en contenedor y datos en SQL |
+| 21/09/2026 | 08:14:20 | [`6d8e97e`](https://github.com/Emperador24/HEXACORE/commit/6d8e97e9c9c0693ecf05bf7d7aaa4d69c8fb8076) | Conecta el mercado de reventa del portal al backend real (CU-006) |
+| 22/09/2026 | 00:41:06 | [`e422fbe`](https://github.com/Emperador24/HEXACORE/commit/e422fbe0152d309544d9e9e38f57d95457e62793) | Saca la firma de iOS del proyecto para que compile en cualquier Mac |
+| 22/09/2026 | 00:41:15 | [`e38b45b`](https://github.com/Emperador24/HEXACORE/commit/e38b45b19590bcb10974f6e457dfa954efd5f613) | Aligera el fondo difuminado de la app móvil |
+| 22/09/2026 | 00:41:30 | [`f54608e`](https://github.com/Emperador24/HEXACORE/commit/f54608e971c5e240adbc565e7e063c6c8e7caca4) | Acota cada operación de logística a quien le corresponde (CU-017, CU-018) |
+| 22/09/2026 | 00:41:41 | [`08c052c`](https://github.com/Emperador24/HEXACORE/commit/08c052c8d192a8eb7ff0e68e382f812b83690429) | Mide la cobertura de integración de eventos-emergencias |
+| 22/09/2026 | 00:41:51 | [`528e6ba`](https://github.com/Emperador24/HEXACORE/commit/528e6ba53385e81c93d30c022d7c77077b306622) | Corrige una comilla que impedía crear el esquema de la venta primaria |
+| 22/09/2026 | 00:42:03 | [`9ea8b05`](https://github.com/Emperador24/HEXACORE/commit/9ea8b05fba0b76940bf1a0866765467c0e6cfe04) | Arregla las pruebas de pedidos y su cierre ordenado |
+| 22/09/2026 | 00:42:13 | [`a52b23c`](https://github.com/Emperador24/HEXACORE/commit/a52b23cfd7c6df121b2c50e36c0292400a62fbb9) | Añade las pruebas de integración de CU-011 |
+| 22/09/2026 | 00:42:22 | [`bee2f77`](https://github.com/Emperador24/HEXACORE/commit/bee2f7723ce0d2e8b24ecebb05cb6bfb12ab2a22) | Mete el servicio de pedidos en el CI y el CD |
+| 22/09/2026 | 00:42:34 | [`542df33`](https://github.com/Emperador24/HEXACORE/commit/542df336ced32d810aaa6a1ebe918af63574efbf) | Deja el sistema usable tras un solo arranque, no solo levantado |
+| 22/09/2026 | 01:39:22 | [`8b56b49`](https://github.com/Emperador24/HEXACORE/commit/8b56b49ae97f2433327723fc893cf5bc0bdf1e2a) | Aísla las pruebas de integración en su propia base |
+| 22/09/2026 | 01:39:22 | [`b402df7`](https://github.com/Emperador24/HEXACORE/commit/b402df7608c46caee1af57fbd61513e28bcbb775) | Añade un recolector de los datos que dejan las pruebas |
+| 22/09/2026 | 07:29:46 | [`a3ac0cd`](https://github.com/Emperador24/HEXACORE/commit/a3ac0cd6d8f2b76c789506a0e264c5048cff0e38) | Arregla el orden por evento próximo del mercado, que daba 500 siempre |
+| 22/09/2026 | 07:30:06 | [`3464307`](https://github.com/Emperador24/HEXACORE/commit/346430732fb2859db3f60912fdc61562fd677858) | Prueba la venta primaria, que no tenía ni una prueba de integración |
+| 22/09/2026 | 07:30:23 | [`1d6ed3a`](https://github.com/Emperador24/HEXACORE/commit/1d6ed3a7006fde5cd60cd2bd593d855be3b5cc2c) | Prueba las formas en que un pago de pedido no puede seguir |
+| 22/09/2026 | 07:30:36 | [`a16bcd9`](https://github.com/Emperador24/HEXACORE/commit/a16bcd964dfedca8267cec5e7de724e4698a56f1) | Deja de medir la disponibilidad con una sola muestra |
+| 22/09/2026 | 07:30:47 | [`932606e`](https://github.com/Emperador24/HEXACORE/commit/932606ec779ffb43b10cd53055ac3e5c4383f315) | Reparte de verdad el sistema en dos computadores |
+| 22/09/2026 | 07:31:08 | [`2b81146`](https://github.com/Emperador24/HEXACORE/commit/2b81146ebcf1ec69e9ca191b3068e6357843d606) | Conecta el portal de administración al backend, y lo despliega |
+| 22/09/2026 | 07:31:21 | [`2747215`](https://github.com/Emperador24/HEXACORE/commit/274721524682ad97e273afc479273215ad07fc2c) | Corre las pruebas de integración en el CI y publica el portal admin |
+| 22/09/2026 | 07:31:33 | [`babc3a3`](https://github.com/Emperador24/HEXACORE/commit/babc3a3c5119ada5a1d894360304278ec686394f) | Mide los cinco atributos de calidad con una sola orden |
+| 22/09/2026 | 07:31:47 | [`e0d4575`](https://github.com/Emperador24/HEXACORE/commit/e0d4575682b3b2822a815945932cab339ce3f73b) | Documenta las tácticas de seguridad y consistencia en el SAD |
+| 22/09/2026 | 08:34:54 | [`4a5d559`](https://github.com/Emperador24/HEXACORE/commit/4a5d5595be5a8b74daf44c56e9aa28ed37c7e4b5) | El CI se fusionó en rojo: la prueba de disponibilidad es de portátil |
+| 22/09/2026 | 09:00:42 | [`cc613d5`](https://github.com/Emperador24/HEXACORE/commit/cc613d52955fb25ebc9464aeac7c41489d8a7102) | Añade las diapositivas de la sustentación |
+| 23/09/2026 | 18:13:44 | [`eea2ddb`](https://github.com/Emperador24/HEXACORE/commit/eea2ddbf208b4003b44c9bb735e23d663d8a0574) | Presentacion |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. La sustentación estaba prevista para el 24/09 según la Sesión 7; esta nota no registra su resultado.
+
+---
+
+## Nota de seguimiento — [31/10/2026] — Revisión de la arquitectura del backend: ADR-12, ADR-14 y ADR-15
+
+**Modalidad:** actualización documental retrospectiva basada en el historial Git, los ADR del SAD y los PR del repositorio.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota retrospectiva incorporada el 11/11/2026. Registra trabajo del 21 al 31/10/2026, anterior a la migración de ADR-16 que documentan las notas del 01 y 02/11. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00). El conteo comprende los commits sin fusión de autor `Emperador24` en ese intervalo.
+
+### 1. Objetivo de la sesión
+Dejar constancia de tres decisiones de arquitectura del backend (ADR-12, ADR-14 y ADR-15), de su justificación y de cuánto se ejecutó de cada una. Hasta ahora solo estaban en el SAD y en los mensajes de commit.
+
+### 2. Temas tratados
+
+- Tema 1 — **ADR-12: arquitectura basada en servicios (21–22/10).** El backend pasa de seis microservicios por dominio a tres servicios de dominio. Un **Núcleo** agrupa Administración, Pedidos, Personal y Parqueaderos como módulos de una sola unidad desplegable; Entradas/Mercado Secundario y Eventos/Emergencias siguen como servicios independientes. Se creó el Núcleo con Administración, se absorbió Pedidos y se corrigió su arranque en contenedor. Evidencia: [`aefffb5`](https://github.com/Emperador24/HEXACORE/commit/aefffb52dc8cb902824c4d9b9bfd5e08befba4f0), [`95acc78`](https://github.com/Emperador24/HEXACORE/commit/95acc7818b1acd3b77348f2400e9baf649abdb22), [`55115bc`](https://github.com/Emperador24/HEXACORE/commit/55115bc662858ac1e7c47d12b08fa05130b4816c).
+- Tema 2 — **ADR-14: arquitectura híbrida entre SOA y microservicios (23–24/10).** Revisa el criterio de extracción de ADR-12, de dos condiciones a cuatro; con él, el diseño pasa a siete microservicios y siete servicios de dominio. El SAD describe ADR-14 en todas sus vistas y los diagramas quedan en una sola versión. Se borraron los cuatro servicios que ADR-12 había dejado sin uso: 182 archivos y 572 MB con una segunda copia de Pagos y de Autenticación. Evidencia: [`44cc95c`](https://github.com/Emperador24/HEXACORE/commit/44cc95cf3dcaff95bf2ba21740498d259810e314), [`8aa4f8e`](https://github.com/Emperador24/HEXACORE/commit/8aa4f8ea8dfbbd9c6ecf1063526d9220e3baee9e), [`8bc5505`](https://github.com/Emperador24/HEXACORE/commit/8bc5505cd36219fb023457087e053b2d43183890), [`9467b57`](https://github.com/Emperador24/HEXACORE/commit/9467b57a90dc182636715998271863761aabe4e9).
+- Tema 3 — **Revisión del profesor sobre la vista de contenedores (27/10).** Correcciones marcadas como obligatorias:
+  - el gateway enruta también a los servicios de dominio y a Acceso QR;
+  - el gateway verifica el JWT por su cuenta, sin preguntarle a Autenticación en cada petición;
+  - Pagos anuncia PagoAprobado / PagoRechazado al broker;
+  - la pasarela confirma por webhook.
+
+  Evidencia: [`6eb89c2`](https://github.com/Emperador24/HEXACORE/commit/6eb89c224c768e81047de4fab2b9a5e3d5179953).
+- Tema 4 — **Ejecución de ADR-14 (27–29/10).**
+  - **Nuevos servicios:** Catálogo, Notificaciones, Alimentos (como servicio de dominio con dos réplicas fijas), Pagos unificado y Cola virtual (nueva). El Núcleo pasó a ser Autenticación.
+  - **Pagos:** el servicio único agrega un libro de idempotencia **durable**, que no tenía ninguna de las dos copias anteriores.
+  - **Acceso QR y Postventa:** se extrajeron convirtiendo sus transacciones locales sobre `Entrada` en **Sagas**.
+  - **Renombre:** `entradas-mercado-secundario` pasó a llamarse `ventas`.
+
+  Evidencia: [`3926e87`](https://github.com/Emperador24/HEXACORE/commit/3926e87b28b98273c99bf189b86ad4da7842dc28), [`dadc3f5`](https://github.com/Emperador24/HEXACORE/commit/dadc3f54fc9d1d66509ab2c3391de7e6a367b40b), [`ec0718a`](https://github.com/Emperador24/HEXACORE/commit/ec0718ae2fd22cd79c888b89d172a15960b3fc9a), [`444eea6`](https://github.com/Emperador24/HEXACORE/commit/444eea6bd9c955e362a59e99abd14dd9d2f57b61), [`c6d700b`](https://github.com/Emperador24/HEXACORE/commit/c6d700bbe2cf141441b763df00c2f83b98191be8), [`e71c99e`](https://github.com/Emperador24/HEXACORE/commit/e71c99ea930e25ccab10449be9c0a35a70e40551), [`432cd72`](https://github.com/Emperador24/HEXACORE/commit/432cd726634b675eff2720d0b5ef7a7c93540b7a), [`da8b41f`](https://github.com/Emperador24/HEXACORE/commit/da8b41fc711ef9f78e150dad325fb1fb9a1fbae9).
+- Tema 5 — **ADR-15: correcciones a la vista de contenedores (31/10).**
+  - **Gateway:** valida el JWT con la clave pública, autoriza por rol y exige el turno de la Cola virtual en `POST /compras`.
+  - **Acceso QR:** ya no llama a Ventas. Valida contra su propia copia de los QR, alimentada por CompraConfirmada y EntradaActualizada, y publica IngresoRegistrado.
+  - **Outbox:** Ventas y Acceso QR publican por una bandeja de salida (Transactional Outbox).
+  - **Webhook:** el de la pasarela entra por el gateway, firmado con HMAC.
+
+  Se integró a `develop` con el PR #43 (31/10, 02:10). Evidencia: [`4b8cdd4`](https://github.com/Emperador24/HEXACORE/commit/4b8cdd493c356d0cc1ffc6ac075901e86bf26962).
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | **ADR-12:** de seis microservicios a tres servicios de dominio, con un Núcleo modular. ADR-01 queda superado. | Tres hechos medidos sobre el prototipo: solo uno de los seis servicios admitía réplicas (los demás declaraban puerto fijo), dos nunca pasaron de su README y las seis bases compartían una sola instancia de PostgreSQL. Se reformula la métrica de RNF-13, el único atributo que la decisión degrada. | Samuel Emperador | 21/10/2026 |
+| 2 | **ADR-14:** criterio de extracción de cuatro condiciones; siete microservicios y siete servicios de dominio. ADR-12 queda superado. | ADR-12 no expresaba dos casos. **Los transversales:** Pagos lo usan compra, reventa, reembolsos, pedidos y parqueaderos, y su lógica estaba duplicada en dos servicios; Autenticación la usa cada petición. **Los que tienen almacén propio:** Catálogo (índice), Cola virtual (fila en memoria) y Acceso QR (caché para validar sin red). | Samuel Emperador | 23/10/2026 |
+| 3 | Alimentos se extrae como **servicio de dominio**, no como microservicio. | No cumple dos de los cuatro criterios: su carga es estable y ningún otro dominio lo usa; corre con dos réplicas fijas por disponibilidad. | Samuel Emperador | 28/10/2026 |
+| 4 | Al extraer Acceso QR y Postventa, sus transacciones sobre `Entrada` pasan a **Sagas**. | `Entrada` y su historial siguen siendo de Ventas; el cambio de dueño, el QR nuevo y el historial siguen en una transacción local de Ventas. Descartado: compartir la tabla entre servicios. | Samuel Emperador | 28–29/10/2026 |
+| 5 | Renombrar la carpeta del servicio a `ventas`, pero **no** la base `entradas_mercado_secundario`. | El mercado secundario se fue a Postventa. Cambiar la base obligaría a todo el equipo a recrear su volumen, porque `initdb` solo corre sobre un volumen nuevo. | Samuel Emperador | 29/10/2026 |
+| 6 | **ADR-15:** JWT verificado en el gateway, Acceso QR con copia propia de los QR, Outbox en Ventas y Acceso QR, y webhook firmado con HMAC. | Atiende la revisión del profesor del 27/10 y deja resueltas las decisiones que el diagrama dejaba abiertas. | Samuel Emperador | 31/10/2026 |
+
+> **Seguimiento posterior (sin reescribir lo anterior):** el 01 y 02/11 Sebastián Sánchez ejecutó ADR-16, que **sustituye la topología resultante de ADR-14**. Concentró el backend en Núcleo, Boletería y Trabajador, con Pagos como módulo reutilizable y una base única por esquemas (ver las dos notas siguientes). El 02/11 se integró a `develop` (PR #44) y la documentación vigente pasó a describir ADR-16.
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos. Las correcciones de la revisión del profesor se tomaron como obligatorias.
+
+### 5. Tareas asignadas
+No se asignan tareas nuevas. Estado al 31/10:
+
+| Trabajo registrado | Responsable | Estado |
+|---|---|---|
+| ADR-12, ADR-14 y ADR-15 en el SAD y en los diagramas C4 | Samuel Emperador | Registrados; vistas regeneradas |
+| Extracción de servicios según ADR-14 | Samuel Emperador | Ejecutada en su mayor parte; luego sustituida por ADR-16 |
+| Correcciones de la revisión del profesor | Samuel Emperador | Aplicadas en el diagrama de contenedores (27/10 y 31/10) |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- Las Sagas de Acceso QR y Postventa introducen consistencia eventual donde antes había una transacción local.
+- Más unidades desplegables significan más operación y más memoria para la demostración en dos computadores.
+- Dos cambios de arquitectura en diez días obligan a mantener alineados el SAD, los diagramas y el código; se dejó una sola versión de cada diagrama para que no convivieran dos arquitecturas.
+
+### 7. Avance general del proyecto
+Se publicaron **30 commits** del 21 al 31/10, integrados a `develop` con el PR #43.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 21/10/2026 | 20:08:06 | [`aefffb5`](https://github.com/Emperador24/HEXACORE/commit/aefffb52dc8cb902824c4d9b9bfd5e08befba4f0) | Adopta la arquitectura basada en servicios (ADR-12) |
+| 21/10/2026 | 20:13:02 | [`95acc78`](https://github.com/Emperador24/HEXACORE/commit/95acc7818b1acd3b77348f2400e9baf649abdb22) | Crea el Núcleo con Administración como primer módulo (ADR-12) |
+| 21/10/2026 | 21:29:06 | [`55115bc`](https://github.com/Emperador24/HEXACORE/commit/55115bc662858ac1e7c47d12b08fa05130b4816c) | Absorbe Pedidos en el Núcleo y apunta la infraestructura (ADR-12) |
+| 22/10/2026 | 00:39:49 | [`4baf1ca`](https://github.com/Emperador24/HEXACORE/commit/4baf1cae1eb25b364868d6551aab2ae10f0df9d6) | Arregla el arranque real del Núcleo en contenedor |
+| 22/10/2026 | 00:49:35 | [`677cadd`](https://github.com/Emperador24/HEXACORE/commit/677cadd6d47b442f643db808dfe832d42f78f9af) | Apunta la medición de atributos al Núcleo |
+| 23/10/2026 | 23:05:15 | [`44cc95c`](https://github.com/Emperador24/HEXACORE/commit/44cc95cf3dcaff95bf2ba21740498d259810e314) | Registra ADR-14: arquitectura híbrida entre SOA y microservicios |
+| 23/10/2026 | 23:19:10 | [`8aa4f8e`](https://github.com/Emperador24/HEXACORE/commit/8aa4f8ea8dfbbd9c6ecf1063526d9220e3baee9e) | Describe el sistema con ADR-14 en todas las vistas del SAD |
+| 24/10/2026 | 13:15:13 | [`f2d7489`](https://github.com/Emperador24/HEXACORE/commit/f2d748903caf181e76c775662da92a2f9212ba8e) | Corrige el mapa de migración: Pagos ya tiene idempotencia |
+| 24/10/2026 | 13:33:11 | [`5fad606`](https://github.com/Emperador24/HEXACORE/commit/5fad606bfaaa1df4bb445cadda9526165f30fe1b) | Redibuja las vistas de componentes y de secuencia para ADR-14 |
+| 24/10/2026 | 14:00:21 | [`8bc5505`](https://github.com/Emperador24/HEXACORE/commit/8bc5505cd36219fb023457087e053b2d43183890) | Deja una sola versión de cada diagrama, la de ADR-14 |
+| 24/10/2026 | 14:33:07 | [`9467b57`](https://github.com/Emperador24/HEXACORE/commit/9467b57a90dc182636715998271863761aabe4e9) | Borra los cuatro servicios que ADR-12 dejó sin usar |
+| 24/10/2026 | 14:35:27 | [`15be90d`](https://github.com/Emperador24/HEXACORE/commit/15be90dfebe6eff655d4bae4234a5eb4b547d2ad) | Recupera en el Núcleo la tolerancia a CI de cu027-disponibilidad |
+| 24/10/2026 | 14:36:46 | [`a126371`](https://github.com/Emperador24/HEXACORE/commit/a126371a6331a2aca00428203964d194d3312d15) | Apunta al Núcleo la última cita del README del gateway |
+| 25/10/2026 | 19:42:11 | [`ede4d34`](https://github.com/Emperador24/HEXACORE/commit/ede4d3413cdaf77749202e1d868abc44cf2d21a9) | Separa dos rótulos que se tapaban en la vista de contenedores |
+| 27/10/2026 | 00:39:36 | [`6eb89c2`](https://github.com/Emperador24/HEXACORE/commit/6eb89c224c768e81047de4fab2b9a5e3d5179953) | Completa los flujos que faltaban en la vista de contenedores |
+| 27/10/2026 | 23:42:22 | [`3926e87`](https://github.com/Emperador24/HEXACORE/commit/3926e87b28b98273c99bf189b86ad4da7842dc28) | Saca el Catálogo a su propio microservicio (ADR-14, fase A) |
+| 28/10/2026 | 00:07:49 | [`1472a3f`](https://github.com/Emperador24/HEXACORE/commit/1472a3fff139541e39387791a2c9794c5a29ee82) | Pone en marcha el Catálogo y arregla lo que el arranque destapó |
+| 28/10/2026 | 00:25:38 | [`d938d62`](https://github.com/Emperador24/HEXACORE/commit/d938d627568c0f6f6bc0f9a0cb2b88dc2810930f) | Arregla el apagado del Núcleo con conexiones nombradas |
+| 28/10/2026 | 09:41:16 | [`dadc3f5`](https://github.com/Emperador24/HEXACORE/commit/dadc3f54fc9d1d66509ab2c3391de7e6a367b40b) | Saca Notificaciones a su propio microservicio (ADR-14) |
+| 28/10/2026 | 09:56:17 | [`ec0718a`](https://github.com/Emperador24/HEXACORE/commit/ec0718ae2fd22cd79c888b89d172a15960b3fc9a) | Saca Alimentos a su propio servicio de dominio (ADR-14) |
+| 28/10/2026 | 10:07:13 | [`90f188c`](https://github.com/Emperador24/HEXACORE/commit/90f188c6794cba92e214589e20a08f144d05d61f) | El Núcleo pasa a ser Autenticación (ADR-14) |
+| 28/10/2026 | 10:07:38 | [`0671369`](https://github.com/Emperador24/HEXACORE/commit/067136997d6af6239c0c17302abf42a7660229ee) | Marca la fase B como hecha en el mapa de migración |
+| 28/10/2026 | 15:09:06 | [`444eea6`](https://github.com/Emperador24/HEXACORE/commit/444eea6bd9c955e362a59e99abd14dd9d2f57b61) | Unifica Pagos en su propio microservicio (ADR-14) |
+| 28/10/2026 | 15:22:37 | [`c6d700b`](https://github.com/Emperador24/HEXACORE/commit/c6d700bbe2cf141441b763df00c2f83b98191be8) | Construye la Cola virtual (ADR-14) |
+| 28/10/2026 | 22:46:26 | [`e71c99e`](https://github.com/Emperador24/HEXACORE/commit/e71c99ea930e25ccab10449be9c0a35a70e40551) | Saca Acceso QR a su propio microservicio, con Saga (ADR-14) |
+| 29/10/2026 | 07:35:50 | [`432cd72`](https://github.com/Emperador24/HEXACORE/commit/432cd726634b675eff2720d0b5ef7a7c93540b7a) | Extrae Postventa a su propio servicio (ADR-14, fase A) |
+| 29/10/2026 | 07:39:52 | [`1ca6f3f`](https://github.com/Emperador24/HEXACORE/commit/1ca6f3f5911d61bae988131007e68b4bd37a7bb4) | Dibuja en el diagrama de contenedores la llamada de Acceso QR a Ventas |
+| 29/10/2026 | 08:16:26 | [`da8b41f`](https://github.com/Emperador24/HEXACORE/commit/da8b41fc711ef9f78e150dad325fb1fb9a1fbae9) | Renombra entradas-mercado-secundario a ventas |
+| 29/10/2026 | 08:16:44 | [`7a9c5da`](https://github.com/Emperador24/HEXACORE/commit/7a9c5da046242bcaf147dba1f399478b248c72f5) | Apunta CI y CD a la carpeta ventas |
+| 31/10/2026 | 00:19:45 | [`4b8cdd4`](https://github.com/Emperador24/HEXACORE/commit/4b8cdd493c356d0cc1ffc6ac075901e86bf26962) | Aplica ADR-15: correcciones a la vista de contenedores |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota.
+
+---
+
 ## Nota de seguimiento — [01/11/2026] — Inicio de la migración modular
 
 **Modalidad:** actualización documental basada en trabajo técnico e historial Git.
@@ -685,6 +912,208 @@ Evidencia complementaria:
 
 ### 8. Próxima sesión
 **Fecha propuesta:** No se establece. **Siguiente actividad solicitada por Sebastián:** revisión funcional y técnica desde la misma rama con otro integrante; registrar hallazgos antes de decidir cualquier integración o corte. No se considera una revisión ya realizada.
+
+---
+
+
+## Nota de seguimiento — [07/11/2026] — Casos de uso sobre ADR-16: CU-007 a CU-010 y CU-024 a CU-026, con apoyo a CU-019, CU-021–023 y CU-029
+
+**Modalidad:** actualización documental basada en el historial Git, los PR y la Bitácora Arquitectónica del repositorio.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota incorporada el 11/11/2026. Registra trabajo del 02 al 07/11/2026, posterior a la integración de ADR-16 en `develop` (PR #44). No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00). El conteo comprende los commits sin fusión de autor `Emperador24` en ese intervalo.
+
+### 1. Objetivo de la sesión
+Registrar la implementación de los casos de uso de Samuel sobre la arquitectura de ADR-16. También dejar constancia de los casos de otros integrantes que Samuel implementó y que quedan pendientes de revisión de su responsable.
+
+### 2. Temas tratados
+
+- Tema 1 — **Documentación alineada con ADR-16 (03/11).**
+  - **Semillas:** se retiran los eventos, entradas y cupones que la aplicación no puede usar (Jazz al Atardecer, Verano, Mago, Voleibol, ULTIMO, VERANO5), y también los volcados SQL antiguos.
+  - **Documentos:** se actualizan SAD, ADR-16, C4, resumen, propuesta, presentación y guías. Las siete vistas C4 quedan en Archify como fuente única y se recompilan los PDF de `Submission`.
+
+  Evidencia: [`08ace6f`](https://github.com/Emperador24/HEXACORE/commit/08ace6fc0ae3e9b26cc940167e7572314c9b6de1).
+- Tema 2 — **CU-007 y CU-026, y portal administrativo nuevo (03/11, PR #45).**
+  - **CU-007:**
+    - ficha del empleado con documento, correo y teléfono únicos;
+    - desactivación que cancela los turnos futuros;
+    - candidatos con disponibilidad;
+    - confirmación o rechazo del empleado desde la app;
+    - auditoría.
+  - **CU-026**, en el nuevo módulo `eventos-recintos` del Núcleo (noveno esquema):
+    - borrador, publicar, editar, cancelar y eliminar;
+    - aforo validado por recinto y zona;
+    - traslape con sugerencias;
+    - control de versión, historial y bandeja de salida hacia `eventos.gestion`.
+  - **Portal administrativo:** se rediseñó.
+  - **Pruebas:** 831 unitarias y 93 e2e del Núcleo.
+
+  Evidencia: [`5d21968`](https://github.com/Emperador24/HEXACORE/commit/5d219685de0a84b98e10e10d223111b8bfcbb0b3), [`5f287b0`](https://github.com/Emperador24/HEXACORE/commit/5f287b0a96a1c20f04a5f43f937010da54f99032).
+- Tema 3 — **CU-008, CU-009, CU-010, CU-024 y CU-025 (05/11).**
+  - **CU-008:** solicitud, revisión, cancelación y respuesta del reemplazo en los cambios de turno, con historial auditado.
+  - **CU-009:** puntualidad por registro, estado del empleado y reporte de asistencia.
+  - **CU-010:** evacuación en el módulo `operacion`, con plan, rutas, salidas, escalamiento y avisos por RabbitMQ con outbox y reintento.
+  - **CU-024/025:** nuevo módulo y esquema `parqueaderos`, con tarifas, cobro, ocupación por zona, alertas y redirecciones.
+  - **Interfaces:** pantallas del portal administrativo y de la app móvil.
+  - **Mismo commit:** incluye **CU-019** (monitoreo en vivo) y **CU-029** (recintos y zonas).
+
+  Evidencia: [`e70a352`](https://github.com/Emperador24/HEXACORE/commit/e70a352b552082264d4d55c71773ffff49dc3cd3), [`ae8da7c`](https://github.com/Emperador24/HEXACORE/commit/ae8da7ccbce0671431d7b790289ceb01b2f2c0de).
+- Tema 4 — **CU-021, CU-022 y CU-023 de parqueadero (07/11).**
+  - **CU-021:** reserva con bloqueo temporal en Redis y garantía en PostgreSQL, pago, QR y vencimiento.
+  - **CU-022:** ingreso y salida por QR o placa, con sincronización idempotente de lo registrado sin red.
+  - **CU-023:** espacios por zona con asignación bajo bloqueo.
+  - **Vínculo con los de Samuel:** la reserva prepagada de CU-024A sale ahora de una reserva pagada, y CU-025 cuenta los espacios reservados.
+
+  Evidencia: [`f2db59e`](https://github.com/Emperador24/HEXACORE/commit/f2db59e075c107cc7a01e5e44510a6224df208b3).
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | El **Evento** tiene un único dueño: el módulo `eventos-recintos` del Núcleo, con esquema propio. Publicar, editar lo publicado y cancelar emiten `eventos.gestion` (outbox, al menos una vez, con versión del evento), según el contrato `CONTRATO-EVENTOS.md`. | Antes el Evento solo existía como copias en Boletería llenadas por semillas, y nadie lo creaba ni lo publicaba. Aforo y traslape se validan con la fila del recinto bloqueada. Descartado: restricción `EXCLUDE` para el traslape, porque requiere `btree_gist`, que no prepara la base. | Samuel Emperador | 03/11/2026 |
+| 2 | En esta entrega se publica solo el contrato; los consumidores en Boletería quedan para después. | Catálogo, Ventas, Postventa y Acceso QR son módulos de otros integrantes. *Revisado el 09/11: ver la nota siguiente.* | Samuel Emperador | 03/11/2026 |
+| 3 | CU-019 va en un módulo `operacion` (décimo esquema) dentro del Núcleo, con panel por Server-Sent Events. | ADR-16 prevé un proceso Operación, pero todavía no existe. SSE alcanza para un flujo de un solo sentido; WebSockets añadía infraestructura. Descartado: leer la base de Acceso QR, porque rompe la propiedad de esquemas. | Samuel Emperador | 03/11/2026 |
+| 4 | Implementar CU-021–023 (reparto de Daniel Cristancho) para poder probar CU-024/025 de punta a punta. Quedan señalados en la guía del equipo para revisión de su responsable. | Sin reserva, ingreso ni espacios, el cobro y la ocupación no se podían probar con datos reales. Lo mismo se hizo con CU-019 (Diego) y CU-029 (Sebastián). No se reasignan esos casos. | Samuel Emperador | 05–07/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos. La guía por integrante (`Documentation/Work/GUIA-EQUIPO-MIGRACION.md`) registra qué implementó Samuel en casos ajenos, para que lo revisen sus dueños.
+
+### 5. Tareas asignadas
+
+| Trabajo registrado | Responsable | Estado al 07/11 |
+|---|---|---|
+| CU-007, CU-008, CU-009, CU-010, CU-024, CU-025, CU-026 | Samuel Emperador | Implementados con portal y app; integrados a `develop` (PR #45 y #46) salvo el commit del 07/11 |
+| CU-019 | Diego Coronado (dueño); implementado por Samuel | Pendiente de revisión de su dueño |
+| CU-021, CU-022, CU-023 | Daniel Cristancho (dueño); implementados por Samuel | Pendientes de revisión de su dueño |
+| CU-029 | Sebastián Sánchez (dueño); implementado por Samuel | Pendiente de revisión de su dueño |
+| Consumidores de `eventos.gestion` en Boletería | Por definir | Pendiente (resuelto el 09/11; ver la nota siguiente) |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- Mientras Boletería no consumiera `eventos.gestion`, un evento publicado no llegaba a la cartelera y cancelarlo no devolvía el dinero.
+- **Desde el 06/11 GitHub Actions no arrancaba ningún trabajo** ("account is locked due to a billing issue"). El PR #46 (06/11, 21:08) se fusionó sin que el CI lo verificara.
+- F14 (avisos de logística sin destinatario filtrado) sigue abierta junto a Diego.
+
+### 7. Avance general del proyecto
+Se publicaron **7 commits** del 02 al 07/11; el PR #45 se fusionó el 03/11 a las 08:21 y el #46 el 06/11 a las 21:08.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 02/11/2026 | 20:04:38 | [`ccc0984`](https://github.com/Emperador24/HEXACORE/commit/ccc0984db57dc02eddd0b1ad49f49405eee78ab9) | x |
+| 03/11/2026 | 04:23:04 | [`08ace6f`](https://github.com/Emperador24/HEXACORE/commit/08ace6fc0ae3e9b26cc940167e7572314c9b6de1) | docs: alinear documentacion y diagramas C4 con ADR-16 y retirar datos quemados |
+| 03/11/2026 | 08:02:01 | [`5d21968`](https://github.com/Emperador24/HEXACORE/commit/5d219685de0a84b98e10e10d223111b8bfcbb0b3) | feat: CU-007 y CU-026 completos y nuevo portal administrativo |
+| 03/11/2026 | 09:05:59 | [`5f287b0`](https://github.com/Emperador24/HEXACORE/commit/5f287b0a96a1c20f04a5f43f937010da54f99032) | fix(infra): sembrar recintos y eventos de CU-026 con --datos-demo |
+| 05/11/2026 | 23:06:16 | [`e70a352`](https://github.com/Emperador24/HEXACORE/commit/e70a352b552082264d4d55c71773ffff49dc3cd3) | feat: CU-008, CU-009, CU-010, CU-024 y CU-025 completos |
+| 05/11/2026 | 23:15:22 | [`ae8da7c`](https://github.com/Emperador24/HEXACORE/commit/ae8da7ccbce0671431d7b790289ceb01b2f2c0de) | test(identidad): no fijar la lista de conexiones de /salud en cu027-disponibilidad |
+| 07/11/2026 | 11:44:12 | [`f2db59e`](https://github.com/Emperador24/HEXACORE/commit/f2db59e075c107cc7a01e5e44510a6224df208b3) | feat: CU-021, CU-022 y CU-023 de parqueadero para cerrar CU-024/025 |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota.
+
+---
+
+## Nota de seguimiento — [10/11/2026] — Revisión de los CU, pagos con Stripe, correo real y despliegue continuo
+
+**Modalidad:** actualización documental basada en el historial Git, el PR #47 y las ejecuciones de GitHub Actions.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota incorporada el 11/11/2026. Registra trabajo del 09 y 10/11/2026. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00). El conteo comprende los commits sin fusión de autor `Emperador24` en ese intervalo; incluye una fusión de `develop` (`65f90a1`) solo como evidencia, sin contarla.
+
+### 1. Objetivo de la sesión
+Dejar constancia de cuatro cosas:
+- la revisión de los casos de uso de Samuel y los defectos que encontró;
+- el reemplazo de la pasarela y del correo simulados por servicios reales en modo de prueba;
+- la preparación del despliegue en internet con entrega continua desde `main`;
+- la integración del trabajo en `develop` (PR #47).
+
+### 2. Temas tratados
+
+- Tema 1 — **Revisión de CU-006 a CU-010 y CU-024 a CU-026 (09/11).** La revisión encontró tres defectos y se corrigieron en ese orden:
+  1. **Nadie consumía `eventos.gestion`.** Ahora cada módulo de Boletería tiene su consumidor, con cola durable, cola de mensajes muertos (DLQ) y guardia de versión:
+     - Catálogo pone y quita el evento de la cartelera.
+     - Ventas devuelve el 100 % de cada compra al cancelarse el evento, con el flujo de CU-003 e incluidas las entradas en reventa.
+     - Postventa retira las publicaciones activas del evento.
+     - Acceso QR rechaza ingresos de un evento cancelado.
+
+     Se añadieron cuatro migraciones (`version_evento`).
+  2. **Carrera en las asignaciones de CU-007/008.** Dos asignaciones simultáneas al mismo empleado pasaban las dos, porque la comprobación de choque y el guardado iban por separado. Ahora van en una transacción con el empleado bloqueado.
+  3. **`POST /logistica/turnos` sin validar.** Admitía empleados desactivados; ahora los rechaza y deja auditoría y aviso.
+
+  Además se agregó una demo grabada con Playwright por cada caso de uso y se corrigieron dos fallos de la reventa en el portal (CU-006B y CU-006G). Evidencia: [`c3fc6a6`](https://github.com/Emperador24/HEXACORE/commit/c3fc6a699ba46a111dad5c794dc32f338aa8724c), [`87e7b79`](https://github.com/Emperador24/HEXACORE/commit/87e7b794cf93b53d2680ca0d9bcbf9cfdaa564eb).
+- Tema 2 — **Arranque en cualquier computador solo con Docker (09/11).** Las semillas de demostración exigían Node 22 en la máquina. Ahora corren en un contenedor `datos-demo` (perfil `demo`) que solo siembra sobre una base vacía. Hay un `iniciar.ps1` para Windows y `.gitattributes` fija los finales de línea para que los scripts funcionen al clonar en Windows. Evidencia: [`ec7dd0f`](https://github.com/Emperador24/HEXACORE/commit/ec7dd0f197e1600091245cdc142023c2e42dc139).
+- Tema 3 — **Pagos con Stripe y correo real por Gmail (09/11).**
+  - **Stripe:** el adaptador `PasarelaStripe` implementa la misma interfaz que la pasarela simulada, con PaymentIntents, Refunds e `Idempotency-Key`. El webhook se verifica con la firma `Stripe-Signature`, y el portal captura la tarjeta con Stripe Elements.
+  - **Correo:** se envía por SMTP con una contraseña de aplicación de Gmail.
+  - **Selección del proveedor:** variables de entorno (`PAGOS_PROVEEDOR`, `CORREO_PROVEEDOR`); sin ellas el sistema sigue con lo simulado. PSE sigue simulado.
+
+  Evidencia: [`ce0db06`](https://github.com/Emperador24/HEXACORE/commit/ce0db0619f713169e983f792ab488e0765fb18d9).
+- Tema 4 — **Producción con HTTPS y despliegue continuo (09/11).**
+  - **Entrada pública:** Caddy con certificados automáticos de Let's Encrypt es la única entrada (puertos 80 y 443). Cada portal sirve `/api` en su mismo dominio.
+  - **Claves:** el servidor genera sus propias claves JWT.
+  - **`desplegar.sh`:** despliega una versión del registro y, si no queda sana, vuelve sola a la anterior.
+  - **CD:** un trabajo nuevo despliega por SSH cada cambio que entra a `main`.
+  - **Guía:** `DESPLIEGUE.md` documenta la máquina de Oracle Cloud *Always Free* y el dominio gratis en DuckDNS.
+
+  Evidencia: [`9bdc469`](https://github.com/Emperador24/HEXACORE/commit/9bdc4694090723e33b999c5b4cf172bae55536ce), [`3a2c1cd`](https://github.com/Emperador24/HEXACORE/commit/3a2c1cd7c25d5bce2375d8cc6cb2537ef960f475).
+- Tema 5 — **Integración con `develop` (10/11).** `develop` traía cuatro migraciones de Alimentos (Sebastián) y la rama otras cinco. Los conflictos estaban en los conteos y se resolvieron con el total combinado: 34 migraciones y 84 tablas, verificado sobre una base vacía. La fusión automática dejó además las rutas de Stripe apuntando a una variable de nginx que `develop` había eliminado, y el gateway no habría arrancado; se corrigió. El PR #47 se fusionó a `develop` a las 09:55. Evidencia: [`65f90a1`](https://github.com/Emperador24/HEXACORE/commit/65f90a13a517d67d9922d29bcf2905748d9855dc), [`5c641a8`](https://github.com/Emperador24/HEXACORE/commit/5c641a841085b96b7e3e3c5ef33e7c14ed54f23d), [PR #47](https://github.com/Emperador24/HEXACORE/pull/47).
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | Implementar en Boletería los consumidores de `eventos.gestion`. *Revisa la decisión 2 de la nota del 07/11.* | Sin ellos CU-026 no cumplía su paso 8 ni CU-026D: publicar no llegaba a la cartelera y cancelar no devolvía el dinero. La guardia de versión evita que un mensaje viejo pise uno nuevo, porque la entrega es al menos una vez. | Samuel Emperador | 09/11/2026 |
+| 2 | Pasarela real: **Stripe en modo de prueba**. | Permite cobrar con tarjetas de prueba y con el mismo flujo de un cobro real, sin dinero. Descartado: **Wompi**, porque abrir la cuenta pedía demasiados requisitos. Solo cambia el adaptador (RNF-16); el resto del sistema no se entera. | Samuel Emperador | 09/11/2026 |
+| 3 | Correo real por **SMTP de Gmail** con contraseña de aplicación. | Hace que el correo de verificación llegue a la bandeja real sin contratar un proveedor. Los errores 5xx se tratan como permanentes; los 4xx y los de red se reintentan. | Samuel Emperador | 09/11/2026 |
+| 4 | Las credenciales (Stripe, Gmail) van solo en `App/infra/.env`, que git ignora. | No deben quedar en el repositorio. | Samuel Emperador | 09/11/2026 |
+| 5 | Producción en **Oracle Cloud Always Free** (máquina ARM A1.Flex) con dominio de **DuckDNS**. | Gratis y sin fecha de fin, con 24 GB de RAM, suficiente para todo el sistema. Descartado: **Azure**, porque la cuenta de estudiante no tenía permiso para crear un grupo de recursos. Las imágenes ya se publicaban para arm64. | Samuel Emperador | 09/11/2026 |
+| 6 | El despliegue continuo sale de **`main`**, y una versión que no queda sana se revierte sola. | Lo que llega a producción pasa antes por `develop` y por el CI. La reversión automática acota la caída a lo que tarda en fallar la sonda. Volver de versión no revierte la base: las migraciones solo van hacia delante. | Samuel Emperador | 09/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos.
+
+### 5. Tareas asignadas
+
+| Trabajo registrado | Responsable | Estado al 11/11 |
+|---|---|---|
+| Consumidores de CU-026 y correcciones de CU-007/008 | Samuel Emperador | Implementados y en `develop` |
+| Stripe y Gmail | Samuel Emperador | Implementados; se activan con credenciales en `.env` |
+| Despliegue continuo en producción | Samuel Emperador | Preparado y documentado; **la máquina de Oracle, el dominio y los secretos de GitHub todavía no están creados**, así que no hay nada desplegado |
+| Fallos del CI tras fusionar el PR #47 | Sebastián Sánchez | Corregidos el 11/11 en `feature/sebastian` (cinco commits `fix(ci)`/`test(ci)`); su CI pasó con el PR #47 incluido |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- **CI y facturación.** El bloqueo de facturación de GitHub Actions impidió verificar en el CI el trabajo del 06 al 09/11. El uso de la cuenta salía en US$0 netos; el CI volvió a correr desde la madrugada del 10/11.
+- **PR #47 fusionado en rojo.** Se fusionó con tres trabajos del CI en rojo: pruebas e2e de parqueaderos y de convivencia de logística, guardas de la revisión y transferencia histórica. `develop` sigue sin exigir el CI para fusionar (el mismo riesgo del 22/09). Sebastián los corrigió el 11/11.
+- **Stripe en modo de prueba** no mueve dinero real; pasar a producción exigiría activar la cuenta de Stripe.
+- **Oracle Always Free** puede responder "Out of capacity" al crear la máquina ARM.
+
+### 7. Avance general del proyecto
+Se publicaron **8 commits** el 09 y 10/11. Con esto, los casos de uso del reparto de Samuel quedan implementados con backend, portal y app, salvo CU-028 (permisos dinámicos) y los límites ya señalados de CU-006 (liquidación y notificación sin abono real), y el sistema queda listo para desplegarse en internet en cuanto exista la máquina.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 09/11/2026 | 21:37:44 | [`87e7b79`](https://github.com/Emperador24/HEXACORE/commit/87e7b794cf93b53d2680ca0d9bcbf9cfdaa564eb) | feat(demo): demo Playwright de CU-006 a CU-026 y arreglos de reventa en el portal |
+| 09/11/2026 | 21:37:44 | [`c3fc6a6`](https://github.com/Emperador24/HEXACORE/commit/c3fc6a699ba46a111dad5c794dc32f338aa8724c) | fix: consumidores de eventos de CU-026 y asignaciones de personal sin carreras |
+| 09/11/2026 | 21:49:50 | [`ec7dd0f`](https://github.com/Emperador24/HEXACORE/commit/ec7dd0f197e1600091245cdc142023c2e42dc139) | feat(infra): arrancar HEXACORE completo en cualquier computador solo con Docker |
+| 09/11/2026 | 22:22:54 | [`ce0db06`](https://github.com/Emperador24/HEXACORE/commit/ce0db0619f713169e983f792ab488e0765fb18d9) | feat(pagos, correo): Stripe en modo de prueba y correo real por SMTP (Gmail) |
+| 09/11/2026 | 22:27:06 | [`9bbe38d`](https://github.com/Emperador24/HEXACORE/commit/9bbe38d71e45e294dfd412cafbf90ce294bb305d) | docs(test): 30 migraciones tras la versión del evento en Boletería |
+| 09/11/2026 | 23:33:36 | [`9bdc469`](https://github.com/Emperador24/HEXACORE/commit/9bdc4694090723e33b999c5b4cf172bae55536ce) | feat(cd): producción con HTTPS y despliegue continuo de main |
+| 09/11/2026 | 23:59:03 | [`3a2c1cd`](https://github.com/Emperador24/HEXACORE/commit/3a2c1cd7c25d5bce2375d8cc6cb2537ef960f475) | docs(despliegue): Oracle Cloud Always Free en lugar de Azure |
+| 10/11/2026 | 09:54:23 | [`5c641a8`](https://github.com/Emperador24/HEXACORE/commit/5c641a841085b96b7e3e3c5ef33e7c14ed54f23d) | fix(gateway): rutas de Stripe al upstream nucleo_http tras fusionar develop |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. **Pendiente técnico:**
+- crear la máquina y el dominio, y hacer el primer despliegue;
+- confirmar el CI de `develop` en verde y llevar `develop` a `main`;
+- revisar con sus dueños CU-019, CU-021–023 y CU-029.
 
 ---
 
