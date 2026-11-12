@@ -556,7 +556,7 @@ El historial Git acredita que **Sebastián Sánchez retomó la implementación y
 
 **Hora de inicio – fin:** No aplica; no se registra una reunión.
 
-**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+**Responsable del avance:** Samuel Emperador.
 
 **Asistentes / ausentes:** No aplica.
 
@@ -671,7 +671,7 @@ Se publicaron **37 commits** del 19 al 23/09, integrados por los PR #24, #25, #2
 
 **Hora de inicio – fin:** No aplica; no se registra una reunión.
 
-**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+**Responsable del avance:** Samuel Emperador.
 
 **Asistentes / ausentes:** No aplica.
 
@@ -922,7 +922,7 @@ Evidencia complementaria:
 
 **Hora de inicio – fin:** No aplica; no se registra una reunión.
 
-**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+**Responsable del avance:** Samuel Emperador.
 
 **Asistentes / ausentes:** No aplica.
 
@@ -1022,7 +1022,7 @@ Se publicaron **7 commits** del 02 al 07/11; el PR #45 se fusionó el 03/11 a la
 
 **Hora de inicio – fin:** No aplica; no se registra una reunión.
 
-**Responsable del avance:** Samuel Emperador, con apoyo de Claude Code.
+**Responsable del avance:** Samuel Emperador.
 
 **Asistentes / ausentes:** No aplica.
 
