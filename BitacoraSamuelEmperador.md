@@ -494,3 +494,51 @@
   - **F14, con Diego:** avisos de logística sin destinatario filtrado.
 - **Revisiones:** CU-019 con Diego, CU-021–023 con Daniel y CU-029 con Sebastián.
 - **Entrega 2:** actualizar el SAD y los diagramas (siguen en ocho esquemas; hoy son once) para la Entrega 2 (20/11, tentativa).
+
+---
+
+## [12/11/2026]
+
+**¿Qué hice?**
+- **CU-028 · Gestión de roles y permisos.** Era el único caso de uso pendiente a mi nombre.
+  - El administrador crea roles propios con una matriz de permisos por módulo y acción: eventos, personal, parqueaderos, emergencias y reportes. Los cuatro roles del sistema quedan fijos.
+  - **CU-028B:** al restringir un permiso, la misma sesión pierde el acceso en su siguiente petición, sin volver a iniciar sesión. Identidad publica en Redis la matriz y los roles vigentes, y una guarda común del Núcleo los lee en cada petición. Esa guarda reemplazó las cuatro copias que tenía cada módulo.
+  - **CU-028A:** un rol con usuarios activos solo se elimina reasignándolos a otro rol.
+  - Control de versión entre administradores, auditoría de solo inserción y una migración nueva (36 migraciones, 87 tablas).
+  - Pantalla nueva en el portal administrativo; una cuenta con un rol propio solo ve los módulos que puede leer.
+  - Decisión registrada en `modulos/identidad/DECISIONES.md` §24. Descarté meter los permisos en el token (dura 15 min) y que el gateway le pregunte a Identidad en cada petición (es lo que quitó ADR-15).
+- **F14:** los avisos de logística ya no se envían a la lista global. Cada empleado ve solo los suyos y quien supervisa ve todos. Lo hice yo en lugar de Diego.
+- **Monitoreo:** Prometheus, Loki, Promtail y Grafana, con el tablero en `/grafana/` por el mismo gateway (`./iniciar.sh --monitoreo`).
+  - Muestra CPU y memoria por instancia, peticiones por réplica, latencia y logs.
+  - cAdvisor no funcionó con Docker Desktop: probé las versiones 0.49 y 0.52 y no ve los contenedores con el almacén de imágenes de containerd. Lo reemplacé con un exportador pequeño que lee la API de Docker y publica las mismas métricas.
+- **Desempeño:** escribí `prueba-carga.py` para CU-006, CU-025 y CU-026.
+  - Los tres cumplen p95 < 500 ms con 200 usuarios simultáneos, sin fallos.
+  - El cuello de botella es el proceso Node de cada programa: llega a un núcleo completo, porque ejecuta la aplicación en un solo hilo.
+  - Con 2 réplicas del Núcleo la capacidad subió 57 % (CU-026) y 82 % (CU-025).
+  - Una primera conclusión mía culpaba a PostgreSQL y era falsa: venía de un error de medición de la CPU. Lo corregí y lo dejé escrito en la interpretación.
+- **Disponibilidad:** `demo-disponibilidad.sh` escala Boletería a 3 réplicas o el Núcleo a 2 y tumba una con `kill -9` en medio del tráfico.
+  - Ninguna de las cerca de 500 peticiones de esos segundos falló, en ningún caso.
+  - Docker levantó la réplica en 8 a 13 s.
+  - Probé el Núcleo con 2 réplicas: la demo completa de mis casos pasa contra él, así que se puede tumbar en vivo.
+- **Demo de Playwright:** agregué el caso de CU-028 y una pausa de al menos 2 s por pantalla. Los 8 casos pasan; la demo dura unos 5 min 20 s.
+- **Datos de Ventas borrados:** al correr `atributos-calidad.py` en mi entorno local se borraron las copias de Ventas de algunos eventos, y las compras que hubiera.
+  - La causa es que la suite de consistencia vuelve a sembrar la base de Ventas.
+  - Lo reparé reenviando los mensajes originales de CU-026.
+  - Desde ahora esa suite solo corre con `--destructivas`.
+
+## [13/11/2026]
+
+**¿Qué hice?**
+- **Cobertura al 100 %** en postventa (CU-006), personal-logística (CU-007 a CU-009), operación (CU-010), parqueaderos (CU-024, CU-025), eventos-recintos (CU-026), roles y permisos (CU-028) y la guarda común.
+  - Encontré que la medición juntaba mal las pruebas unitarias con las e2e. Ahora `npm run test:cov:total` mide cada una con su herramienta y las une por línea.
+  - Agregué una suite e2e de reventa en Boletería, más pruebas e2e y unitarias para las ramas que faltaban.
+  - En total pasan 1049 unitarias, 132 e2e del Núcleo y 29 e2e de Boletería.
+- Commit y push a `feature/samuel` ([`a7a135b`](https://github.com/Emperador24/HEXACORE/commit/a7a135bc91e15d9799ba34f8b0f0afbb0737ecd7), [`f2d96be`](https://github.com/Emperador24/HEXACORE/commit/f2d96be9fd2e803b4b9e232a921a6731c71c2314)), y PR [#51](https://github.com/Emperador24/HEXACORE/pull/51) hacia `develop`.
+
+**Próximos pasos**
+- Esperar el CI del PR #51 en verde antes de fusionar.
+- Decidir con el equipo cuánto de la demo de Playwright se muestra en vivo: completa dura unos 5 min 20 s, y los 10 min son para los 32 casos.
+- Ensayar el guion de `App/infra/DEMOSTRACION-ATRIBUTOS.md`: Grafana, prueba de carga rápida, caída de réplicas de Boletería y del Núcleo.
+- Contarle a Diego cómo se mide ahora la cobertura (`test:cov:total`) y que F14 quedó resuelto.
+- Avisar a Daniel que los consumidores de `eventos.gestion` en Ventas y Catálogo ya existen (los hice el 09/11) para que los revise.
+- Pendientes de despliegue y de la Entrega 2: máquina de Oracle, SAD con once esquemas.
