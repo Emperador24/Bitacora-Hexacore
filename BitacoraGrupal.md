@@ -1117,6 +1117,149 @@ Se publicaron **8 commits** el 09 y 10/11. Con esto, los casos de uso del repart
 
 ---
 
+## Nota de seguimiento — [14/11/2026] — CU-028, F14, atributos de calidad de Samuel, cobertura, SAD y diagramas
+
+**Modalidad:** actualización documental basada en el historial Git, el PR #51 y las ejecuciones de GitHub Actions.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota incorporada el 14/11/2026. Registra trabajo del 12 al 14/11/2026. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00). El conteo comprende los commits sin fusión de autor `Emperador24` en ese intervalo.
+
+### 1. Objetivo de la sesión
+Dejar constancia de seis cosas:
+- la implementación de CU-028 (roles y permisos dinámicos) y la corrección de F14;
+- el diseño, la implementación y la medición de los tres atributos de calidad asignados a Samuel: desempeño, disponibilidad, y monitoreo y logs;
+- la cobertura al 100 % de los módulos de Samuel y el cambio en cómo se mide;
+- la demostración automatizada con Playwright y su guía;
+- la revisión de lo que pide el profesor para la sustentación y los entregables;
+- la nueva sección del SAD y la actualización de los diagramas.
+
+### 2. Temas tratados
+
+- Tema 1 — **CU-028 · Gestión de roles y permisos (12/11).** Era el único caso de uso del reparto de Samuel sin implementar (implementación acordada con Sebastián).
+  - **Matriz de permisos.** El administrador crea roles propios con permisos por módulo (eventos, personal, parqueaderos, emergencias, reportes) y acción (leer, crear, actualizar, eliminar). Los cuatro roles del sistema (Cliente, Personal, Organizador, Administrador) quedan fijos; un *trigger* impide darles permisos.
+  - **CU-028B, cambio sin volver a iniciar sesión.** Identidad publica en Redis la matriz (`permisos-rol:<rol>`) y los roles vigentes de cada usuario (`roles-usuario:<id>`). Una guarda común del Núcleo (`compartido/seguridad/sesion-valida.guard.ts`) los lee en cada petición, con una sola ida a Redis. Reemplazó las cuatro copias que tenía cada módulo. El gateway deja pasar un rol propio solo en las rutas que declaran su módulo (`$modulo_permiso`).
+  - **CU-028A.** Un rol con usuarios activos solo se elimina indicando a qué rol pasan.
+  - **Concurrencia y auditoría.** Dos administradores que editan el mismo rol: el segundo recibe 409 `VERSION_DESACTUALIZADA`. La tabla `auditoria_roles` es de solo inserción.
+  - **Persistencia.** Una migración nueva: 36 migraciones y 87 tablas.
+  - **Portal.** Pantalla de roles; una cuenta con un rol propio solo ve en el menú los módulos que puede leer.
+
+  Decisión registrada en `modulos/identidad/DECISIONES.md` §24.
+- Tema 2 — **F14 corregido (12/11).** Los avisos de logística salían en una lista global. Ahora cada empleado ve solo los suyos y quien supervisa ve todos. Lo hizo Samuel en lugar de Diego, por acuerdo.
+- Tema 3 — **Monitoreo y logs (12/11).**
+  - **Piezas.** `docker-compose.monitoreo.yml` agrega Prometheus, Promtail, Loki, Grafana y un exportador propio. Se activa con `./iniciar.sh --monitoreo`.
+  - **Mismo punto de entrada.** El tablero se sirve por el gateway en `/grafana/`.
+  - **Tablero.** Tiene siete paneles: instancias vivas, CPU y memoria por instancia, peticiones por réplica, respuestas por código, latencia p95 y logs filtrables por servicio.
+  - **Datos del gateway.** Su log de acceso registra qué réplica atendió (`upstream=`) y cuánto tardó (`rt=`).
+  - **Por qué no cAdvisor.** Con el almacén de imágenes de containerd de Docker Desktop, las versiones 0.49.1 y 0.52.1 fallan con «failed to identify the read-write layer ID» y no ven ningún contenedor. El exportador lee lo mismo de la API de Docker y publica las métricas con los mismos nombres.
+- Tema 4 — **Desempeño (12/11).** `App/infra/prueba-carga.py` mide la lectura más concurrida de CU-006, CU-025 y CU-026 con 1, 10, 50, 100 y 200 usuarios, siempre por el gateway. Lee la CPU de cada contenedor en Prometheus y escribe un informe con su interpretación.
+  - **Resultado.** Con una réplica, los tres cumplen p95 ≤ 500 ms con 200 usuarios (150, 355 y 311 ms), sin fallos.
+  - **Cuello de botella.** El proceso Node de cada programa llega a un núcleo (101–106 %) y no sube más, porque ejecuta la aplicación en un solo hilo.
+  - **Con dos réplicas del Núcleo,** la capacidad sube 57 % en CU-026 y 82 % en CU-025.
+  - **Conclusión corregida.** Una primera conclusión culpaba a PostgreSQL. Venía de un error al medir la CPU (muestras cada 5 s en los bordes del nivel); se corrigió.
+- Tema 5 — **Disponibilidad (12/11).** `App/infra/demo-disponibilidad.sh` escala Boletería a 3 réplicas (o el Núcleo a 2), muestra el reparto con la cabecera `X-Servidor` y mata una réplica con `kill -9` en medio del tráfico.
+  - **Boletería:** 484 peticiones en los 8 s siguientes, 0 fallidas; Docker la recupera en 8–13 s.
+  - **Núcleo:** 509 peticiones, 0 fallidas; recuperación en 8 s.
+  - **Núcleo replicado.** Antes de tumbarlo en vivo se comprobó que la demo completa de los casos de uso pasa contra dos réplicas.
+- Tema 6 — **Cobertura al 100 % (13/11).**
+  - **Módulos.** Postventa, personal-logística, operación, parqueaderos, eventos-recintos, roles y permisos, y la guarda común quedan al 100 % por línea.
+  - **Error de medición.** La cifra anterior juntaba mal las pruebas unitarias con las e2e, porque cada herramienta deriva un mapa de sentencias distinto. Ahora `npm run test:cov:total` mide las unitarias con Jest (proveedor v8) y las e2e con c8, y las une por línea.
+  - **Pruebas nuevas.** Se agregó una suite e2e de reventa en Boletería.
+  - **Total:** 1 049 pruebas unitarias, 132 e2e del Núcleo y 29 e2e de Boletería.
+- Tema 7 — **Demostración con Playwright (13 y 14/11).**
+  - **CU-028.** Se agregó su caso, con dos ventanas: el administrador quita un permiso y la supervisora lo pierde en su siguiente clic.
+  - **Ritmo.** Primero se fijó una pausa mínima de 2 s por pantalla. Después se bajó a 1,5 s como máximo, con 300 ms entre acciones, para que quepa en la sustentación: los 8 casos pasan de unos 5 min 20 s a unos 3 min 30 s.
+  - **Guía.** `App/frontend/demo-playwright/GUIA-DEMOSTRACION.md` explica cómo prepararla, qué correr en vivo y qué decir en cada pantalla.
+  - **Error de Playwright.** Se corrigió el aviso «Internal error: step id not found»: salía al cerrar la segunda ventana de CU-028 sin cerrar antes su página.
+- Tema 8 — **Revisión frente a lo que pide el profesor (14/11).** Se comparó lo hecho con la consigna de la sustentación y los entregables:
+  - arquitectura antigua vs. nueva;
+  - demo de 10 minutos;
+  - asignación de atributos;
+  - diseño e implementación de atributos con demostración en vivo;
+  - SAD actualizado, repositorio, diapositivas y anexos.
+
+  Conclusión: el código y las mediciones de Samuel estaban completos, pero **el SAD seguía con las cifras de la arquitectura ADR-12 y sin sección de monitoreo**, y **los diagramas eran del 3/11**.
+- Tema 9 — **SAD: atributos de calidad sobre la arquitectura vigente (14/11).** Nuevo archivo `Documentation/Work/AtributosVigentes.tex`, incluido en el SAD antes de la sección histórica.
+  - **Por atributo:** escenario de calidad (fuente, estímulo, artefacto, entorno, respuesta, medida), tácticas con su mecanismo y el archivo que las implementa, cómo se prueba, resultados e interpretación.
+  - **Trazabilidad:** una tabla final relaciona cada atributo con su RNF y su evidencia.
+  - **RNF-19 (observabilidad).** Se agregó a la tabla compartida con el SRS, porque ningún RNF cubría el monitoreo.
+  - **Incumplimientos explícitos.** RNF-07 se midió hasta 200 usuarios y no en los 2 000 que fija. RNF-10 se cumple en CU-025 (1,82×) pero no en CU-026 (1,57×), y se midió con el Núcleo, no con Boletería.
+- Tema 10 — **Diagramas al día (14/11).**
+  - **Lo desactualizado.** Contexto, contenedores, componentes del Núcleo y de Boletería, panorama y despliegue mostraban Operación como programa pendiente, el Organizador sin backend, 8 esquemas y 18 migraciones, y no tenían monitoreo ni réplicas del Núcleo.
+  - **Lo nuevo:**
+    - el Núcleo con sus siete módulos y replicable;
+    - Operación como módulo;
+    - la guarda común y Redis con los permisos de CU-028;
+    - `eventos.gestion` y sus cuatro consumidores;
+    - el monitoreo;
+    - 36 migraciones y 11 esquemas.
+  - **Textos actualizados:** `ArquitecturaVigente.tex` (incluida la tabla de datos por esquema), el glosario del SAD, el documento C4 y el README de diagramas.
+  - **Legibilidad.** Archify separa como mucho 14 px las flechas que llegan al mismo lado de una caja, y su validador no detecta flechas encimadas. Por eso se agregaron dos guiones:
+    - `regenerar.sh` genera los diagramas con una copia temporal de Archify que reparte esas flechas a lo largo de todo el lado;
+    - `revisar-flechas.py` mide en el SVG que ninguna flecha comparta tramo con otra ni llegue al mismo punto de una caja.
+
+    Se encontraron 33 problemas y quedaron en 0 en las seis vistas.
+
+  Evidencia de los temas 1 a 7: [`a7a135b`](https://github.com/Emperador24/HEXACORE/commit/a7a135bc91e15d9799ba34f8b0f0afbb0737ecd7), [`f2d96be`](https://github.com/Emperador24/HEXACORE/commit/f2d96be9fd2e803b4b9e232a921a6731c71c2314), [`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2), [PR #51](https://github.com/Emperador24/HEXACORE/pull/51). Temas 9 y 10: commit `474b67b` en `feature/samuel`.
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | Los permisos de CU-028 viven en Redis y la guarda común los lee en cada petición. | CU-028B exige que un cambio se aplique sin volver a iniciar sesión. Descartado: meterlos en el token, que dura 15 min; y que el gateway le pregunte a Identidad en cada petición, que es justo lo que quitó ADR-15. | Samuel Emperador | 12/11/2026 |
+| 2 | Monitoreo con Prometheus, Loki y Grafana tras el gateway, con un exportador propio en lugar de cAdvisor. | La consigna pide CPU y memoria por instancia y logs desde el mismo punto de entrada. cAdvisor no ve los contenedores en Docker Desktop. El exportador publica las mismas métricas, así que en un Linux se puede volver a cAdvisor sin tocar el tablero. | Samuel Emperador | 12/11/2026 |
+| 3 | Probar y demostrar el Núcleo con dos réplicas. | Es el programa que más módulos concentra y el que se satura primero (un núcleo de CPU). Se comprobó antes que la demo completa pasa contra él. Sus trabajos de fondo usan `SKIP LOCKED`, así que dos réplicas no publican dos veces. | Samuel Emperador | 12/11/2026 |
+| 4 | La suite de consistencia de `atributos-calidad.py` solo corre con `--destructivas`. | Vuelve a sembrar Ventas con `TRUNCATE`. Al correrla en el entorno local se borraron copias de eventos de CU-026; se repararon reenviando sus mensajes. | Samuel Emperador | 12/11/2026 |
+| 5 | La cobertura se mide uniendo por línea las pruebas unitarias (Jest, v8) y las e2e (c8). | Mezclar contadores de dos herramientas con mapas de sentencias distintos daba cifras falsas. Una línea cuenta como cubierta si alguna prueba pasa por ella. | Samuel Emperador | 13/11/2026 |
+| 6 | La demo de Playwright pasa como mucho 1,5 s por pantalla. | Con 2 s mínimo duraba 5 min 20 s; el grupo tiene 10 min de demo para todos. | Samuel Emperador | 14/11/2026 |
+| 7 | Las mediciones actuales van en una sección propia del SAD, y los incumplimientos se escriben. | La sección anterior era de ADR-12 y lo decía. Es mejor que el profesor lea los límites (RNF-07 hasta 200 usuarios, RNF-10 en CU-026) escritos por el equipo que descubrirlos en la sustentación. | Samuel Emperador | 14/11/2026 |
+| 8 | Los diagramas se regeneran con `regenerar.sh`, no con Archify directo. | Con Archify directo las flechas que llegan a un mismo lado se enciman. El guion no modifica la instalación de Archify y falla si alguna flecha queda encima de otra. | Samuel Emperador | 14/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos.
+
+### 5. Tareas asignadas
+
+| Trabajo registrado | Responsable | Estado al 14/11 |
+|---|---|---|
+| CU-028 y F14 | Samuel Emperador | Implementados y probados; en el PR #51 |
+| Desempeño, disponibilidad y monitoreo | Samuel Emperador | Implementados y medidos; guion en `App/infra/DEMOSTRACION-ATRIBUTOS.md` |
+| Cobertura de los módulos de Samuel | Samuel Emperador | 100 % por línea |
+| Sección del SAD y diagramas | Samuel Emperador | Hechos en `474b67b`, en `feature/samuel` |
+| Semilla de Alimentos: falta `cancelaciones_pedido` en el `TRUNCATE` | Sebastián Sánchez | Pendiente; es lo único que deja en rojo el CI del PR #51 |
+| Revisión de los consumidores de `eventos.gestion` | Daniel Cristancho | Pendiente |
+| Diapositivas de los atributos de Samuel | Samuel Emperador | Pendiente |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- **CI del PR #51.** 7 de 8 trabajos pasan. Falla «Pruebas de integración del backend» porque la semilla de Alimentos hace `TRUNCATE` sin `cancelaciones_pedido`, que referencia a `historial_preparacion`. Ya fallaba igual en el PR #49. El PR además necesita la aprobación de un compañero.
+- **Demo del prototipo.** Los ocho casos de Samuel duran unos 3 min 30 s de los 10 min del grupo. Hay que acordar qué casos se muestran.
+- **Otros documentos.** `Summary.tex`, `ArchitecturalProposal.tex` y `Presentacion.tex` todavía dicen 8 esquemas o que F14 sigue abierto. Los PDF de `Documentation/Submission/` no se han regenerado.
+- **Regenerar diagramas con Archify directo** vuelve a encimar las flechas; está advertido en el README de diagramas.
+- **Mediciones en un portátil.** El generador de carga compite por la CPU con lo que mide; las cifras son un piso y varían alrededor de ±30 % entre corridas.
+
+### 7. Avance general del proyecto
+Se registraron **4 commits** del 12 al 14/11 (el trabajo del 12/11 entró en el commit del 13/11). Con esto, **los casos de uso del reparto de Samuel quedan todos implementados**, CU-028 incluido. Sus tres atributos de calidad están diseñados, implementados, medidos y documentados en el SAD, y los diagramas reflejan la arquitectura vigente.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 13/11/2026 | 08:22:35 | [`a7a135b`](https://github.com/Emperador24/HEXACORE/commit/a7a135bc91e15d9799ba34f8b0f0afbb0737ecd7) | feat: CU-028, F14, atributos de desempeño, disponibilidad y monitoreo, y cobertura al 100 % |
+| 13/11/2026 | 08:22:55 | [`f2d96be`](https://github.com/Emperador24/HEXACORE/commit/f2d96be9fd2e803b4b9e232a921a6731c71c2314) | docs(demo-playwright): caso CU-028 y pausa mínima de 2 s por pantalla |
+| 14/11/2026 | 12:07:22 | [`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2) | feat(demo-playwright): pantallas de 1,5 s como máximo, guía de demostración y cierre de la ventana de CU-028 |
+| 14/11/2026 | 16:56:39 | `474b67b` | docs: sección de desempeño, disponibilidad y monitoreo en el SAD y diagramas al día |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. **Pendiente técnico:**
+- dejar en verde y fusionar el PR #51;
+- acordar qué casos de uso se muestran en los 10 min de demo y ensayar el guion de atributos;
+- hacer las diapositivas de atributos y la de asignación por integrante;
+- regenerar los PDF de `Documentation/Submission/` antes de subir los entregables.
+
+---
+
 
 ## Historial de sesiones
 

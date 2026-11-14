@@ -557,8 +557,21 @@
   - Lo comprobé apagando las capturas y el video por separado. Ahora se cierra la página antes que la ventana, y en tres corridas no volvió a salir.
 - Commit y push a `feature/samuel` ([`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2)); entra en el PR [#51](https://github.com/Emperador24/HEXACORE/pull/51).
 
+- **SAD: sección de mis tres atributos sobre la arquitectura actual** (`Documentation/Work/AtributosVigentes.tex`).
+  - Para cada atributo: escenario de calidad, tácticas con el archivo que las implementa, cómo se prueba, resultados e interpretación. Al final, una tabla de trazabilidad.
+  - Agregué **RNF-19 (observabilidad)**, porque ningún RNF cubría el monitoreo.
+  - Dejé escritos dos incumplimientos: RNF-07 lo medí hasta 200 usuarios y no en los 2 000 que fija, y RNF-10 se cumple en CU-025 (1,82×) pero no en CU-026 (1,57×). Prefiero que el profesor los lea escritos por mí a que los descubra en la sustentación.
+- **Diagramas al día.** Estaban del 3/11: Operación figuraba como programa pendiente, el Organizador sin backend, 8 esquemas y 18 migraciones, y no había monitoreo ni réplicas del Núcleo.
+  - Actualicé contexto, contenedores, componentes del Núcleo y de Boletería, panorama y despliegue.
+  - Actualicé también los textos que los acompañan, entre ellos la tabla de datos por esquema, que conté en el código.
+- **Flechas legibles.** Archify separa como mucho 14 px las flechas que llegan al mismo lado de una caja, y su validador no lo detecta.
+  - `revisar-flechas.py` mide en el SVG si dos flechas comparten tramo o llegan al mismo punto: encontró 33 problemas.
+  - `regenerar.sh` usa una copia temporal de Archify que reparte esas flechas a lo largo del lado. Además dimensioné cada caja para que las flechas bajen rectas.
+  - Quedaron en 0 problemas en las seis vistas.
+- Commit `474b67b` en `feature/samuel` (todavía sin subir). Anoté todo lo del 12 al 14/11 en la bitácora grupal.
+
 **Próximos pasos**
-- Actualizar en el SAD mis tres atributos con las mediciones actuales y agregar la sección de Monitoreo.
-- Hacer mis diapositivas: una por atributo y el despliegue con réplicas y monitoreo.
-- Dejar el PR #51 en verde. El único trabajo que falla es la semilla de Alimentos, a la que le falta `cancelaciones_pedido` en el `TRUNCATE`; es de Sebastián y ya fallaba en el PR #49. Además el PR necesita la aprobación de un compañero.
-- Acordar con el equipo qué casos se muestran en los 10 minutos de la demo y ensayar el guion de atributos.
+- Subir `474b67b` al PR #51 y dejarlo en verde. Lo único que falla es la semilla de Alimentos (falta `cancelaciones_pedido` en el `TRUNCATE`); es de Sebastián y ya fallaba en el PR #49. El PR necesita además la aprobación de un compañero.
+- Hacer mis diapositivas: una por atributo (diseño → resultado) y la de despliegue con réplicas y monitoreo.
+- Acordar con el equipo qué casos se muestran en los 10 minutos de demo y ensayar el guion de atributos.
+- Avisar al equipo que hay que regenerar los diagramas con `regenerar.sh`, y que `Summary.tex`, `ArchitecturalProposal.tex` y `Presentacion.tex` todavía dicen 8 esquemas o que F14 sigue abierto.
