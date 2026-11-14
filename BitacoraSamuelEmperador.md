@@ -570,8 +570,19 @@
   - Quedaron en 0 problemas en las seis vistas.
 - Commit y push a `feature/samuel` ([`474b67b`](https://github.com/Emperador24/HEXACORE/commit/474b67b3cc1013539945710829df307aa8719e41)); entra en el PR [#51](https://github.com/Emperador24/HEXACORE/pull/51). Anoté todo lo del 12 al 14/11 en la bitácora grupal.
 
+- **Conflictos del PR #51 con `develop`.** Después de abrir mi PR entró a `develop` el PR #50 de Sebastián (más de 30 commits de seguridad), y el mío quedó con cuatro conflictos. Hice el merge de `develop` en mi rama:
+  - **Guarda de Parqueaderos.** Sebastián le agregó `validar(token)` para que el panel en vivo (SSE) vuelva a comprobar la sesión cada 3 s; yo la había reemplazado por la guarda común de CU-028. Llevé su `validar` a la guarda común con el mismo comportamiento (token, revocación en Redis y otra verificación del token después de la espera), y conservé los roles vigentes y permisos de CU-028.
+  - **Mejora que salió del merge:** el panel en vivo ahora también se cierra si al usuario le quitan el permiso de parqueaderos (CU-028B), con `ROL_INSUFICIENTE`. Antes solo se cerraba al terminar la sesión.
+  - **F14.** Los dos lo habíamos corregido igual. Dejé su versión con mi comentario.
+  - **Pruebas de la base vacía.** Combiné sus comprobaciones nuevas (la tabla de CU-011F, el historial por nombre y las 18 procedencias) con los totales de CU-028: 87 tablas, 36 historiales y 40 filas.
+  - **Pruebas adaptadas.** Adapté el doble de Redis de su prueba a la guarda común, porque esta lee en un solo `MULTI`, y puse uno de mis e2e al nuevo cierre del flujo (`FLUJO_NO_DISPONIBLE`). Agregué pruebas para el permiso retirado.
+  - **Verificado en local:** 1 099 pruebas unitarias, 136 e2e del Núcleo, 29 e2e de Boletería, el gateway, el compose y el portal admin (22 pruebas).
+  - **La semilla de Alimentos** ya venía corregida en `develop`, que era lo que dejaba en rojo el CI del PR.
+  - Commit y push a `feature/samuel` ([`77ffb4b`](https://github.com/Emperador24/HEXACORE/commit/77ffb4b080508993a6fa248feff0ee4d77e6894a)). El PR #51 quedó sin conflictos, a la espera del CI y de la aprobación de un compañero.
+
 **Próximos pasos**
-- Dejar el PR #51 en verde. Lo único que falla es la semilla de Alimentos (falta `cancelaciones_pedido` en el `TRUNCATE`); es de Sebastián y ya fallaba en el PR #49. El PR necesita además la aprobación de un compañero.
+- Confirmar el CI del PR #51 en verde tras el merge y pedir la aprobación de un compañero.
+- Reconstruir los portales en mi entorno (Sebastián cambió la CSP y actualizó Angular) y volver a correr la demo de Playwright antes de la sustentación.
 - Hacer mis diapositivas: una por atributo (diseño → resultado) y la de despliegue con réplicas y monitoreo.
 - Acordar con el equipo qué casos se muestran en los 10 minutos de demo y ensayar el guion de atributos.
 - Avisar al equipo que hay que regenerar los diagramas con `regenerar.sh`, y que `Summary.tex`, `ArchitecturalProposal.tex` y `Presentacion.tex` todavía dicen 8 esquemas o que F14 sigue abierto.
