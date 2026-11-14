@@ -1204,7 +1204,7 @@ Dejar constancia de seis cosas:
 
     Se encontraron 33 problemas y quedaron en 0 en las seis vistas.
 
-  Evidencia de los temas 1 a 7: [`a7a135b`](https://github.com/Emperador24/HEXACORE/commit/a7a135bc91e15d9799ba34f8b0f0afbb0737ecd7), [`f2d96be`](https://github.com/Emperador24/HEXACORE/commit/f2d96be9fd2e803b4b9e232a921a6731c71c2314), [`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2), [PR #51](https://github.com/Emperador24/HEXACORE/pull/51). Temas 9 y 10: commit `474b67b` en `feature/samuel`.
+  Evidencia de los temas 1 a 7: [`a7a135b`](https://github.com/Emperador24/HEXACORE/commit/a7a135bc91e15d9799ba34f8b0f0afbb0737ecd7), [`f2d96be`](https://github.com/Emperador24/HEXACORE/commit/f2d96be9fd2e803b4b9e232a921a6731c71c2314), [`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2), [PR #51](https://github.com/Emperador24/HEXACORE/pull/51). Temas 9 y 10: [`474b67b`](https://github.com/Emperador24/HEXACORE/commit/474b67b3cc1013539945710829df307aa8719e41).
 
 ### 3. Decisiones tomadas
 
@@ -1229,7 +1229,7 @@ No se registran acuerdos grupales nuevos.
 | CU-028 y F14 | Samuel Emperador | Implementados y probados; en el PR #51 |
 | Desempeño, disponibilidad y monitoreo | Samuel Emperador | Implementados y medidos; guion en `App/infra/DEMOSTRACION-ATRIBUTOS.md` |
 | Cobertura de los módulos de Samuel | Samuel Emperador | 100 % por línea |
-| Sección del SAD y diagramas | Samuel Emperador | Hechos en `474b67b`, en `feature/samuel` |
+| Sección del SAD y diagramas | Samuel Emperador | Hechos; en el PR #51 |
 | Semilla de Alimentos: falta `cancelaciones_pedido` en el `TRUNCATE` | Sebastián Sánchez | Pendiente; es lo único que deja en rojo el CI del PR #51 |
 | Revisión de los consumidores de `eventos.gestion` | Daniel Cristancho | Pendiente |
 | Diapositivas de los atributos de Samuel | Samuel Emperador | Pendiente |
@@ -1249,7 +1249,7 @@ Se registraron **4 commits** del 12 al 14/11 (el trabajo del 12/11 entró en el 
 | 13/11/2026 | 08:22:35 | [`a7a135b`](https://github.com/Emperador24/HEXACORE/commit/a7a135bc91e15d9799ba34f8b0f0afbb0737ecd7) | feat: CU-028, F14, atributos de desempeño, disponibilidad y monitoreo, y cobertura al 100 % |
 | 13/11/2026 | 08:22:55 | [`f2d96be`](https://github.com/Emperador24/HEXACORE/commit/f2d96be9fd2e803b4b9e232a921a6731c71c2314) | docs(demo-playwright): caso CU-028 y pausa mínima de 2 s por pantalla |
 | 14/11/2026 | 12:07:22 | [`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2) | feat(demo-playwright): pantallas de 1,5 s como máximo, guía de demostración y cierre de la ventana de CU-028 |
-| 14/11/2026 | 16:56:39 | `474b67b` | docs: sección de desempeño, disponibilidad y monitoreo en el SAD y diagramas al día |
+| 14/11/2026 | 16:56:39 | [`474b67b`](https://github.com/Emperador24/HEXACORE/commit/474b67b3cc1013539945710829df307aa8719e41) | docs: sección de desempeño, disponibilidad y monitoreo en el SAD y diagramas al día |
 
 ### 8. Próxima sesión
 **Fecha propuesta:** No se establece en esta nota. **Pendiente técnico:**

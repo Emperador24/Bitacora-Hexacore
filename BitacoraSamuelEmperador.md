@@ -568,10 +568,10 @@
   - `revisar-flechas.py` mide en el SVG si dos flechas comparten tramo o llegan al mismo punto: encontró 33 problemas.
   - `regenerar.sh` usa una copia temporal de Archify que reparte esas flechas a lo largo del lado. Además dimensioné cada caja para que las flechas bajen rectas.
   - Quedaron en 0 problemas en las seis vistas.
-- Commit `474b67b` en `feature/samuel` (todavía sin subir). Anoté todo lo del 12 al 14/11 en la bitácora grupal.
+- Commit y push a `feature/samuel` ([`474b67b`](https://github.com/Emperador24/HEXACORE/commit/474b67b3cc1013539945710829df307aa8719e41)); entra en el PR [#51](https://github.com/Emperador24/HEXACORE/pull/51). Anoté todo lo del 12 al 14/11 en la bitácora grupal.
 
 **Próximos pasos**
-- Subir `474b67b` al PR #51 y dejarlo en verde. Lo único que falla es la semilla de Alimentos (falta `cancelaciones_pedido` en el `TRUNCATE`); es de Sebastián y ya fallaba en el PR #49. El PR necesita además la aprobación de un compañero.
+- Dejar el PR #51 en verde. Lo único que falla es la semilla de Alimentos (falta `cancelaciones_pedido` en el `TRUNCATE`); es de Sebastián y ya fallaba en el PR #49. El PR necesita además la aprobación de un compañero.
 - Hacer mis diapositivas: una por atributo (diseño → resultado) y la de despliegue con réplicas y monitoreo.
 - Acordar con el equipo qué casos se muestran en los 10 minutos de demo y ensayar el guion de atributos.
 - Avisar al equipo que hay que regenerar los diagramas con `regenerar.sh`, y que `Summary.tex`, `ArchitecturalProposal.tex` y `Presentacion.tex` todavía dicen 8 esquemas o que F14 sigue abierto.
