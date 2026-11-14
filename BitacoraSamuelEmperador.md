@@ -542,3 +542,23 @@
 - Contarle a Diego cómo se mide ahora la cobertura (`test:cov:total`) y que F14 quedó resuelto.
 - Avisar a Daniel que los consumidores de `eventos.gestion` en Ventas y Catálogo ya existen (los hice el 09/11) para que los revise.
 - Pendientes de despliegue y de la Entrega 2: máquina de Oracle, SAD con once esquemas.
+
+## [14/11/2026]
+
+**¿Qué hice?**
+- **Revisión contra lo que pide el profesor** para la sustentación y los entregables. Mis casos de uso y mis tres atributos están implementados y medidos. Lo que falta es documental:
+  - En el SAD, la sección de tácticas y mediciones todavía tiene las cifras de la arquitectura ADR-12 (dice que no se han repetido) y no tiene sección de Monitoreo.
+  - La presentación no tiene diapositivas de atributos, ni la de asignación por integrante, ni la comparación de contenedores antiguo vs. nuevo.
+- **Demo de Playwright más corta:** cada pantalla se queda como mucho 1,5 s y `demo:ver` espera 300 ms entre acciones. Los 8 casos pasan de unos 5 min 20 s a unos 3 min 30 s. La versión corta (CU-010, CU-006 y CU-028) dura alrededor de 1,5 min.
+  - Bajar solo la pausa casi no cambiaba nada: el tiempo se iba en la espera de 600 ms entre cada clic y cada tecleo.
+- **Guía de demostración** (`App/frontend/demo-playwright/GUIA-DEMOSTRACION.md`): preparación del día anterior y de 15 minutos antes, comandos en vivo, qué decir en cada pantalla, plan B con los videos y problemas conocidos.
+- **Error «Internal error: step id not found» en CU-028:** no era de la aplicación sino de Playwright 1.56.
+  - Salía al cerrar la segunda ventana (la de la supervisora) sin cerrar primero su página, porque la captura final de cada caso buscaba esa página ya cerrada.
+  - Lo comprobé apagando las capturas y el video por separado. Ahora se cierra la página antes que la ventana, y en tres corridas no volvió a salir.
+- Commit y push a `feature/samuel` ([`5bb01a2`](https://github.com/Emperador24/HEXACORE/commit/5bb01a2a7cce6e5ea066873dfc62a4805f98ddb2)); entra en el PR [#51](https://github.com/Emperador24/HEXACORE/pull/51).
+
+**Próximos pasos**
+- Actualizar en el SAD mis tres atributos con las mediciones actuales y agregar la sección de Monitoreo.
+- Hacer mis diapositivas: una por atributo y el despliegue con réplicas y monitoreo.
+- Dejar el PR #51 en verde. El único trabajo que falla es la semilla de Alimentos, a la que le falta `cancelaciones_pedido` en el `TRUNCATE`; es de Sebastián y ya fallaba en el PR #49. Además el PR necesita la aprobación de un compañero.
+- Acordar con el equipo qué casos se muestran en los 10 minutos de la demo y ensayar el guion de atributos.
