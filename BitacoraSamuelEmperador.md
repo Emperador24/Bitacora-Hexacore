@@ -586,3 +586,43 @@
 - Hacer mis diapositivas: una por atributo (diseño → resultado) y la de despliegue con réplicas y monitoreo.
 - Acordar con el equipo qué casos se muestran en los 10 minutos de demo y ensayar el guion de atributos.
 - Avisar al equipo que hay que regenerar los diagramas con `regenerar.sh`, y que `Summary.tex`, `ArchitecturalProposal.tex` y `Presentacion.tex` todavía dicen 8 esquemas o que F14 sigue abierto.
+
+## [16/11/2026]
+
+**¿Qué hice?**
+- **Revisión del PR #53 de Sebastián**, ya integrado en `develop`.
+  - **Toca mi CU-028:**
+    - Si los roles guardados en Redis están dañados, la guarda común ahora responde 503 en vez de volver a los roles del token. Es más seguro: un rol retirado no puede volver por un dato dañado.
+    - En las rutas con permiso por módulo, el gateway deja que decida el Núcleo, para que funcionen los roles asignados después de iniciar sesión. Revisé que el Núcleo siga rechazando sin permiso.
+  - **Editó mi sección del SAD.** Algunas correcciones son buenas: el reintento de nginx es solo para lecturas, los 5 s del DNS no acotan la recuperación y `SKIP LOCKED` no garantiza una sola ejecución. Pero también agregó notas de proceso que hacían ver mis mediciones como si no se hubieran hecho.
+  - **La presentación ya trae las diapositivas del equipo:** responsables por atributo y contenedores antes/ahora. A mí me dejó 2 diapositivas en el tramo 16:00–22:00.
+  - **El reparto confirmado me asigna RNF-08, RNF-09 y RNF-17**, que todavía no tengo medidos:
+    - RNF-08: validar un QR en p95 ≤ 300 ms.
+    - RNF-09: la ocupación se refleja en el tablero en ≤ 2 s (CU-025).
+    - RNF-17: la evacuación llega al 99 % del personal en ≤ 10 s (CU-010).
+- **Mis diapositivas en la presentación.** Las 9 diapositivas de desempeño, disponibilidad y monitoreo reemplazan las 2 de resumen en el mismo tramo 16:00–22:00, con sus franjas de tiempo.
+  - Les incorporé las precisiones técnicas del PR #53, y la de límites ahora dice que RNF-08, RNF-09 y RNF-17 están sin medir.
+  - El diagrama de despliegue quedó solo en los anexos.
+  - 33 páginas, sin desbordes.
+- **SAD:** quité las notas de proceso de mi sección («conserva la evidencia histórica», «no se ejecutan en esta revisión documental…»), conservé sus correcciones técnicas y cambié el enlace del plan de ZeroTier a `develop`. Quedan los mismos 27 avisos de ancho que ya tenía.
+- **Sustentación en varios computadores:**
+  - Revisé cómo levantar el sistema completo en 3 computadores: uno para desempeño, otro para disponibilidad y otro para el despliegue, que se arranca primero y se deja corriendo.
+  - Ya funciona con `iniciar.sh`, y las imágenes publicadas se bajan sin iniciar sesión.
+  - ZeroTier serviría para mostrar los otros dos computadores desde el del proyector.
+  - El plan de Sebastián (`PLAN-DEMO-ZEROTIER.md`) es otro montaje: el sistema repartido en A/B/C, apagando B.
+- Commit y push a `feature/samuel` ([`f896bc6`](https://github.com/Emperador24/HEXACORE/commit/f896bc6)) con los PDF regenerados, y PR [#55](https://github.com/Emperador24/HEXACORE/pull/55) hacia `develop`.
+- **ZeroTier desde mi Mac y la VM de la Javeriana** (red `HEXACORE-DEMO`).
+  - Los dos equipos estaban bien: unidos, autorizados y con sus IP; la VM es `10.11.163.231`.
+  - Los pings no llegaban porque la VPN F5 de la universidad, conectada en mi Mac, se lleva todo el tráfico que va a `10.x`. Las respuestas de mi Mac salían por esa VPN y nunca volvían a la VM.
+  - En el montaje A/B/C de Sebastián (PR #54) mi Mac es A, el equipo que no se apaga, y la VPN de la universidad se mantiene conectada para administrar la VM. Por eso propuse cambiar el rango de la red ZeroTier a uno que no empiece por `10.`, por ejemplo `172.27.0.0/16`.
+- **PR #56 de `develop` a `main` con conflictos** en `Presentacion.tex` y `Presentacion.pdf`.
+  - `main` y `develop` tienen dos bases de fusión, y desde una de ellas los dos archivos aparecen como creados por separado en cada rama. Git lo resuelve en local, pero GitHub no.
+  - Hice merge de `main` en mi rama conservando la presentación actual; el contenido queda idéntico a `develop`.
+  - Commit y push a `feature/samuel` ([`e5f8e0a`](https://github.com/Emperador24/HEXACORE/commit/e5f8e0a)) y PR [#57](https://github.com/Emperador24/HEXACORE/pull/57) hacia `develop`. Al mergearlo, el #56 queda sin conflictos.
+
+**Próximos pasos**
+- Mergear el PR #57 y luego revisar el #56: que corra la CI y que tenga aprobación antes de pasar a `main`.
+- Avisarle a Sebastián lo de la VPN F5 y cambiar el rango de la red ZeroTier antes de ensayar el montaje A/B/C.
+- Acordar con el equipo el tiempo de mi demo en vivo: dura ~6,5 min y el guion le da 150 s.
+- Ensayar el montaje A/B/C antes de la sustentación (Docker con 6 GB en mi Mac, que es A).
+- Medir RNF-08, RNF-09 y RNF-17 y agregarlos al SAD y a mis diapositivas.
