@@ -497,6 +497,21 @@
 
 ---
 
+## [11/11/2026]
+
+**¿Qué hice?**
+- **Distribución de los atributos de calidad por integrante.** Armé el reparto de los atributos que pidió el profesor, cada uno con un único responsable y la demostración mínima que espera:
+  - yo: desempeño (RNF-07, RNF-08, RNF-10), disponibilidad (RNF-03, RNF-04, RNF-09, RNF-17) y monitoreo y logs (RNF-19);
+  - Diego: desplegabilidad (RNF-15) y comprobabilidad (RNF-18);
+  - Sebastián: seguridad (RNF-05, RNF-06), Safety de transacciones (RNF-01, RNF-02, RNF-11) y modificabilidad (RNF-13);
+  - Daniel: integrabilidad (RNF-16) y usabilidad (RNF-12, RNF-14), con aportes de todos.
+- Relacioné cada atributo con los RNF del SAD, para que los 19 queden cubiertos, y expliqué qué exige cada uno, su umbral y cómo se ve en la demostración.
+- Tres decisiones del reparto: Safety se mide con transacciones de dinero (RNF-01, 02 y 11) y la evacuación (RNF-17) va con disponibilidad; tiempo real y escalabilidad van con disponibilidad y desempeño; portabilidad va con usabilidad.
+
+**Próximos pasos**
+- Que cada integrante confirme su parte por escrito en el grupo.
+- Medir RNF-08, RNF-09 y RNF-17, que me quedan asignados.
+
 ## [12/11/2026]
 
 **¿Qué hice?**
@@ -620,9 +635,27 @@
   - Hice merge de `main` en mi rama conservando la presentación actual; el contenido queda idéntico a `develop`.
   - Commit y push a `feature/samuel` ([`e5f8e0a`](https://github.com/Emperador24/HEXACORE/commit/e5f8e0a)) y PR [#57](https://github.com/Emperador24/HEXACORE/pull/57) hacia `develop`. Al mergearlo, el #56 queda sin conflictos.
 
+- **ZeroTier con Sebastián.** Cambiamos el rango de la red a `192.168.193.0/24` y se acabó el choque con la VPN F5: mi Mac (A) es `.59`, la VM (B) es `.137` y el Mac de Sebastián (C) es `.132`.
+  - Desde mi Mac responden por ZeroTier todos los puertos que necesita B.
+  - La VM llega por relevo de ZeroTier, no directo: unos 124 ms por ida y vuelta, porque la red de la universidad bloquea el UDP directo. Sus réplicas van a responder más lento.
+  - Para montar A tengo que bajar antes el sistema normal, que ocupa los mismos puertos.
+- **Medí los RNF que me faltaban** (informes en `App/infra/informe-atributos/`):
+  - RNF-07: CU-001 con p95 de 197 ms y 200 usuarios, 0 fallos (2 000 sin verificar).
+  - RNF-08: validar el QR da p95 de 51 ms con 10 lectores (~500 validaciones/s); desde 50 lectores pasa de 300 ms, porque todas las validaciones suman en la misma fila de aforo.
+  - RNF-10: con Boletería ×2 la capacidad sube solo 1,12–1,26×; en un portátil no quedan núcleos libres para la segunda réplica.
+  - RNF-09: máximo 1,01 s en el panel del parqueadero y 1,12 s en el de monitoreo, 20 de 20.
+  - RNF-17: 300 de 300 teléfonos simulados vieron la evacuación en ≤ 4 s, también con una réplica del Núcleo muerta.
+- **Lo que tuve que cambiar para RNF-09:**
+  - Los paneles en vivo se actualizaban cada 3 s; ahora cada 1 s.
+  - La primera medición dio 11 de 20 ingresos sin llegar al panel: la bandeja de salida de Acceso QR publicaba unos 50 avisos por segundo, esperando a RabbitMQ de uno en uno, y tenía 19 000 pendientes. Ahora publica el lote y espera las confirmaciones juntas: unos 1 700 por segundo. Vació el atraso en unos 10 s.
+  - Los ingresos sin punto de acceso iban a la DLQ de Monitoreo; ahora cuentan en «Acceso general».
+- **Grafana con contraseña:** ya no deja entrar sin sesión, porque los logs muestran rutas y errores.
+- **Herramientas nuevas:** `prueba-carga.py` mide también CU-001 y el QR, y `tiempo-real.py` mide RNF-09 y RNF-17.
+- **Documentación:** el reparto del 11/11 quedó en `Documentation/Work/DISTRIBUCION-ATRIBUTOS.md` y en el documento compartido del equipo, con los 19 RNF explicados. Actualicé el SAD (subsección nueva de tiempo real y evacuación), mis diapositivas (lámina nueva de Boletería, CU-001 y QR), las fichas de `CIERRE-RUBRICA.md` y los PDF.
+- Commits [`be5667d`](https://github.com/Emperador24/HEXACORE/commit/be5667d69ee06915e76296dcd95935299c895363), [`ce7bfaf`](https://github.com/Emperador24/HEXACORE/commit/ce7bfaffc8efdf8d1916e7bc721413bc28e8246c) y [`d2f922c`](https://github.com/Emperador24/HEXACORE/commit/d2f922cde3ee8a4bbedb08262350049229f7a2eb) en `feature/samuel`, y PR [#60](https://github.com/Emperador24/HEXACORE/pull/60) hacia `develop`. Pasan las 1 141 pruebas unitarias del backend.
+
 **Próximos pasos**
-- Mergear el PR #57 y luego revisar el #56: que corra la CI y que tenga aprobación antes de pasar a `main`.
-- Avisarle a Sebastián lo de la VPN F5 y cambiar el rango de la red ZeroTier antes de ensayar el montaje A/B/C.
+- Conseguir la aprobación del PR #60 y después revisar el #56 (`develop` → `main`).
+- Montar A en mi Mac y ensayar con Sebastián el montaje A/B/C, apagando B.
 - Acordar con el equipo el tiempo de mi demo en vivo: dura ~6,5 min y el guion le da 150 s.
-- Ensayar el montaje A/B/C antes de la sustentación (Docker con 6 GB en mi Mac, que es A).
-- Medir RNF-08, RNF-09 y RNF-17 y agregarlos al SAD y a mis diapositivas.
+- Ensayar mi tramo de la presentación y la parte escrita individual.

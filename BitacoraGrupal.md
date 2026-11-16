@@ -1117,6 +1117,73 @@ Se publicaron **8 commits** el 09 y 10/11. Con esto, los casos de uso del repart
 
 ---
 
+## Nota de seguimiento — [11/11/2026] — Distribución de los atributos de calidad por integrante
+
+**Modalidad:** actualización documental: propuesta de reparto compartida con el equipo.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota del 11/11/2026. Registra la propuesta de reparto de los atributos de calidad que pidió el profesor y su relación con los 19 RNF del SAD. No acredita una reunión: cada integrante debe confirmar su parte por escrito en el grupo. El archivo del reparto se subió al repositorio el 16/11 (ver esa nota).
+
+### 1. Objetivo de la sesión
+Repartir los atributos de calidad que el profesor detalló para la sustentación, de modo que cada uno tenga un único responsable que lo presente en vivo y responda por él en la nota individual, y que los 19 RNF del SAD queden cubiertos.
+
+### 2. Temas tratados
+
+- Tema 1 — **Reparto por integrante.** Cada atributo queda con un responsable y con la demostración mínima que espera el profesor:
+
+  | Atributo | Responsable | RNF que lo miden |
+  |---|---|---|
+  | Desempeño (pruebas de carga) | Samuel | RNF-07, RNF-08, RNF-10 |
+  | Disponibilidad (pruebas de resiliencia) | Samuel | RNF-03, RNF-04, RNF-09, RNF-17 |
+  | Monitoreo y logs | Samuel | RNF-19 |
+  | Desplegabilidad | Diego | RNF-15 |
+  | Comprobabilidad (cobertura) | Diego | RNF-18 |
+  | Seguridad (escaneo OWASP) | Sebastián | RNF-05, RNF-06 |
+  | Safety (transacciones seguras) | Sebastián | RNF-01, RNF-02, RNF-11 |
+  | Modificabilidad (configuración sin recompilar) | Sebastián | RNF-13 |
+  | Integrabilidad (pasarela de pagos) | Daniel | RNF-16 |
+  | Usabilidad (arquitectura de información) | Daniel consolida; todos aportan | RNF-12, RNF-14 |
+
+- Tema 2 — **Reglas comunes.** Cada atributo lo presenta su responsable; todo automatizado salvo la prueba de carga; diapositivas y demostración en vivo, no solo capturas; el diseño de cada atributo va en el SAD (escenario, tácticas, implementación y evidencia); lo que tarda, como el pipeline, se deja corriendo en otro computador.
+- Tema 3 — **Cómo leer cada RNF.** Un RNF es la versión medible del atributo: dice qué tiene que pasar y con qué umbral se cumple. Para cada atributo se escribió qué exige cada RNF, su umbral y cómo se ve en la demostración.
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | Safety se mide con RNF-01, RNF-02 y RNF-11. | El profesor pidió la versión centrada en transacciones con dinero: no vender dos veces, invalidar el QR viejo y auditar cada pago. RNF-17 (evacuación) es Safety física y su riesgo es que el aviso no llegue a tiempo, así que va con disponibilidad. | Equipo, propuesta de Samuel | 11/11/2026 |
+| 2 | Tiempo real (RNF-09) va con disponibilidad y escalabilidad (RNF-10) con desempeño. | No están en la lista del profesor y usan las mismas réplicas, el mismo tablero y las mismas pruebas. | Equipo, propuesta de Samuel | 11/11/2026 |
+| 3 | Portabilidad (RNF-14) va con usabilidad. | Los dos se demuestran recorriendo las pantallas de web y móvil. | Equipo, propuesta de Samuel | 11/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+Cada integrante confirma su parte por escrito en el grupo y escribe en el SAD el diseño de su atributo.
+
+### 5. Tareas asignadas
+
+| Trabajo | Responsable | Estado al 11/11 |
+|---|---|---|
+| Desempeño, disponibilidad y monitoreo | Samuel Emperador | En curso; RNF-08, RNF-09 y RNF-17 por medir |
+| Desplegabilidad y comprobabilidad | Diego Coronado | Por confirmar |
+| Seguridad, Safety y modificabilidad | Sebastián Sánchez | Por confirmar |
+| Integrabilidad y usabilidad | Daniel Cristancho | Por confirmar |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- El reparto necesita la confirmación escrita de cada integrante.
+- La cobertura al 100 % que pide el profesor depende de las pruebas que escriba el dueño de cada módulo.
+
+### 7. Avance general del proyecto
+Sin commits asociados a esta nota: es un acuerdo de reparto.
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota.
+
+---
+
 ## Nota de seguimiento — [14/11/2026] — CU-028, F14, atributos de calidad de Samuel, cobertura, SAD y diagramas
 
 **Modalidad:** actualización documental basada en el historial Git, el PR #51 y las ejecuciones de GitHub Actions.
@@ -1260,6 +1327,110 @@ Se registraron **4 commits** del 12 al 14/11 (el trabajo del 12/11 entró en el 
 
 ---
 
+
+## Nota de seguimiento — [16/11/2026] — Revisión del PR #53, RNF de Samuel medidos, ZeroTier y PR #55, #57 y #60
+
+**Modalidad:** actualización documental basada en el historial Git, los PR #53 a #60 y las mediciones en el entorno local.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota incorporada el 16/11/2026. Registra trabajo del 16/11/2026. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00). El conteo comprende los commits sin fusión de autor `Emperador24` ese día; la fusión `e5f8e0a` se cita solo como evidencia.
+
+### 1. Objetivo de la sesión
+Dejar constancia de cinco cosas:
+- la revisión del PR #53 de Sebastián y de lo que cambió en la sección de Samuel del SAD y en la presentación;
+- las diapositivas de los atributos de Samuel y la limpieza de su sección del SAD;
+- el conflicto del PR #56 (`develop` → `main`);
+- la red ZeroTier para la demostración en varios computadores;
+- la medición de los RNF de Samuel que faltaban (RNF-07 sobre CU-001, RNF-08, RNF-09, RNF-10 con Boletería y RNF-17), con los cambios de código que hicieron falta.
+
+### 2. Temas tratados
+
+- Tema 1 — **Revisión del PR #53 (Sebastián).**
+  - **Guarda común (CU-028):** si los roles guardados en Redis están dañados, ahora responde 503 en lugar de volver a los roles del token. Es más seguro: un rol retirado no puede volver por un dato dañado.
+  - **Gateway:** en las rutas con permiso por módulo deja que decida el Núcleo, para que funcionen los roles asignados después de iniciar sesión. Se comprobó que el Núcleo sigue rechazando sin permiso.
+  - **SAD de Samuel:** se conservaron sus correcciones técnicas (el reintento de nginx es solo para lecturas, los 5 s del DNS no acotan la recuperación, `SKIP LOCKED` no garantiza una sola ejecución), pero se quitaron notas de proceso que hacían ver las mediciones como no hechas.
+  - **Presentación:** ya trae las láminas de responsables y de contenedores antes/ahora.
+- Tema 2 — **Diapositivas de Samuel.** Nueve láminas de desempeño, disponibilidad y monitoreo reemplazan las dos de resumen en el tramo 16:00–22:00, con sus franjas de tiempo y las precisiones del PR #53. Commit [`f896bc6`](https://github.com/Emperador24/HEXACORE/commit/f896bc63946f8a8bbe10b32ff351cbbb7193d444), [PR #55](https://github.com/Emperador24/HEXACORE/pull/55).
+- Tema 3 — **Conflicto del PR #56 (`develop` → `main`).** GitHub marcaba conflicto en `Presentacion.tex` y `Presentacion.pdf`. `main` y `develop` tienen dos bases de fusión y desde una los dos archivos aparecen creados por separado en cada rama; Git en local lo resuelve, GitHub no. Se hizo merge de `main` en la rama conservando la presentación vigente; el contenido queda idéntico a `develop`. Fusión [`e5f8e0a`](https://github.com/Emperador24/HEXACORE/commit/e5f8e0a), [PR #57](https://github.com/Emperador24/HEXACORE/pull/57).
+- Tema 4 — **ZeroTier para la demostración A/B/C.**
+  - **Reparto:** A, el Mac de Samuel (datos, gateway y una réplica de Núcleo y Boletería); B, la VM de la Javeriana (otra réplica de cada uno); C, el Mac de Sebastián (cliente que mide).
+  - **Pings que no llegaban:** la VPN F5 de la universidad, conectada en el Mac de Samuel, se llevaba todo el tráfico a `10.x`, y la red ZeroTier usaba `10.11.163.x`. Se cambió el rango de la red a `192.168.193.0/24`: A es `.59`, B es `.137` y C es `.132`.
+  - **Estado:** desde A responden por ZeroTier todos los puertos que necesita B. La VM llega por relevo de ZeroTier, no directo (unos 124 ms por ida y vuelta), porque la red de la universidad bloquea el UDP directo.
+  - **Pendiente:** el montaje de A no se ha configurado. El sistema normal de A ocupa los mismos puertos y hay que bajarlo antes.
+- Tema 5 — **RNF de Samuel medidos (`App/infra/informe-atributos/`).**
+
+  | RNF | Qué se midió | Resultado |
+  |---|---|---|
+  | RNF-07 | CU-001 (`GET /cartelera/:id`) con 1 a 200 usuarios | p95 197 ms con 200, 0 fallos; 2 000 no verificado |
+  | RNF-08 | Validación de QR con QR distintos de un evento de prueba | p95 51 ms con 10 lectores (~500 validaciones/s); desde 50 lectores > 300 ms |
+  | RNF-10 | Boletería con 1 y 2 réplicas | 1,12× (CU-001) y 1,26× (CU-006): no llega a 1,7× en un portátil |
+  | RNF-09 | Del ingreso al panel en vivo, 20 muestras por panel | Máx. 1,01 s (parqueadero) y 1,12 s (monitoreo) |
+  | RNF-17 | Evacuación a 300 dispositivos simulados (sondeo de 4 s como la app) | 300/300 en ≤ 4 s, también con una réplica del Núcleo muerta |
+
+- Tema 6 — **Cambios de código que hicieron falta.**
+  - **Paneles cada 1 s.** Los flujos SSE de parqueadero (CU-025) y monitoreo (CU-019) se recalculaban cada 3 s: con eso el peor caso ya pasaba de 2 s.
+  - **Bandeja de salida de Acceso QR.** La primera medición de RNF-09 dio 11 de 20 ingresos sin reflejar: después de la carga de QR quedaban 19 000 avisos pendientes, porque la bandeja publicaba unos 50 por segundo esperando la confirmación de RabbitMQ de uno en uno. Ahora publica el lote y espera las confirmaciones juntas: unos 1 700 por segundo.
+  - **Ingresos sin punto de acceso.** El consumidor de Monitoreo los mandaba a la DLQ; ahora cuentan en «Acceso general».
+  - **Grafana con sesión.** Ya no admite visitantes anónimos (RNF-19, acceso controlado a los logs).
+  - **Herramientas:** `prueba-carga.py` con los escenarios `cu001` y `qr`, y `tiempo-real.py` nuevo para RNF-09 y RNF-17.
+- Tema 7 — **Documentación.**
+  - `Documentation/Work/DISTRIBUCION-ATRIBUTOS.md`: el reparto del 11/11 con los 19 RNF.
+  - SAD: desempeño con CU-001, QR y Boletería ×2, y subsección nueva «Tiempo real y aviso de evacuación».
+  - Diapositivas: lámina «Boletería, CU-001 y QR» y cifras de RNF-09 y RNF-17 en las láminas de tiempo real y Safety.
+  - `CIERRE-RUBRICA.md`: fichas de rendimiento, tiempo real, escalabilidad, Safety y observabilidad.
+  - PDF del SAD y de la presentación regenerados. [PR #60](https://github.com/Emperador24/HEXACORE/pull/60).
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | Las diapositivas de Samuel van dentro del tramo 16:00–22:00 en lugar de las dos de resumen. | Así el guion de 54 min no se mueve. La demo en vivo (~6,5 min) sigue por acordar frente a los 150 s del bloque de demostraciones. | Samuel Emperador | 16/11/2026 |
+| 2 | La red ZeroTier usa `192.168.193.0/24`. | Cualquier rango `10.x` choca con la VPN F5 de la universidad, que el equipo necesita para administrar la VM. | Samuel Emperador, Sebastián Sánchez | 16/11/2026 |
+| 3 | Los paneles en vivo se recalculan cada 1 s. | Con 3 s RNF-09 no se puede cumplir. El costo es una consulta por segundo por panel abierto, y la sesión se revalida más seguido. | Samuel Emperador | 16/11/2026 |
+| 4 | La bandeja de Acceso QR publica en lote y marca solo lo anterior al primer fallo. | Mantiene el orden y la regla original; lo que se reenvía lo descartan los consumidores por `id`. Descartado: publicar sin esperar confirmación, que podría perder avisos. | Samuel Emperador | 16/11/2026 |
+| 5 | RNF-10 se informa como no cumplido en este entorno. | Con Boletería ×2 la capacidad sube 12–26 %: las réplicas comparten el portátil con el gateway, PostgreSQL y el generador. Se repetirá con réplicas en máquinas separadas. | Samuel Emperador | 16/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos.
+
+### 5. Tareas asignadas
+
+| Trabajo registrado | Responsable | Estado al 16/11 |
+|---|---|---|
+| RNF-07, RNF-08, RNF-09, RNF-10 y RNF-17 | Samuel Emperador | Medidos y documentados; en el PR #60 |
+| Diapositivas de los atributos de Samuel | Samuel Emperador | Hechas |
+| Montaje ZeroTier A/B/C | Samuel Emperador, Sebastián Sánchez | Red funcionando; montaje de A y B pendiente |
+| Revisión y aprobación del PR #60 | Un compañero | Pendiente |
+| Tiempo de la demo en vivo de atributos | Equipo | Por acordar |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- **ZeroTier:** la VM llega por relevo (~124 ms); sus réplicas pueden pasar los límites de espera hacia PostgreSQL y Redis en A. A es el punto único de falla.
+- **Paneles cada 1 s:** alguna prueba de Seguridad podría suponer las ventanas de revalidación de 2/3 s; se avisó en el PR #60.
+- **RNF-10 y RNF-07:** en un solo portátil no se puede medir una duplicación limpia ni llegar a 2 000 usuarios.
+- **RNF-17:** mide la llegada a la app abierta; teléfonos sin señal o con la app cerrada necesitan push o SMS reales.
+
+### 7. Avance general del proyecto
+Se registraron **4 commits** el 16/11 y una fusión. Los casos de uso de Samuel siguen completos, y **sus tres atributos tienen ya todos sus RNF medidos**: los que cumplen y los que no, con su causa escrita.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 16/11/2026 | 13:51:36 | [`f896bc6`](https://github.com/Emperador24/HEXACORE/commit/f896bc63946f8a8bbe10b32ff351cbbb7193d444) | docs(sustentacion): diapositivas de desempeño, disponibilidad y monitoreo y SAD sin notas de proceso |
+| 16/11/2026 | 18:38:18 | [`be5667d`](https://github.com/Emperador24/HEXACORE/commit/be5667d69ee06915e76296dcd95935299c895363) | feat(atributos): medir RNF-07/08/09/10/17, paneles en vivo cada 1 s y Grafana con sesión |
+| 16/11/2026 | 18:38:18 | [`ce7bfaf`](https://github.com/Emperador24/HEXACORE/commit/ce7bfaffc8efdf8d1916e7bc721413bc28e8246c) | docs: distribución de atributos de calidad con los 19 RNF por responsable |
+| 16/11/2026 | 18:42:54 | [`d2f922c`](https://github.com/Emperador24/HEXACORE/commit/d2f922cde3ee8a4bbedb08262350049229f7a2eb) | docs(sustentacion): RNF-07/08/09/10/17 medidos en el SAD, diapositivas y fichas |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. **Pendiente técnico:**
+- aprobar y fusionar el PR #60, y luego llevar `develop` a `main` (PR #56);
+- configurar y ensayar el montaje ZeroTier A/B/C, apagando B;
+- acordar el tiempo de la demo de atributos y ensayar el guion completo.
+
+---
 
 ## Historial de sesiones
 
