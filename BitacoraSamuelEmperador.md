@@ -654,8 +654,24 @@
 - **Documentación:** el reparto del 11/11 quedó en `Documentation/Work/DISTRIBUCION-ATRIBUTOS.md` y en el documento compartido del equipo, con los 19 RNF explicados. Actualicé el SAD (subsección nueva de tiempo real y evacuación), mis diapositivas (lámina nueva de Boletería, CU-001 y QR), las fichas de `CIERRE-RUBRICA.md` y los PDF.
 - Commits [`be5667d`](https://github.com/Emperador24/HEXACORE/commit/be5667d69ee06915e76296dcd95935299c895363), [`ce7bfaf`](https://github.com/Emperador24/HEXACORE/commit/ce7bfaffc8efdf8d1916e7bc721413bc28e8246c) y [`d2f922c`](https://github.com/Emperador24/HEXACORE/commit/d2f922cde3ee8a4bbedb08262350049229f7a2eb) en `feature/samuel`, y PR [#60](https://github.com/Emperador24/HEXACORE/pull/60) hacia `develop`. Pasan las 1 141 pruebas unitarias del backend.
 
+- **Presentación única para la sustentación** (`Documentation/Work/Sustentacion.tex`, PDF en `Documentation/Submission/Sustentacion.pdf`): las cuatro partes que pidió el profesor en un solo archivo, con las láminas de ZeroTier y de tiempo real y evacuación. Diagramas al día, incluido uno nuevo del despliegue en tres computadores por ZeroTier (`09-despliegue-zerotier`). Commit [`4a38012`](https://github.com/Emperador24/HEXACORE/commit/4a38012c8c8c3eed73d30556198cf97134cacfa6).
+- **Montaje ZeroTier desde `main`:** las herramientas de A/B (`equipo.py`) ahora exigen la rama `main`, que es la versión que se entrega, en vez de `feature/sebastian`. Commit [`782c22a`](https://github.com/Emperador24/HEXACORE/commit/782c22ac57dc77e6930278b45c6a9f907edaf02f), PR [#62](https://github.com/Emperador24/HEXACORE/pull/62), fusionado.
+- **Montaje A/B levantado** (demo `demoabc-261116-dd70`).
+  - **A, mi Mac:** carpeta privada fuera de Git, secretos nuevos (JWT, PostgreSQL y RabbitMQ), una CA privada de 7 días y un certificado de 2 días para `hexacore.zt.test` y `admin.hexacore.zt.test`. Puertos alternativos (HTTPS 8443, PostgreSQL 25432, Redis 26380, AMQP 25672, correo 23098, pasarela 23099) para no tocar el sistema que ya tenía. `configurar`, `validar`, `construir`, `preparar --cuentas-demo` e `iniciar`: 12 contenedores sanos y los dos portales por HTTPS.
+  - **B, la VM:** recibió solo los secretos comunes por `scp`, sin claves TLS. `configurar`, `validar`, `construir` e `iniciar`.
+  - **`comprobar`** en A y en B: todo arriba, incluido el gateway de A repartiendo a B.
+  - **Para C (Sebastián):** el certificado público de la CA, con la huella por otro canal; una cuenta de ensayo propia en archivo privado; los estados de A y B; un evento de ensayo publicado por la API normal, para que la cartelera no esté vacía, y los logs del gateway en JSONL, que grabo en A durante la medición y le paso al terminar. No abrí SSH a mi Mac.
+- **Servidor de presentación propio.**
+  - `hexacore.duckdns.org`, el dominio de ejemplo de la guía, resultó ser de otra persona (apunta a una IP de Rusia): avisé que no se escanee.
+  - Oracle Cloud no tenía capacidad en Bogotá, y la suscripción de Azure que me aparecía no era mía, así que no la usé. Quedó en **Google Cloud**: `e2-standard-2`, Ubuntu 24.04, IP estática `35.255.61.156`.
+  - https://hexacore-javeriana.duckdns.org y https://admin.hexacore-javeriana.duckdns.org, con HTTPS de Let's Encrypt y las cuentas demo.
+  - **CD conectado:** llave SSH solo para el CD y la huella del servidor verificada como secretos de GitHub. La ejecución [43987694799](https://github.com/Emperador24/HEXACORE/actions/runs/43987694799) desplegó `sha-9815d8e` sola y la salud respondió 200. El primer intento falló antes de desplegar, por dos pruebas de pagos que dieron 503 justo después de reiniciar; al repetirlas pasaron.
+  - `App/infra/DESPLIEGUE.md` reescrito con los pasos que seguí, y quité la brecha «sin servidor de producción» de la presentación, la sustentación, el SAD (versión 2.3), Seguridad y la rúbrica. Commit [`1a985e8`](https://github.com/Emperador24/HEXACORE/commit/1a985e8ffada12042feaf7f968c44f32b3be933e), PR [#66](https://github.com/Emperador24/HEXACORE/pull/66) hacia `develop`.
+
 **Próximos pasos**
-- Conseguir la aprobación del PR #60 y después revisar el #56 (`develop` → `main`).
-- Montar A en mi Mac y ensayar con Sebastián el montaje A/B/C, apagando B.
-- Acordar con el equipo el tiempo de mi demo en vivo: dura ~6,5 min y el guion le da 150 s.
-- Ensayar mi tramo de la presentación y la parte escrita individual.
+- Medir con Sebastián el montaje A/B/C: tumbar el Núcleo de A (Docker lo relanza) y apagar B, con su observador en C y los logs de A.
+- Confirmar quién puede volver a encender la VM desde la plataforma antes de apagarla.
+- Poner las cifras de esa medición en el SAD y en mis diapositivas.
+- Conseguir la aprobación del PR #66 y llevar `develop` a `main`.
+- Acordar el tiempo de mi demo en vivo (~6,5 min frente a 150 s) y ensayar.
+- Apagar o borrar la VM de Google Cloud al terminar la entrega (gasta unos US$54 al mes del crédito).

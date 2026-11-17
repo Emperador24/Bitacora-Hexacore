@@ -1432,6 +1432,83 @@ Se registraron **4 commits** el 16/11 y una fusión. Los casos de uso de Samuel 
 
 ---
 
+## Nota de seguimiento — [16/11/2026] — Presentación única, montaje ZeroTier A/B y servidor de presentación
+
+**Modalidad:** actualización documental basada en el historial Git, los PR #62 y #66, la ejecución del CD y la operación del montaje.
+
+**Hora de inicio – fin:** No aplica; no se registra una reunión.
+
+**Responsable del avance:** Samuel Emperador.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota incorporada el 16/11/2026. Registra trabajo del 16/11/2026, después de la nota anterior del mismo día. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00).
+
+### 1. Objetivo de la sesión
+Dejar constancia de tres cosas:
+- la presentación única para la sustentación y los diagramas al día;
+- el montaje ZeroTier A/B levantado y comprobado, listo para medir;
+- el servidor de presentación propio, con el despliegue continuo conectado.
+
+### 2. Temas tratados
+
+- Tema 1 — **Presentación única** (`Sustentacion.tex`). Las cuatro partes que pidió el profesor en un solo archivo, con las láminas de ZeroTier y de tiempo real. Diagramas al día, con uno nuevo del despliegue por ZeroTier. [PR #62](https://github.com/Emperador24/HEXACORE/pull/62), fusionado.
+- Tema 2 — **Montaje ZeroTier A/B** (demo `demoabc-261116-dd70`, herramientas en `main`).
+  - **A** (Mac de Samuel): secretos y CA privada fuera de Git, puertos alternativos (HTTPS 8443, PostgreSQL 25432, Redis 26380, AMQP 25672, correo 23098, pasarela 23099) y base nueva con las cuentas demo.
+  - **B** (VM de la Javeriana): recibió solo los secretos comunes, sin claves TLS.
+  - **`comprobar`** en A y B: PostgreSQL, Redis, RabbitMQ, correo, pasarela, claves y gateway A→B arriba.
+  - **Para C** (Sebastián): `ca.pem` con la huella por otro canal, una cuenta de ensayo en archivo privado, los estados de A y B, un evento de ensayo publicado por la API normal y los logs del gateway en JSONL (grabados en A y entregados al terminar, sin SSH al Mac de Samuel).
+- Tema 3 — **Servidor de presentación.**
+  - `hexacore.duckdns.org`, el dominio de ejemplo de la guía, pertenece a un tercero (IP en Rusia); queda excluido de pruebas y escaneos.
+  - Oracle Cloud sin capacidad en Bogotá; la suscripción de Azure visible no era del equipo y no se usó. Quedó en **Google Cloud** (`e2-standard-2`, Ubuntu 24.04, IP estática).
+  - https://hexacore-javeriana.duckdns.org y https://admin.hexacore-javeriana.duckdns.org, con HTTPS de Let's Encrypt y datos demo.
+  - **CD conectado:** la ejecución [43987694799](https://github.com/Emperador24/HEXACORE/actions/runs/43987694799) desplegó `sha-9815d8e` por SSH y comprobó la salud. Antes falló dos pruebas de pagos (503 justo después de reiniciar) que pasaron al repetirse.
+  - `DESPLIEGUE.md` reescrito y brecha «sin servidor de producción» retirada de la presentación, la sustentación, el SAD (versión 2.3), Seguridad y la rúbrica. [PR #66](https://github.com/Emperador24/HEXACORE/pull/66).
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | Las herramientas de ZeroTier montan desde `main`. | Es la versión que se entrega; `feature/sebastian` podía divergir. | Samuel Emperador | 16/11/2026 |
+| 2 | Los logs del gateway se entregan a C como archivo al terminar cada medición. | Evita abrir SSH en el Mac de Samuel; la guía admite un export reciente. | Samuel Emperador | 16/11/2026 |
+| 3 | El servidor de presentación va en Google Cloud con `hexacore-javeriana.duckdns.org`. | Oracle sin capacidad; la suscripción de Azure visible no era del equipo; `hexacore.duckdns.org` es de un tercero. | Samuel Emperador | 16/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos.
+
+### 5. Tareas asignadas
+
+| Trabajo registrado | Responsable | Estado al 16/11 |
+|---|---|---|
+| Medición A/B/C con caída del Núcleo de A y apagado de B | Samuel Emperador, Sebastián Sánchez | Montaje listo; medición pendiente |
+| Confirmar quién vuelve a encender la VM | Equipo | Pendiente |
+| ZAP contra el servidor de presentación (secretos `OWASP_CLIENTE_*`) | Sebastián Sánchez | Pendiente |
+| Revisión y aprobación del PR #66 | Un compañero | Pendiente |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- **VM de la Javeriana:** no se apaga hasta confirmar su reencendido desde la plataforma.
+- **Costo:** la VM de Google Cloud gasta unos US$54 al mes del crédito de prueba; hay que detenerla al terminar la entrega.
+- **CD:** dos pruebas de pagos fallaron una vez con 503 tras reiniciar y pasaron al repetir; pueden volver a fallar de forma intermitente.
+- **RNF-15:** la reversión automática del despliegue no se ha provocado en vivo.
+
+### 7. Avance general del proyecto
+Se registraron **3 commits** después de la nota anterior. El equipo tiene ya servidor de presentación con despliegue continuo, y el montaje para medir Disponibilidad entre computadores está listo.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 16/11/2026 | 19:01:12 | [`4a38012`](https://github.com/Emperador24/HEXACORE/commit/4a38012c8c8c3eed73d30556198cf97134cacfa6) | docs(sustentacion): presentación completa en un solo archivo y diagramas al día |
+| 16/11/2026 | 19:13:25 | [`782c22a`](https://github.com/Emperador24/HEXACORE/commit/782c22ac57dc77e6930278b45c6a9f907edaf02f) | feat(demo): montar A/B desde main en lugar de feature/sebastian |
+| 16/11/2026 | 23:35:27 | [`1a985e8`](https://github.com/Emperador24/HEXACORE/commit/1a985e8ffada12042feaf7f968c44f32b3be933e) | docs(despliegue): servidor de presentación en Google Cloud y CD conectado |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. **Pendiente técnico:**
+- medir A/B/C con Sebastián y llevar las cifras al SAD y las diapositivas;
+- fusionar el PR #66 y llevar `develop` a `main`;
+- correr el ZAP contra el servidor de presentación;
+- acordar el tiempo de la demo y ensayar.
+
+---
+
 ## Historial de sesiones
 
 | Sesión | Fecha | Temas principales | Enlace |
