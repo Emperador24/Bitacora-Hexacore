@@ -667,6 +667,7 @@
   - https://hexacore-javeriana.duckdns.org y https://admin.hexacore-javeriana.duckdns.org, con HTTPS de Let's Encrypt y las cuentas demo.
   - **CD conectado:** llave SSH solo para el CD y la huella del servidor verificada como secretos de GitHub. La ejecución [43987694799](https://github.com/Emperador24/HEXACORE/actions/runs/43987694799) desplegó `sha-9815d8e` sola y la salud respondió 200. El primer intento falló antes de desplegar, por dos pruebas de pagos que dieron 503 justo después de reiniciar; al repetirlas pasaron.
   - `App/infra/DESPLIEGUE.md` reescrito con los pasos que seguí, y quité la brecha «sin servidor de producción» de la presentación, la sustentación, el SAD (versión 2.3), Seguridad y la rúbrica. Commit [`1a985e8`](https://github.com/Emperador24/HEXACORE/commit/1a985e8ffada12042feaf7f968c44f32b3be933e), PR [#66](https://github.com/Emperador24/HEXACORE/pull/66) hacia `develop`.
+- **Ritmo de la demo visible con Playwright:** a pedido de Sebastián subí las pausas a 1000 ms entre acciones y 2500 ms de lectura por pantalla (antes 500 y 1500). La aceptación automática y el CI siguen sin pausas. Commit [`be89248`](https://github.com/Emperador24/HEXACORE/commit/be892489196a123ba519dae6609bb26309486f04), en el PR #66.
 
 **Próximos pasos**
 - Medir con Sebastián el montaje A/B/C: tumbar el Núcleo de A (Docker lo relanza) y apagar B, con su observador en C y los logs de A.
@@ -675,3 +676,28 @@
 - Conseguir la aprobación del PR #66 y llevar `develop` a `main`.
 - Acordar el tiempo de mi demo en vivo (~6,5 min frente a 150 s) y ensayar.
 - Apagar o borrar la VM de Google Cloud al terminar la entrega (gasta unos US$54 al mes del crédito).
+
+## [17/11/2026]
+
+**¿Qué hice?**
+- **Medí la disponibilidad entre computadores por ZeroTier** (00:57–01:00, hora de Bogotá).
+  - Sebastián no estaba, así que **mi PC con Windows hizo de C**, el observador, con la IP `192.168.193.84`.
+  - En Windows hubo que resolver dos cosas para que el observador funcionara: crear una copia de ZeroTier llamada `zerotier-cli.exe`, porque Python no ejecuta el `.bat`; y crear un acceso `C:\ZeroTier\One` hacia la carpeta real, porque el observador quita la variable `ProgramData`.
+  - Como la VM no se puede apagar, **B «se cayó» deteniendo sus contenedores** con `equipo.py parar`. Lo dejé escrito así en todos lados.
+- **Resultado, 671 peticiones desde C:**
+  - con A y B arriba, 0 fallas y reparto parejo;
+  - al matar el proceso del Núcleo de A, falló 1 petición, B tomó las sesiones y Docker lo relanzó en **~12 s** (RNF-04 pide ≤ 30 s);
+  - con B detenida, **A atendió el 95 %**, y ningún usuario estuvo más de 1,7 s sin respuesta.
+  - Las 16 fallas con B caída son las pruebas que el gateway le hace a B cada 10 s: el montaje no reintenta, a propósito. El gateway normal sí reintenta, y con él la caída de una réplica dio 0 fallas.
+- **Un error mío en el primer intento:** tumbé el Núcleo de A con `docker kill`, y Docker no relanza un contenedor detenido a mano. Lo repetí con `kill -9` del proceso dentro del contenedor, como hace `demo-disponibilidad.sh`. El primer intento quedó descartado y explicado en el informe.
+- **Documentación:**
+  - informe nuevo, `App/infra/informe-atributos/DISPONIBILIDAD-ZEROTIER.md`;
+  - las cifras en el SAD, la lámina de ZeroTier, la rúbrica y la distribución;
+  - commit [`9e734da`](https://github.com/Emperador24/HEXACORE/commit/9e734daa8af1f7e033a57fd2af8bb8439ac552ef), en el PR [#66](https://github.com/Emperador24/HEXACORE/pull/66).
+
+**Próximos pasos**
+- Conseguir la aprobación del PR #66 y llevar `develop` a `main`; el servidor de Google Cloud se actualiza solo al entrar a `main`.
+- Quitar de Windows el acceso `C:\ZeroTier\One` y la carpeta con la cuenta de ensayo.
+- Confirmar quién puede volver a encender la VM, por si se quiere mostrar el apagado físico.
+- Acordar el tiempo de mi demo en vivo y ensayar.
+- Apagar o borrar la VM de Google Cloud al terminar la entrega.

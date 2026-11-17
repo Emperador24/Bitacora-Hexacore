@@ -1509,6 +1509,79 @@ Se registraron **3 commits** después de la nota anterior. El equipo tiene ya se
 
 ---
 
+## Nota de seguimiento — [17/11/2026] — Disponibilidad medida entre computadores y ritmo de la demo
+
+**Modalidad:** actualización documental basada en el historial Git, el PR #66 y la medición registrada en A y C.
+
+**Hora de inicio – fin:** 00:57–01:00 (medición).
+
+**Responsable del avance:** Samuel Emperador.
+
+**Asistentes / ausentes:** No aplica.
+
+> Nota incorporada el 17/11/2026. Registra la medición del 17/11 y un cambio del 16/11 a las 23:54. No acredita una reunión ni aprobación colectiva. Las horas corresponden a America/Bogota (UTC−05:00).
+
+### 1. Objetivo de la sesión
+Medir Disponibilidad (RNF-03 y RNF-04) entre computadores por ZeroTier y llevar las cifras a la documentación. También dejar registrado el cambio de ritmo de la demo visible.
+
+### 2. Temas tratados
+
+- Tema 1 — **Montaje de la medición.**
+  - A, el Mac de Samuel (`.59`); B, la VM de la Javeriana (`.137`); C, el PC Windows de Samuel (`.84`), porque Sebastián no estaba disponible.
+  - C hizo dos lecturas cada 0,5 s, sin reintentos: la cartelera (Boletería) y la sesión actual (Núcleo). Los registros del gateway de A se cruzaron con los de C.
+  - La VM no se puede apagar, así que **B se cayó deteniendo sus contenedores**, no apagando la máquina.
+- Tema 2 — **Resultados (671 peticiones).**
+
+  | Tramo | Peticiones | Fallidas | Lo observado |
+  |---|---|---|---|
+  | A y B arriba | 219 | 0 | Reparto parejo |
+  | Cae el Núcleo de A (`kill -9`) | — | 1 | B toma las sesiones; Docker relanza el Núcleo de A en ~12 s |
+  | B detenida | 338 | 16 | A atiende el 95 %; ningún usuario más de 1,7 s sin respuesta |
+
+  Las 16 fallas son las pruebas del gateway a B cada 10 s: el montaje no reintenta, a propósito, para que se vean todos los errores. El gateway normal sí reintenta, y con él la caída de una réplica dio 0 fallas (medición del 12/11).
+- Tema 3 — **Primer intento descartado.** El Núcleo de A se tumbó con `docker kill`. Docker no lo relanzó, porque cuenta como una parada manual, así que se repitió con `kill -9` del proceso. Queda explicado en el informe.
+- Tema 4 — **Ritmo de la demo visible.** A pedido de Sebastián: 1000 ms entre acciones y 2500 ms de lectura por pantalla. La aceptación y el CI siguen sin pausas.
+- Tema 5 — **Documentación.** Informe `App/infra/informe-atributos/DISPONIBILIDAD-ZEROTIER.md`, cifras en el SAD, la lámina de ZeroTier, `CIERRE-RUBRICA.md` y `DISTRIBUCION-ATRIBUTOS.md`. [PR #66](https://github.com/Emperador24/HEXACORE/pull/66).
+
+### 3. Decisiones tomadas
+
+| # | Decisión | Justificación / alternativas descartadas | Responsable(s) | Fecha |
+|---|---|---|---|---|
+| 1 | B se cae deteniendo sus contenedores, no apagando la VM. | No hay forma confirmada de volver a encender la VM desde la plataforma. Para el gateway el efecto es el mismo; se informa así, sin marcarlo como apagado. | Samuel Emperador | 17/11/2026 |
+| 2 | Las 16 fallas se presentan como límite del montaje, sin activar el reintento. | El montaje no reintenta a propósito, para ver todos los errores. El gateway normal ya está medido con reintento (0 fallas). Descartado: cambiar la herramienta de Sebastián y repetir la medición. | Samuel Emperador | 17/11/2026 |
+
+### 4. Acuerdos y compromisos del equipo
+No se registran acuerdos grupales nuevos.
+
+### 5. Tareas asignadas
+
+| Trabajo registrado | Responsable | Estado al 17/11 |
+|---|---|---|
+| RNF-03 y RNF-04 entre computadores | Samuel Emperador | Medidos y documentados; en el PR #66 |
+| Revisión y aprobación del PR #66 | Un compañero | Pendiente |
+| Tiempo de la demo en vivo y ensayo | Equipo | Pendiente |
+
+### 6. Riesgos, bloqueos o dudas abiertas
+- **Apagado físico de B** sin probar, mientras no se confirme el reencendido de la VM.
+- **A sigue siendo el punto único de falla**; no se probaron escrituras durante la caída.
+- **La corrida completa dura ~4 min** y no cabe en los 40 s del guion: en vivo se muestran las cifras.
+
+### 7. Avance general del proyecto
+Se registraron **2 commits**. Disponibilidad tiene ya evidencia en un computador y entre computadores.
+
+| Fecha | Hora (Bogotá) | Commit | Cambio registrado |
+|---|---|---|---|
+| 16/11/2026 | 23:54:30 | [`be89248`](https://github.com/Emperador24/HEXACORE/commit/be892489196a123ba519dae6609bb26309486f04) | chore(e2e): demo visible a 1000 ms entre acciones y 2500 ms de lectura |
+| 17/11/2026 | 01:09:35 | [`9e734da`](https://github.com/Emperador24/HEXACORE/commit/9e734daa8af1f7e033a57fd2af8bb8439ac552ef) | docs(disponibilidad): caída del Núcleo de A y de B medida entre computadores por ZeroTier |
+
+### 8. Próxima sesión
+**Fecha propuesta:** No se establece en esta nota. **Pendiente técnico:**
+- fusionar el PR #66 y llevar `develop` a `main`;
+- correr el ZAP contra el servidor de presentación;
+- acordar el tiempo de la demo y ensayar.
+
+---
+
 ## Historial de sesiones
 
 | Sesión | Fecha | Temas principales | Enlace |
